@@ -99,16 +99,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-gjslint');
-  grunt.loadNpmTasks('grunt-continue');
-  grunt.loadNpmTasks('grunt-lint-pattern');
-  grunt.loadNpmTasks('grunt-mocha-cli');
-
+  require('load-grunt-tasks')(grunt);
   grunt.registerTask('dist', ['test', 'clean:dist', 'concat:dist', 'uglify']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'gjslint:all', 'lint_pattern:all']);
   grunt.registerTask('test', ['linters', 'mochacli']);
