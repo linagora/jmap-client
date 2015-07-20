@@ -16,7 +16,19 @@ module.exports = function(grunt) {
         separator: ';\n'
       },
       dist: {
-        src: ['<%= project.lib %>/**/*.js'],
+        options: {
+          banner: '(function() {\nthis.JMAP = {};\n',
+          footer: '\n}).call(typeof exports !== \'undefined\' ? exports : typeof window !== \'undefined\' ? window : this);',
+          process: function(src, filepath) {
+            /*
+             * When babel compile ES6 class to ES5 it create a variable which is a function.
+             * Replace all variable like `var Jmap = (function () {` by `var Jmap = this.JMAP.Jmap = (function () {`
+             * in order to export all class.
+             */
+            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.JMAP.$1 = ');
+          }
+        },
+        src: ['<%= project.dist %>/**/*.js'],
         dest: '<%= project.dist %>/<%= project.name %>.js'
       }
     },
@@ -47,7 +59,7 @@ module.exports = function(grunt) {
     gjslint: {
       options: {
         flags: [
-          '--disable 0110',
+          '--disable 110,10',
           '--nojsdoc'
         ],
         reporter: {
@@ -75,10 +87,7 @@ module.exports = function(grunt) {
         reporter: 'spec',
         timeout: 3000
       },
-      all: [
-        '<%= project.lib %>/**/*.js',
-        '<%= project.test %>/**/*.js'
-      ]
+      all: ['<%= project.test %>/backend/**/*.js']
     },
     watch: {
       files: ['<%= jshint.all.src %>'],
@@ -96,14 +105,39 @@ module.exports = function(grunt) {
           ]
         }]
       }
+    },
+
+    babel: {
+      dist: {
+        files: [{
+          expand: true,
+          dest: '<%= project.dist %>',
+          src: ['<%= project.lib %>/**/*.js'],
+          ext: '.js'
+        }]
+      }
+    },
+
+    karma: {
+      unit: {
+        singleRun: true,
+        browsers: ['PhantomJS'],
+        frameworks: ['mocha'],
+        colors: true,
+        autoWatch: true,
+        files: {
+          src: ['node_modules/chai/chai.js', 'dist/jmap-client.js', 'test/frontend/**/*.js']
+        }
+      }
     }
   });
 
   require('load-grunt-tasks')(grunt);
-  grunt.registerTask('dist', ['test', 'clean:dist', 'concat:dist', 'uglify']);
+  grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'babel', 'concat:dist', 'uglify']);
+  grunt.registerTask('dist', ['test']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'gjslint:all', 'lint_pattern:all']);
-  grunt.registerTask('test', ['linters', 'mochacli']);
-  grunt.registerTask('dev', ['test', 'watch']);
+  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
+  grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
 
   grunt.registerTask('default', ['test']);
 
