@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "description": "This lib help to make requests against a JMAP server",
   "main": "lib/jmap-client.js",
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.61.0",
+    "q": "^1.4.1",
+    "jquery": "^2.1.4"
+  },
   "devDependencies": {
     "chai": "^3.0.0",
     "grunt": "^0.4.5",
@@ -22,7 +26,14 @@
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "load-grunt-tasks": "^3.2.0",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "node-getopt": "^0.2.3",
+    "mockery": "^1.4.0",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-spec-reporter": "^0.0.20",
+    "phantomjs-polyfill": "^0.0.1",
+    "jquery-mockjax": "^2.0.1"
   },
   "scripts": {
     "test": "grunt test"

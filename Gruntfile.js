@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       dist: {
         options: {
-          banner: '(function() {\nthis.JMAP = {};\n',
+          banner: '(function() {\nthis.jmap = {};\n',
           footer: '\n}).call(typeof exports !== \'undefined\' ? exports : typeof window !== \'undefined\' ? window : this);',
           process: function(src, filepath) {
             /*
@@ -25,10 +25,25 @@ module.exports = function(grunt) {
              * Replace all variable like `var Jmap = (function () {` by `var Jmap = this.JMAP.Jmap = (function () {`
              * in order to export all class.
              */
-            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.JMAP.$1 = ');
+            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.jmap.$1 = ');
           }
         },
-        src: ['<%= project.dist %>/**/*.js'],
+        src: [
+          // Models
+          '<%= project.dist %>/lib/models/Model.js',
+          '<%= project.dist %>/lib/models/Account.js',
+          // Promises
+          '<%= project.dist %>/lib/promises/PromiseProvider.js',
+          '<%= project.dist %>/lib/promises/ES6PromiseProvider.js',
+          '<%= project.dist %>/lib/promises/QPromiseProvider.js',
+          // Transport
+          '<%= project.dist %>/lib/transport/Transport.js',
+          '<%= project.dist %>/lib/transport/RequestTransport.js',
+          '<%= project.dist %>/lib/transport/JQueryTransport.js',
+          // Other
+          '<%= project.dist %>/lib/utils/Utils.js',
+          '<%= project.dist %>/lib/Client.js'
+        ],
         dest: '<%= project.dist %>/<%= project.name %>.js'
       }
     },
@@ -120,14 +135,7 @@ module.exports = function(grunt) {
 
     karma: {
       unit: {
-        singleRun: true,
-        browsers: ['PhantomJS'],
-        frameworks: ['mocha'],
-        colors: true,
-        autoWatch: true,
-        files: {
-          src: ['node_modules/chai/chai.js', 'dist/jmap-client.js', 'test/frontend/**/*.js']
-        }
+        configFile: 'test/config/karma.conf.js'
       }
     }
   });
