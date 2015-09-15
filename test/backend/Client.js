@@ -383,4 +383,111 @@ describe('The Client class', function() {
 
   });
 
+  describe('The getThreads method', function() {
+
+    it('should post on the API url', function(done) {
+      new jmap.Client({
+        post: function(url) {
+          expect(url).to.equal('https://test');
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads()
+        .then(null, done);
+    });
+
+    it('should send correct HTTP headers, including Authorization=token', function(done) {
+      new jmap.Client({
+        post: function(url, headers) {
+          expect(headers).to.deep.equal({
+            Authorization: 'token',
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          });
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "getThreads" request body when there is no options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['getThreads', {}, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "getThreads" request body, forwarding options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['getThreads', { ids: ['id1', 'id2'] }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads({ ids: ['id1', 'id2'] })
+        .then(null, done);
+    });
+
+    it('should reject the promise if the JMAP response is invalid', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q('Invalid JMAP response');
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads()
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with an array of Thread objects when the response is valid', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([['threads', {
+            accountId: 'user@example.com',
+            list: [{
+              id: '4f512aafed75e7fb',
+              messageIds: ['fm1u314']
+            }, {
+              id: 'fed75e7fb4f512aa',
+              messageIds: ['fm1u312', 'fm2u12', 'fm1u304']
+            }],
+            notFound: null
+          }, '#0']]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads({ ids: ['4f512aafed75e7fb', 'fed75e7fb4f512aa'] })
+        .then(function(data) {
+          expect(data).to.deep.equal([
+            new jmap.Thread(client, '4f512aafed75e7fb', { messageIds: ['fm1u314'] }),
+            new jmap.Thread(client, 'fed75e7fb4f512aa', { messageIds: ['fm1u312', 'fm2u12', 'fm1u304'] })
+          ]);
+
+          done();
+        }).then(null, done);
+    });
+
+  });
+
 });

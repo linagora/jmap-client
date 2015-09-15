@@ -39,6 +39,39 @@ describe('The MessageList class', function() {
 
   });
 
+  describe('The getThreads method', function() {
+
+    it('should delegate to the jmap client, passing ids in the options, when no options are given', function(done) {
+      new jmap.MessageList({
+        getThreads: function(options) {
+          expect(options).to.deep.equal({
+            ids: ['id1', 'id2']
+          });
+
+          done();
+        }
+      }, {
+        threadIds: ['id1', 'id2']
+      }).getThreads();
+    });
+
+    it('should preserve other options', function(done) {
+      new jmap.MessageList({
+        getThreads: function(options) {
+          expect(options).to.deep.equal({
+            ids: ['id1', 'id2'],
+            fetchMessages: true
+          });
+
+          done();
+        }
+      }, {
+        threadIds: ['id1', 'id2']
+      }).getThreads({ fetchMessages: true });
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {
