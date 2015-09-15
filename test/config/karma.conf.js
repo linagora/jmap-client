@@ -27,8 +27,7 @@ module.exports = function(config) {
       // This must be here, before the actual tests
       'test/frontend/require.js',
       // Tests
-      'test/backend/models/Model.js',
-      'test/backend/models/Account.js',
+      'test/backend/models/*.js',
       'test/backend/utils/Utils.js',
       'test/backend/Client.js',
       'test/frontend/transport/JQueryTransport.js'
