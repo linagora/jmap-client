@@ -71,18 +71,20 @@ module.exports = function(grunt) {
         ]
       }
     },
-    gjslint: {
-      options: {
-        flags: [
-          '--disable 110,10',
-          '--nojsdoc'
-        ],
-        reporter: {
-          name: CI ? 'gjslint_xml' : 'console',
-          dest: CI ? 'gjslint.xml' : undefined
-        }
+    jscs: {
+      lint: {
+        options: {
+          config: '.jscsrc',
+          esnext: true
+        },
+        src: ['<%= jshint.all.src %>']
       },
-      all: {
+      fix: {
+        options: {
+          config: '.jscsrc',
+          esnext: true,
+          fix: true
+        },
         src: ['<%= jshint.all.src %>']
       }
     },
@@ -143,7 +145,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'babel', 'concat:dist', 'uglify']);
   grunt.registerTask('dist', ['test']);
-  grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'gjslint:all', 'lint_pattern:all']);
+  grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
   grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
 
