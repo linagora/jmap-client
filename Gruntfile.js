@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       dist: {
         options: {
-          banner: '(function() {\nthis.JMAP = {};\n',
+          banner: '(function() {\nthis.jmap = {};\n',
           footer: '\n}).call(typeof exports !== \'undefined\' ? exports : typeof window !== \'undefined\' ? window : this);',
           process: function(src, filepath) {
             /*
@@ -25,10 +25,25 @@ module.exports = function(grunt) {
              * Replace all variable like `var Jmap = (function () {` by `var Jmap = this.JMAP.Jmap = (function () {`
              * in order to export all class.
              */
-            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.JMAP.$1 = ');
+            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.jmap.$1 = ');
           }
         },
-        src: ['<%= project.dist %>/**/*.js'],
+        src: [
+          // Models
+          '<%= project.dist %>/lib/models/Model.js',
+          '<%= project.dist %>/lib/models/Account.js',
+          // Promises
+          '<%= project.dist %>/lib/promises/PromiseProvider.js',
+          '<%= project.dist %>/lib/promises/ES6PromiseProvider.js',
+          '<%= project.dist %>/lib/promises/QPromiseProvider.js',
+          // Transport
+          '<%= project.dist %>/lib/transport/Transport.js',
+          '<%= project.dist %>/lib/transport/RequestTransport.js',
+          '<%= project.dist %>/lib/transport/JQueryTransport.js',
+          // Other
+          '<%= project.dist %>/lib/utils/Utils.js',
+          '<%= project.dist %>/lib/Client.js'
+        ],
         dest: '<%= project.dist %>/<%= project.name %>.js'
       }
     },
@@ -56,18 +71,20 @@ module.exports = function(grunt) {
         ]
       }
     },
-    gjslint: {
-      options: {
-        flags: [
-          '--disable 110,10',
-          '--nojsdoc'
-        ],
-        reporter: {
-          name: CI ? 'gjslint_xml' : 'console',
-          dest: CI ? 'gjslint.xml' : undefined
-        }
+    jscs: {
+      lint: {
+        options: {
+          config: '.jscsrc',
+          esnext: true
+        },
+        src: ['<%= jshint.all.src %>']
       },
-      all: {
+      fix: {
+        options: {
+          config: '.jscsrc',
+          esnext: true,
+          fix: true
+        },
         src: ['<%= jshint.all.src %>']
       }
     },
@@ -120,14 +137,7 @@ module.exports = function(grunt) {
 
     karma: {
       unit: {
-        singleRun: true,
-        browsers: ['PhantomJS'],
-        frameworks: ['mocha'],
-        colors: true,
-        autoWatch: true,
-        files: {
-          src: ['node_modules/chai/chai.js', 'dist/jmap-client.js', 'test/frontend/**/*.js']
-        }
+        configFile: 'test/config/karma.conf.js'
       }
     }
   });
@@ -135,7 +145,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'babel', 'concat:dist', 'uglify']);
   grunt.registerTask('dist', ['test']);
-  grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'gjslint:all', 'lint_pattern:all']);
+  grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
   grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
 

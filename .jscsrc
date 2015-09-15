@@ -1,0 +1,10 @@
+{
+	"preset": "airbnb",
+	"requirePaddingNewLinesAfterBlocks": null,
+	"requireTrailingComma": null,
+	"disallowMultipleVarDecl": null,
+	"requirePaddingNewLinesBeforeLineComments": null,
+	"safeContextKeyword": ["self"],
+	"requireCamelCaseOrUpperCaseIdentifiers": null
+}
+
