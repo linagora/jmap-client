@@ -35,6 +35,34 @@ describe('The Account class', function() {
 
   });
 
+  describe('The getMailboxes method', function() {
+
+    it('should delegate to the jmap client, passing the accountId in the options', function(done) {
+      new jmap.Account({
+        getMailboxes: function(options) {
+          expect(options.accountId).to.equal('id');
+
+          done();
+        }
+      }, 'id').getMailboxes();
+    });
+
+    it('should preserve other options', function(done) {
+      new jmap.Account({
+        getMailboxes: function(options) {
+          expect(options).to.deep.equal({
+            accountId: 'id',
+            a: 'b',
+            c: 0
+          });
+
+          done();
+        }
+      }, 'id').getMailboxes({ a: 'b', c: 0 });
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {
