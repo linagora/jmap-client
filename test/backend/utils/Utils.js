@@ -61,15 +61,15 @@ describe('The Utils class', function() {
       }).to.throw(Error);
     });
 
-    it('should throw an Error if data has more than one element', function() {
-      expect(function() {
-        jmap.Utils.assertValidJMAPResponse('request', [0, 1, 2]);
-      }).to.throw(Error);
-    });
-
     it('should throw an Error if data[0] is not an array', function() {
       expect(function() {
         jmap.Utils.assertValidJMAPResponse('request', [0]);
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if one of the data elements is not an array', function() {
+      expect(function() {
+        jmap.Utils.assertValidJMAPResponse('request', [[], 0, []]);
       }).to.throw(Error);
     });
 

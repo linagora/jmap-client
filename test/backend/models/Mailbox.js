@@ -63,6 +63,40 @@ describe('The Mailbox class', function() {
 
   });
 
+  describe('The getMessageList method', function() {
+
+    it('should delegate to the jmap client, passing an inMailboxes filter in the options, when no options are given', function(done) {
+      new jmap.Mailbox({
+        getMessageList: function(options) {
+          expect(options).to.deep.equal({
+            filter: {
+              inMailboxes: ['id']
+            }
+          });
+
+          done();
+        }
+      }, 'id', 'name').getMessageList();
+    });
+
+    it('should preserve other options', function(done) {
+      new jmap.Mailbox({
+        getMessageList: function(options) {
+          expect(options).to.deep.equal({
+            filter: {
+              inMailboxes: ['id']
+            },
+            a: 'b',
+            c: 0
+          });
+
+          done();
+        }
+      }, 'id', 'name').getMessageList({ a: 'b', c: 0 });
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {
