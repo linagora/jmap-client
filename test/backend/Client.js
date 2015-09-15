@@ -239,4 +239,148 @@ describe('The Client class', function() {
 
   });
 
+  describe('The getMessageList method', function() {
+
+    it('should post on the API url', function(done) {
+      new jmap.Client({
+        post: function(url) {
+          expect(url).to.equal('https://test');
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList()
+        .then(null, done);
+    });
+
+    it('should send correct HTTP headers, including Authorization=token', function(done) {
+      new jmap.Client({
+        post: function(url, headers) {
+          expect(headers).to.deep.equal({
+            Authorization: 'token',
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          });
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "getMessageList" request body when there is no options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['getMessageList', {}, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "getMessageList" request body, forwarding options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['getMessageList', {
+            filter: {
+              inMailboxes: ['inbox']
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList({
+          filter: {
+            inMailboxes: ['inbox']
+          }
+        })
+        .then(null, done);
+    });
+
+    it('should reject the promise if the JMAP response is invalid', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q('Invalid JMAP response');
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList()
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with a MessageList object when the response is valid', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([['messageList', {
+            accountId: 'user@example.com',
+            filter: {
+              inMailboxes: ['inbox']
+            },
+            sort: ['date desc'],
+            collapseThreads: true,
+            position: 0,
+            total: 100,
+            messageIds: [
+              'fm1u314',
+              'fm1u312'
+            ],
+            threadIds: [
+              '4f512aafed75e7fb',
+              'fed75e7fb4f512aa',
+              '75e7fb4f512aafed'
+            ]
+          }, '#0']]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList({
+          filter: {
+            inMailboxes: ['inbox']
+          },
+          sort: ['date desc'],
+          collapseThreads: true
+        })
+        .then(function(data) {
+          expect(data).to.deep.equal(new jmap.MessageList(client, {
+            accountId: 'user@example.com',
+            filter: {
+              inMailboxes: ['inbox']
+            },
+            sort: ['date desc'],
+            collapseThreads: true,
+            position: 0,
+            total: 100,
+            messageIds: [
+              'fm1u314',
+              'fm1u312'
+            ],
+            threadIds: [
+              '4f512aafed75e7fb',
+              'fed75e7fb4f512aa',
+              '75e7fb4f512aafed'
+            ]
+          }));
+
+          done();
+        }).then(null, done);
+    });
+
+  });
+
 });
