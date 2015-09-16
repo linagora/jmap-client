@@ -72,6 +72,39 @@ describe('The MessageList class', function() {
 
   });
 
+  describe('The getMessages method', function() {
+
+    it('should delegate to the jmap client, passing ids in the options, when no options are given', function(done) {
+      new jmap.MessageList({
+        getMessages: function(options) {
+          expect(options).to.deep.equal({
+            ids: ['id1', 'id2']
+          });
+
+          done();
+        }
+      }, {
+        messageIds: ['id1', 'id2']
+      }).getMessages();
+    });
+
+    it('should preserve other options', function(done) {
+      new jmap.MessageList({
+        getMessages: function(options) {
+          expect(options).to.deep.equal({
+            ids: ['id1', 'id2'],
+            properties: ['id', 'body']
+          });
+
+          done();
+        }
+      }, {
+        messageIds: ['id1', 'id2']
+      }).getMessages({ properties: ['id', 'body'] });
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {

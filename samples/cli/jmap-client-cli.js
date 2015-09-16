@@ -29,20 +29,24 @@ new jmap.Client(new jmap.RequestTransport(), new jmap.QPromiseProvider())
       })
     );
   })
-  .then(function(msgLists) {
-    return q.all(msgLists.map(function (msgList) {
-      return msgList.msgList.getThreads().then(function (threads) {
-        return {
-          mailbox: msgList.mailbox,
-          msgList: msgList.msgList,
-          threads: threads
-        };
-      })
+  .then(function(infos) {
+    return q.all(infos.map(function (info) {
+      return info.msgList.getThreads()
+        .then(function(threads) {
+          return info.msgList.getMessages().then(function(messages) {
+            return {
+              mailbox: info.mailbox,
+              msgList: info.msgList,
+              threads: threads,
+              messages: messages
+            };
+          });
+        });
     }))
   })
-  .then(function(threads) {
-    threads.forEach(function(thread) {
-      console.log('|- ' + thread.mailbox.name + ' (threads: ' + thread.threads.length + ')');
+  .then(function(infos) {
+    infos.forEach(function(info) {
+      console.log('|- ' + info.mailbox.name + ' (threads: ' + info.threads.length + ', messages: ' + info.messages.length + ')');
     });
   })
   .then(null, console.log);
