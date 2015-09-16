@@ -1,0 +1,29 @@
+{
+  "name": "jmap-client",
+  "version": "0.0.0",
+  "authors": [
+    "Linagora Folks <lgs-openpaas-dev@linagora.com>"
+  ],
+  "description": "A Javascript library to connect to a JMAP mail server",
+  "main": "dist/jmap-client.min.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "jmap",
+    "library",
+    "mail",
+    "es6"
+  ],
+  "license": "MIT",
+  "homepage": "https://open-paas.org",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "samples"
+  ]
+}
+
