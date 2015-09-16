@@ -109,7 +109,10 @@ module.exports = function(grunt) {
         reporter: 'spec',
         timeout: 3000
       },
-      all: ['<%= project.test %>/backend/**/*.js']
+      all: [
+        '<%= project.test %>/common/**/*.js',
+        '<%= project.test %>/backend/**/*.js'
+      ]
     },
     watch: {
       files: ['<%= jshint.all.src %>'],
