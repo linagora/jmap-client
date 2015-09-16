@@ -19,34 +19,17 @@ new jmap.Client(new jmap.RequestTransport(), new jmap.QPromiseProvider())
         return a.sortOrder - b.sortOrder;
       })
       .map(function(mailbox) {
-        return mailbox.getMessageList()
-          .then(function(msgList) {
-            return {
-              mailbox: mailbox,
-              msgList: msgList
-            };
-          });
+        return mailbox.getMessageList({
+          collapseThreads: true,
+          fetchMessages: true,
+          fetchThreads: true
+        }).then(function(data) {
+          var threads = data[1] || [],
+              messages = data[2] || [];
+
+          console.log('|- ' + mailbox.name + ' (threads: ' + threads.length + ', messages: ' + messages.length + ')');
+        });
       })
     );
-  })
-  .then(function(infos) {
-    return q.all(infos.map(function (info) {
-      return info.msgList.getThreads()
-        .then(function(threads) {
-          return info.msgList.getMessages().then(function(messages) {
-            return {
-              mailbox: info.mailbox,
-              msgList: info.msgList,
-              threads: threads,
-              messages: messages
-            };
-          });
-        });
-    }))
-  })
-  .then(function(infos) {
-    infos.forEach(function(info) {
-      console.log('|- ' + info.mailbox.name + ' (threads: ' + info.threads.length + ', messages: ' + info.messages.length + ')');
-    });
   })
   .then(null, console.log);

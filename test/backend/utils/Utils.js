@@ -123,4 +123,40 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The capitalize static method', function() {
+
+    it('should return nothing if str is undefined', function() {
+      expect(jmap.Utils.capitalize()).to.equal(undefined);
+    });
+
+    it('should return null if str is null', function() {
+      expect(jmap.Utils.capitalize(null)).to.equal(null);
+    });
+
+    it('should return the argument as-is if str is not a string', function() {
+      expect(jmap.Utils.capitalize(0)).to.equal(0);
+    });
+
+    it('should return the empty string string when length=0', function() {
+      expect(jmap.Utils.capitalize('')).to.equal('');
+    });
+
+    it('should return the capitalized string when length=1', function() {
+      expect(jmap.Utils.capitalize('a')).to.equal('A');
+    });
+
+    it('should return the capitalized string when length=1 and already upper case', function() {
+      expect(jmap.Utils.capitalize('A')).to.equal('A');
+    });
+
+    it('should return the capitalized string when length>1 and already capitalized', function() {
+      expect(jmap.Utils.capitalize('Abcd')).to.equal('Abcd');
+    });
+
+    it('should return the capitalized string when length>1', function() {
+      expect(jmap.Utils.capitalize('abcd')).to.equal('Abcd');
+    });
+
+  });
+
 });
