@@ -21,10 +21,28 @@ new jmap.Client(new jmap.RequestTransport(), new jmap.QPromiseProvider())
       .map(function(mailbox) {
         return mailbox.getMessageList()
           .then(function(msgList) {
-            console.log('|- ' + mailbox.name + ' (messages: ' + msgList.messageIds.length + ', threads: ' + msgList.threadIds.length + ')');
+            return {
+              mailbox: mailbox,
+              msgList: msgList
+            };
           });
       })
     );
   })
+  .then(function(msgLists) {
+    return q.all(msgLists.map(function (msgList) {
+      return msgList.msgList.getThreads().then(function (threads) {
+        return {
+          mailbox: msgList.mailbox,
+          msgList: msgList.msgList,
+          threads: threads
+        };
+      })
+    }))
+  })
+  .then(function(threads) {
+    threads.forEach(function(thread) {
+      console.log('|- ' + thread.mailbox.name + ' (threads: ' + thread.threads.length + ')');
+    });
+  })
   .then(null, console.log);
-

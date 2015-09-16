@@ -34,6 +34,7 @@ module.exports = function(grunt) {
           '<%= project.dist %>/lib/models/Account.js',
           '<%= project.dist %>/lib/models/Mailbox.js',
           '<%= project.dist %>/lib/models/MessageList.js',
+          '<%= project.dist %>/lib/models/Thread.js',
           // Promises
           '<%= project.dist %>/lib/promises/PromiseProvider.js',
           '<%= project.dist %>/lib/promises/ES6PromiseProvider.js',
