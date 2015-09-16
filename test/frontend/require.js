@@ -14,4 +14,10 @@ window.require = function(name) {
   if (name === 'q') {
     return Q;
   }
+
+  // chai-datetime is self-registering in the browser
+  // we're returning a noop function so that the call to chai.use() does nothing
+  if (name === 'chai-datetime') {
+    return function() {};
+  }
 };
