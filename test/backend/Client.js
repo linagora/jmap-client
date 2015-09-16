@@ -381,6 +381,93 @@ describe('The Client class', function() {
         }).then(null, done);
     });
 
+    it('should support implicit requests for getThreads and getMessages', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([
+            ['messageList', {
+              messageIds: [
+                'fm1u314',
+                'fm1u312'
+              ],
+              threadIds: [
+                '4f512aafed75e7fb',
+                'fed75e7fb4f512aa'
+              ]
+            }, '#0'],
+            ['threads', {
+              list: [{
+                id: '4f512aafed75e7fb',
+                messageIds: ['fm1u314']
+              }, {
+                id: 'fed75e7fb4f512aa',
+                messageIds: ['fm1u312', 'fm2u12']
+              }
+              ],
+              notFound: null
+            }, '#0'],
+            ['messages', {
+              accountId: 'user@example.com',
+              state: 'm815034',
+              list: [{
+                id: 'fm1u314',
+                threadId: '4f512aafed75e7fb',
+                mailboxIds: ['inbox']
+              },
+              {
+                id: 'fm1u312',
+                threadId: 'fed75e7fb4f512aa',
+                mailboxIds: ['inbox']
+              },
+              {
+                id: 'fm2u12',
+                threadId: 'fed75e7fb4f512aa',
+                mailboxIds: ['mailbox2']
+              }
+              ],
+              notFound: null
+            }, '#0']
+          ]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessageList({
+          filter: {
+            inMailboxes: ['inbox']
+          },
+          sort: ['date desc'],
+          collapseThreads: true
+        })
+        .then(function(data) {
+          expect(data).to.deep.equal([
+            new jmap.MessageList(client, {
+              messageIds: [
+                'fm1u314',
+                'fm1u312'
+              ],
+              threadIds: [
+                '4f512aafed75e7fb',
+                'fed75e7fb4f512aa'
+              ]
+            }),
+            [
+              new jmap.Thread(client, '4f512aafed75e7fb', { messageIds: ['fm1u314'] }),
+              new jmap.Thread(client, 'fed75e7fb4f512aa', { messageIds: ['fm1u312', 'fm2u12'] })
+            ],
+            [
+              new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', ['inbox']),
+              new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', ['inbox']),
+              new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', ['mailbox2'])
+            ]
+          ]);
+
+          done();
+        }).then(null, done);
+    });
+
   });
 
   describe('The getThreads method', function() {
@@ -482,6 +569,48 @@ describe('The Client class', function() {
           expect(data).to.deep.equal([
             new jmap.Thread(client, '4f512aafed75e7fb', { messageIds: ['fm1u314'] }),
             new jmap.Thread(client, 'fed75e7fb4f512aa', { messageIds: ['fm1u312', 'fm2u12', 'fm1u304'] })
+          ]);
+
+          done();
+        }).then(null, done);
+    });
+
+    it('should support implicit requests for getMessages', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([
+            ['threads', {
+              accountId: 'user@example.com',
+              list: [{
+                id: '4f512aafed75e7fb',
+                messageIds: ['fm1u314']
+              }],
+              notFound: null
+            }, '#0'],
+            ['messages', {
+              accountId: 'user@example.com',
+              list: [{
+                id: 'fm1u314',
+                threadId: '4f512aafed75e7fb',
+                mailboxIds: ['inbox']
+              }],
+              notFound: null
+            }, '#0']
+          ]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getThreads({
+          ids: ['4f512aafed75e7fb'],
+          fetchMessages: true
+        })
+        .then(function(data) {
+          expect(data).to.deep.equal([
+            [new jmap.Thread(client, '4f512aafed75e7fb', { messageIds: ['fm1u314'] })],
+            [new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', ['inbox'])]
           ]);
 
           done();
