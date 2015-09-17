@@ -11,47 +11,7 @@ module.exports = function(grunt) {
       dist: 'dist',
       name: 'jmap-client'
     },
-    concat: {
-      options: {
-        separator: ';\n'
-      },
-      dist: {
-        options: {
-          banner: '(function() {\nthis.jmap = {};\n',
-          footer: '\n}).call(typeof exports !== \'undefined\' ? exports : typeof window !== \'undefined\' ? window : this);',
-          process: function(src, filepath) {
-            /*
-             * When babel compile ES6 class to ES5 it create a variable which is a function.
-             * Replace all variable like `var Jmap = (function () {` by `var Jmap = this.JMAP.Jmap = (function () {`
-             * in order to export all class.
-             */
-            return src.replace(/var (?!_)(.*?) = (?=\(?function \w*?\([^)]*\) \{)/g, 'var $1 = this.jmap.$1 = ');
-          }
-        },
-        src: [
-          // Models
-          '<%= project.dist %>/lib/models/Model.js',
-          '<%= project.dist %>/lib/models/Account.js',
-          '<%= project.dist %>/lib/models/Mailbox.js',
-          '<%= project.dist %>/lib/models/MessageList.js',
-          '<%= project.dist %>/lib/models/Thread.js',
-          '<%= project.dist %>/lib/models/EMailer.js',
-          '<%= project.dist %>/lib/models/Message.js',
-          // Promises
-          '<%= project.dist %>/lib/promises/PromiseProvider.js',
-          '<%= project.dist %>/lib/promises/ES6PromiseProvider.js',
-          '<%= project.dist %>/lib/promises/QPromiseProvider.js',
-          // Transport
-          '<%= project.dist %>/lib/transport/Transport.js',
-          '<%= project.dist %>/lib/transport/RequestTransport.js',
-          '<%= project.dist %>/lib/transport/JQueryTransport.js',
-          // Other
-          '<%= project.dist %>/lib/utils/Utils.js',
-          '<%= project.dist %>/lib/Client.js'
-        ],
-        dest: '<%= project.dist %>/<%= project.name %>.js'
-      }
-    },
+
     uglify: {
       dist: {
         files: [
@@ -62,6 +22,7 @@ module.exports = function(grunt) {
         ]
       }
     },
+
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -76,6 +37,7 @@ module.exports = function(grunt) {
         ]
       }
     },
+
     jscs: {
       lint: {
         options: {
@@ -93,6 +55,7 @@ module.exports = function(grunt) {
         src: ['<%= jshint.all.src %>']
       }
     },
+
     lint_pattern: {
       options: {
         rules: [
@@ -103,6 +66,7 @@ module.exports = function(grunt) {
         src: ['<%= jshint.all.src %>']
       }
     },
+
     mochacli: {
       options: {
         require: ['chai'],
@@ -114,6 +78,7 @@ module.exports = function(grunt) {
         '<%= project.test %>/backend/**/*.js'
       ]
     },
+
     watch: {
       files: ['<%= jshint.all.src %>'],
       tasks: ['test']
@@ -132,26 +97,35 @@ module.exports = function(grunt) {
       }
     },
 
-    babel: {
+    browserify: {
       dist: {
-        files: [{
-          expand: true,
-          dest: '<%= project.dist %>',
-          src: ['<%= project.lib %>/**/*.js'],
-          ext: '.js'
-        }]
+        options: {
+          transform: [
+            ['babelify']
+          ],
+          browserifyOptions: {
+            standalone: 'jmap'
+          },
+          external: [
+            'request',
+            'q'
+          ]
+        },
+        files: {
+          '<%= project.dist %>/jmap-client.js': ['<%= project.lib %>/API.js']
+        }
       }
     },
 
     karma: {
       unit: {
-        configFile: 'test/config/karma.conf.js'
+        configFile: '<%= project.test %>/config/karma.conf.js'
       }
     }
   });
 
   require('load-grunt-tasks')(grunt);
-  grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'babel', 'concat:dist', 'uglify']);
+  grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'browserify', 'uglify']);
   grunt.registerTask('dist', ['test']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
   grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);

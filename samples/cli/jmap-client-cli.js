@@ -1,6 +1,6 @@
 'use strict';
 
-var jmap = require('../../dist/jmap-client.min').jmap,
+var jmap = require('../../dist/jmap-client.min'),
     q = require('q'),
     options = require('node-getopt').create([ ['', 'token=ARG', ''], ['', 'url=ARG', ''] ]).parseSystem().options;
 

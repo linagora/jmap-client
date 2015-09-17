@@ -4,7 +4,7 @@
 
 window.require = function(name) {
   if (/jmap-client/.test(name)) {
-    return { jmap: jmap };
+    return jmap;
   }
 
   if (name === 'chai') {
