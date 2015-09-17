@@ -60,7 +60,7 @@ describe('The JQueryTransport class', function() {
         });
     });
 
-    it('should build a correct options object, and pass it to jQuery', function(done) {
+    it('should serialize data to JSON, build a correct options object, and pass it to jQuery', function(done) {
       jQuery.mockjax({
         url: 'http://test',
         response: function(options) {
@@ -70,11 +70,10 @@ describe('The JQueryTransport class', function() {
             headers: {
               Authorization: 'SuperSecretToken'
             },
-            data: {
-              a: 'b',
-              c: 0
-            },
-            dataType: 'json'
+            data: '{"a":"b","c":0}',
+            dataType: 'json',
+            jsonp: false,
+            processData: false
           });
 
           this.responseText = '[]';
