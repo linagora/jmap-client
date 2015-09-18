@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JMAP-Client Sample</title>
+
+  <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="../../dist/jmap-client.min.js"></script>
+</head>
+<body>
+  <input type="url" id="url" placeholder="API Url"/>
+  <input type="text" id="token" placeholder="Auth Token"/>
+  <button name="submit" onclick="fetchJMAPMailboxes()">Go !</button>
+
+  <script type="text/javascript">
+    function fetchJMAPMailboxes() {
+      new jmap.Client(new jmap.JQueryTransport())
+        .withAPIUrl($("#url").val())
+        .withAuthenticationToken($("#token").val())
+        .getAccounts()
+        .then(function (accounts) {
+          console.log(accounts[0].name);
+
+          return accounts[0].getMailboxes();
+        })
+        .then(function (mailboxes) {
+          return Promise.all(mailboxes.map(function (mailbox) {
+            return mailbox.getMessageList({
+              collapseThreads: true,
+              fetchMessages: true,
+              fetchThreads: true
+            }).then(function (data) {
+              var threads = data[1] || [],
+                  messages = data[2] || [];
+
+              console.log('|- ' + mailbox.name + ' (threads: ' + threads.length + ', messages: ' + messages.length + ')');
+            });
+            })
+          );
+        })
+        .then(function() {
+          console.log('All done!');
+        }, function (err) {
+          console.log(err);
+        });
+    }
+  </script>
+</body>
+</html>

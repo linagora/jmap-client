@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client').jmap,
+    jmap = require('../../../dist/jmap-client'),
     mockery = require('mockery');
 
 function newTransport() {
