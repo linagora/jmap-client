@@ -67,6 +67,7 @@ TODO
 ## Roadmap
 
 * Implement complete error handling.
+* Add support for message attachments.
 * Implement authentication, first using login/password then using oauth.
 * Support entities states, and then getXXXUpdates requests.
 * ...

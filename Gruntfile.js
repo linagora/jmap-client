@@ -9,6 +9,8 @@ module.exports = function(grunt) {
       lib: 'lib',
       test: 'test',
       dist: 'dist',
+      doc: 'doc',
+      apidoc: '<%= project.doc %>/api',
       name: 'jmap-client'
     },
 
@@ -94,6 +96,11 @@ module.exports = function(grunt) {
             '!<%= project.dist %>/.git*'
           ]
         }]
+      },
+      apidoc: {
+        files: [{
+          src: ['<%= project.apidoc %>/**/*']
+        }]
       }
     },
 
@@ -121,6 +128,17 @@ module.exports = function(grunt) {
       unit: {
         configFile: '<%= project.test %>/config/karma.conf.js'
       }
+    },
+
+    jsdoc: {
+      dist: {
+        src: ['lib/'],
+        options: {
+          recurse: true,
+          destination: '<%= project.apidoc %>',
+          configure: '.jsdocrc'
+        }
+      }
     }
   });
 
@@ -130,6 +148,7 @@ module.exports = function(grunt) {
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
   grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
+  grunt.registerTask('apidoc', 'Generates API documentation', ['clean:apidoc', 'jsdoc']);
 
   grunt.registerTask('default', ['test']);
 

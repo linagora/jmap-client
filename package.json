@@ -22,6 +22,7 @@
     "grunt-mocha-cli": "^1.13.1",
     "grunt-jscs": "^2.1.0",
     "grunt-browserify": "^4.0.1",
+    "grunt-jsdoc": "^0.6.8",
     "karma": "^0.12.37",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
@@ -35,7 +36,8 @@
     "phantomjs-polyfill": "^0.0.1",
     "jquery-mockjax": "^2.0.1",
     "chai-datetime": "^1.4.0",
-    "babelify": "^6.3.0"
+    "babelify": "^6.3.0",
+    "jsdoc": "jsdoc3/jsdoc#a6927b2fbd51acf616d153339f78e6f5703688a0"
   },
   "scripts": {
     "test": "grunt test"
