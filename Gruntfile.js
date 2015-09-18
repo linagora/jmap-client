@@ -132,7 +132,7 @@ module.exports = function(grunt) {
 
     jsdoc: {
       dist: {
-        src: ['lib/'],
+        src: ['<%= project.lib %>/'],
         options: {
           recurse: true,
           destination: '<%= project.apidoc %>',
