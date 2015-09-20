@@ -5,6 +5,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
     project: {
       lib: 'lib',
       test: 'test',
@@ -137,6 +138,39 @@ module.exports = function(grunt) {
           recurse: true,
           destination: '<%= project.apidoc %>',
           configure: '.jsdocrc'
+        }
+      }
+    },
+
+    release: {
+      options: {
+        file: 'package.json',
+        additionalFiles: ['bower.json'],
+        npmtag: true,
+        commitMessage: 'Bumped version to <%= version %>',
+        tagName: 'v<%= version %>',
+        tagMessage: 'Version <%= version %>',
+        afterBump: ['exec:gitcheckout_ReleaseBranch', 'test', 'apidoc'],
+        beforeRelease: ['exec:gitadd_DistAndAPIDoc', 'exec:gitcommit_DistAndAPIDoc'],
+        afterRelease: ['exec:gitcheckout_master']
+      }
+    },
+
+    exec: {
+      gitcheckout_ReleaseBranch: {
+        cmd: function() {
+          return 'git checkout -b release-' + this.file.readJSON('package.json').version;
+        }
+      },
+      gitcheckout_master: {
+        cmd: 'git checkout master'
+      },
+      gitadd_DistAndAPIDoc: {
+        cmd: 'git add -f dist/ doc/api/'
+      },
+      gitcommit_DistAndAPIDoc: {
+        cmd: function() {
+          return 'git commit -m"Added distribution and API documentation for release."';
         }
       }
     }

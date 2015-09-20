@@ -23,6 +23,8 @@
     "grunt-jscs": "^2.1.0",
     "grunt-browserify": "^4.0.1",
     "grunt-jsdoc": "^0.6.8",
+    "grunt-release": "~0.13.0",
+    "grunt-exec": "~0.4.6",
     "karma": "^0.12.37",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
