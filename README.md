@@ -64,6 +64,14 @@ TODO
 
 ### 4. Code, execute tests then pull request !
 
+## Release
+
+If you are a maintainer of this project, here's how you can release a new version:
+
+1. Checkout the _master_ branch and pull the latest changes from the remote repository
+2. Run `grunt release` to do the release. A lot of things will happen but you'll eventually be back on the _master_ branch
+3. Bump the version in _master_ to **NEXT_VERSION-dev** (replace _NEXT_VERSION_ by the supposed next version)
+
 ## Roadmap
 
 * Implement complete error handling.
