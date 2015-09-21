@@ -97,7 +97,7 @@ describe('The Utils class', function() {
 
   });
 
-  describe('The jsonArrayToModelList static method', function() {
+  describe('The _jsonArrayToModelList static method', function() {
 
     var client = { jmap: 'client' },
         FakeModel = {
@@ -110,7 +110,7 @@ describe('The Utils class', function() {
         };
 
     it('should call fromJSONObject on the given Model to build the list', function() {
-      expect(jmap.Utils.jsonArrayToModelList(client, FakeModel, [1, 2])).to.deep.equal([
+      expect(jmap.Utils._jsonArrayToModelList(client, FakeModel, [1, 2])).to.deep.equal([
         {
           jmap: client,
           object: 1
