@@ -146,7 +146,6 @@ module.exports = function(grunt) {
       options: {
         file: 'package.json',
         additionalFiles: ['bower.json'],
-        npmtag: true,
         commitMessage: 'Bumped version to <%= version %>',
         tagName: 'v<%= version %>',
         tagMessage: 'Version <%= version %>',
