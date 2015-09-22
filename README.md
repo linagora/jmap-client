@@ -40,12 +40,8 @@ The library is very easy to use, all you need to do is create an instance of the
             // An error occured
         });
 
-Once you're familiar with the library, head on to the [API documentation](TODO) to find out what's possible...  
+Once you're familiar with the library, head on to the [API documentation](http://linagora.github.io/jmap-client/doc/api/) to find out what's possible...  
 There's also some code samples included in the *samples* folder.
-
-## Documentation
-
-TODO
 
 ## How to contribute
 

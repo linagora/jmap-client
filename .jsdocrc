@@ -2,6 +2,11 @@
   "plugins": [
     "plugins/markdown",
     "plugins/underscore"
-  ]
+  ],
+  "templates": {
+    "default": {
+      "includeDate": false
+    }
+  }
 }
 
