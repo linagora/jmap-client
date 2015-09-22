@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: client/Client.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: client/Client.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import ES6PromiseProvider from './../promises/ES6PromiseProvider.js';
+import Utils from './../utils/Utils.js';
+import Account from './../models/Account.js';
+import Mailbox from './../models/Mailbox.js';
+import MessageList from './../models/MessageList.js';
+import Thread from './../models/Thread.js';
+import Message from './../models/Message.js';
+
+export default class Client {
+  /**
+   * The {@link Client} class is the main entry point for sending JMAP requests to a remote server.&lt;br />
+   * It uses a fluent API so that it's easy to chain calls. JMAP requests are sent using one of the _getXXX_ methods
+   * that map to their equivalent in the JMAP specification. For instance, if you want to do a _getAccounts_ request,
+   * you'll use the {@link Client#getAccounts} method.
+   *
+   * @param transport {Transport} The {@link Transport} instance used to send HTTP requests.
+   * @param [promiseProvider={@link ES6PromiseProvider}] {PromiseProvider} The {@link PromiseProvider} implementation to use.
+   */
+  constructor(transport, promiseProvider) {
+    Utils.assertRequiredParameterIsPresent(transport, 'transport');
+
+    this.transport = transport;
+    this.transport.promiseProvider = promiseProvider || new ES6PromiseProvider();
+  }
+
+  /**
+   * Registers an authentication token, obtained by an external mechanism from the target JMAP server.&lt;br />
+   * This token will then be used as the `Authorization` header, as per {@link http://jmap.io/spec.html#authenticating-http-requests}.&lt;br />
+   * &lt;br />
+   * The token will be exposed as the `authToken` property afterwards.
+   *
+   * @param token {String} The authentication token to use in JMAP requests.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAuthenticationToken(token) {
+    this.authToken = token;
+    return this;
+  }
+
+  /**
+   * Sets the API URL of the target JMAP server. All JMAP requests will be sent to this URL.&lt;br />
+   * &lt;br />
+   * The URL will be exposed as the `apiUrl` property afterwards.
+   *
+   * @param url {String} The API URL of the JMAP server.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAPIUrl(url) {
+    this.apiUrl = url;
+    return this;
+  }
+
+  /**
+   * Sends a _getAccounts_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _getAccounts_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to an array of {@link Account} objects.
+   *
+   * @see http://jmap.io/spec.html#getaccounts
+   */
+  getAccounts(options) {
+    return this._jmapRequest('getAccounts', options);
+  }
+
+  /**
+   * Sends a _getMailboxes_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _getMailboxes_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to an array of {@link Mailbox} objects.
+   *
+   * @see http://jmap.io/spec.html#getmailboxes
+   */
+  getMailboxes(options) {
+    return this._jmapRequest('getMailboxes', options);
+  }
+
+  /**
+   * Sends a _getMessageList_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _getMessageList_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link MessageList} object.
+   *
+   * @see http://jmap.io/spec.html#getmessagelist
+   */
+  getMessageList(options) {
+    return this._jmapRequest('getMessageList', options);
+  }
+
+  /**
+   * Sends a _getThreads_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _getThreads_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to an array of {@link Thread} objects.
+   *
+   * @see http://jmap.io/spec.html#getthreads
+   */
+  getThreads(options) {
+    return this._jmapRequest('getThreads', options);
+  }
+
+  /**
+   * Sends a _getMessages_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _getMessages_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to an array of {@link Message} objects.
+   *
+   * @see http://jmap.io/spec.html#getmessages
+   */
+  getMessages(options) {
+    return this._jmapRequest('getMessages', options);
+  }
+
+  _defaultHeaders() {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: this.authToken
+    };
+  }
+
+  _jmapRequest(command, options) {
+    return this.transport
+      .post(this.apiUrl, this._defaultHeaders(), [[command, options || {}, '#0']])
+      .then(Utils.assertValidJMAPResponse.bind(null, command))
+      .then((data) => {
+        return data.map(this._handleResponse.bind(this));
+      })
+      .then(function(responses) {
+        return responses.length > 1 ? responses : responses[0];
+      });
+  }
+
+  _handleResponse(response) {
+    let name = response[0],
+        fn = this['_handle' + Utils.capitalize(name) + 'Response'];
+
+    // This will return the "raw" data if the command is unknown to the client
+    return fn ? fn.bind(this)(response) : response[1];
+  }
+
+  _handleListResponse(response, Model) {
+    return Utils._jsonArrayToModelList(this, Model, response[1].list);
+  }
+
+  _handleAccountsResponse(response) {
+    return this._handleListResponse(response, Account);
+  }
+
+  _handleThreadsResponse(response) {
+    return this._handleListResponse(response, Thread);
+  }
+
+  _handleMessagesResponse(response) {
+    return this._handleListResponse(response, Message);
+  }
+
+  _handleMailboxesResponse(response) {
+    return this._handleListResponse(response, Mailbox);
+  }
+
+  _handleMessageListResponse(response) {
+    return MessageList.fromJSONObject(this, response[1]);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
