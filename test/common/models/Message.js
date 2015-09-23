@@ -211,4 +211,19 @@ describe('The Message class', function() {
 
   });
 
+  describe('The move method', function() {
+
+    it('should delegate to the jmap client, passing the id and the given mailboxIds', function(done) {
+      new jmap.Message({
+        moveMessage: function(id, mailboxIds) {
+          expect(id).to.equal('id');
+          expect(mailboxIds).to.deep.equal(['mailbox1', 'mailbox2']);
+
+          done();
+        }
+      }, 'id', 'threadId', ['inbox']).move(['mailbox1', 'mailbox2']);
+    });
+
+  });
+
 });

@@ -159,4 +159,40 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The assertRequiredParameterIsArrayWithMinimumLength static method', function() {
+
+    it('should not throw an Error if the parameter is a zero-length Array and no length is given', function() {
+      expect(jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength([])).to.deep.equal([]);
+    });
+
+    it('should not throw an Error if the parameter is an Array with the minimum length', function() {
+      expect(jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength([0, 1], '', 2)).to.deep.equal([0, 1]);
+    });
+
+    it('should throw an Error if the parameter is null', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength(null, 'parameter');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is undefined', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is not an Array', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength({});
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is an Array withouth the minimum length', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsArrayWithMinimumLength([], '', 1);
+      }).to.throw(Error);
+    });
+
+  });
+
 });

@@ -847,4 +847,85 @@ describe('The Client class', function() {
 
   });
 
+  describe('The moveMessage method', function() {
+
+    it('should throw an Error if id is not given', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is not given', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is not an Array', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id', 'notAnArray');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is zero-length', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id', []);
+      }).to.throw(Error);
+    });
+
+    it('should send a JMAP "setMessages" request, passing correct options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMessages', {
+            update: {
+              abcd: {
+                mailboxIds: ['mailbox1']
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(null, done);
+    });
+
+    it('should reject the promise if the message was not moved', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: [],
+            notUpdated: {
+              abcd: 'notFound'
+            }
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with nothing is the message was moved', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['abcd']
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(done);
+    });
+
+  });
+
 });
