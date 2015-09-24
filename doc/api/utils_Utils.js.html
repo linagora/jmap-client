@@ -60,6 +60,31 @@ export default class Utils {
   }
 
   /**
+   * Asserts that the given `parameter` is an {@link Array} with a minimum length.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   * @param [length=0] {Number} The minimum required length of the array.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not an array of does not have the minimum length.
+   */
+  static assertRequiredParameterIsArrayWithMinimumLength(parameter, name, length) {
+    if (!Array.isArray(parameter)) {
+      throw new Error('The "' + name + '" parameter must be an Array.');
+    }
+
+    if (length &amp;&amp; parameter.length &lt; length) {
+      throw new Error('The "' + name + '" parameter must have at least ' + length + ' element(s).');
+    }
+
+    return parameter;
+  }
+
+  /**
    * Asserts that the given `data` is a valid JMAP response.&lt;br />
    * This method is intended to be called by instances of {@link Client}, or by any other object making JMAP requests,
    * when validation of the response is required.&lt;br />
@@ -147,7 +172,7 @@ export default class Utils {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">

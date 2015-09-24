@@ -35,6 +35,7 @@ import Mailbox from './../models/Mailbox.js';
 import MessageList from './../models/MessageList.js';
 import Thread from './../models/Thread.js';
 import Message from './../models/Message.js';
+import MessagesSet from './../models/MessagesSet.js';
 
 export default class Client {
   /**
@@ -147,6 +148,47 @@ export default class Client {
     return this._jmapRequest('getMessages', options);
   }
 
+  /**
+   * Sends a _setMessages_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _setMessages_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link MessageSet} object.
+   *
+   * @see http://jmap.io/spec.html#setmessages
+   */
+  setMessages(options) {
+    return this._jmapRequest('setMessages', options);
+  }
+
+  /**
+   * Moves a {@link Message} to a different set of mailboxes.&lt;br />
+   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the {@link Message} to move.
+   * @param mailboxIds {String[]} The identifiers of the target mailboxes for the message.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the message was moved successfully.
+   *
+   * @see Client#setMessages
+   */
+  moveMessage(id, mailboxIds) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+    Utils.assertRequiredParameterIsArrayWithMinimumLength(mailboxIds, 'mailboxIds', 1);
+
+    return this.setMessages({
+      update: {
+        [id]: {
+          mailboxIds: mailboxIds
+        }
+      }
+    }).then(function(messagesSet) {
+      if (messagesSet.updated.indexOf(id) &lt; 0) {
+        throw new Error('Failed to move message ' + id + ', reason is ' + messagesSet.notUpdated[id]);
+      }
+    });
+  }
+
   _defaultHeaders() {
     return {
       Accept: 'application/json',
@@ -198,6 +240,10 @@ export default class Client {
   _handleMessageListResponse(response) {
     return MessageList.fromJSONObject(this, response[1]);
   }
+
+  _handleMessagesSetResponse(response) {
+    return MessagesSet.fromJSONObject(this, response[1]);
+  }
 }
 </code></pre>
         </article>
@@ -209,7 +255,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
