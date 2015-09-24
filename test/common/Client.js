@@ -729,4 +729,203 @@ describe('The Client class', function() {
 
   });
 
+  describe('The setMessages method', function() {
+
+    it('should post on the API url', function(done) {
+      new jmap.Client({
+        post: function(url) {
+          expect(url).to.equal('https://test');
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages()
+        .then(null, done);
+    });
+
+    it('should send correct HTTP headers, including Authorization=token', function(done) {
+      new jmap.Client({
+        post: function(url, headers) {
+          expect(headers).to.deep.equal({
+            Authorization: 'token',
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          });
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "setMessages" request body when there is no options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMessages', {}, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "setMessages" request body, forwarding options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMessages', {
+            update: {
+              abcd: {
+                mailboxIds: ['mailboxId']
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages({
+          update: {
+            abcd: {
+              mailboxIds: ['mailboxId']
+            }
+          }
+        })
+        .then(null, done);
+    });
+
+    it('should reject the promise if the JMAP response is invalid', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q('Invalid JMAP response');
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages()
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with a MessagesSet object when the response is valid', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['abcd']
+          }, '#0']]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMessages({
+          update: {
+            abcd: {
+              mailboxIds: ['mailboxId']
+            }
+          }
+        })
+        .then(function(data) {
+          expect(data).to.deep.equal(new jmap.MessagesSet(client, {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['abcd']
+          }));
+
+          done();
+        }).then(null, done);
+    });
+
+  });
+
+  describe('The moveMessage method', function() {
+
+    it('should throw an Error if id is not given', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is not given', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is not an Array', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id', 'notAnArray');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if mailboxIds is zero-length', function() {
+      expect(function() {
+        new jmap.Client({}).moveMessage('id', []);
+      }).to.throw(Error);
+    });
+
+    it('should send a JMAP "setMessages" request, passing correct options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMessages', {
+            update: {
+              abcd: {
+                mailboxIds: ['mailbox1']
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(null, done);
+    });
+
+    it('should reject the promise if the message was not moved', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: [],
+            notUpdated: {
+              abcd: 'notFound'
+            }
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with nothing is the message was moved', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['abcd']
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .moveMessage('abcd', ['mailbox1'])
+        .then(done);
+    });
+
+  });
+
 });
