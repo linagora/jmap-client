@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Client.moveMessage
 - Message.move
 - Utils.assertRequiredParameterIsArrayWithMinimumLength
+- The MailboxRole class
 
 ## [0.0.2] - 2015-09-22
 - First public release
