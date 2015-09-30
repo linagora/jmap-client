@@ -198,7 +198,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line22">line 22</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -367,7 +367,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line67">line 67</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -547,7 +547,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line80">line 80</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -582,6 +582,225 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
         
 <div class="param-desc">
     <p>A Promise that eventually resolves to an array of <a href="Mailbox.html">Mailbox</a> objects.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getMailboxWithRole"><span class="type-signature"></span>getMailboxWithRole<span class="signature">(role, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Finds a <a href="Mailbox.html">Mailbox</a> with the given role.<br />
+This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox in the returned list.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>role</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MailboxRole.html">MailboxRole</a></span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The desired mailbox role.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The options to the implicit <em>getMailboxes</em> JMAP request.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="MailboxRole.html">MailboxRole</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise that eventually resolves to the <a href="Mailbox.html">Mailbox</a> if found.</p>
 </div>
 
 
@@ -727,7 +946,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line93">line 93</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line126">line 126</a>
     </li></ul></dd>
     
 
@@ -907,7 +1126,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line119">line 119</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -1087,7 +1306,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line106">line 106</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -1271,7 +1490,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line147">line 147</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1451,7 +1670,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line132">line 132</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -1613,7 +1832,7 @@ The URL will be exposed as the <code>apiUrl</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line53">line 53</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -1769,7 +1988,7 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line39">line 39</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -1833,7 +2052,7 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">

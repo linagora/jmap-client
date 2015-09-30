@@ -36,6 +36,7 @@ import MessageList from './../models/MessageList.js';
 import Thread from './../models/Thread.js';
 import Message from './../models/Message.js';
 import MessagesSet from './../models/MessagesSet.js';
+import MailboxRole from './../models/MailboxRole.js';
 
 export default class Client {
   /**
@@ -107,6 +108,38 @@ export default class Client {
    */
   getMailboxes(options) {
     return this._jmapRequest('getMailboxes', options);
+  }
+
+  /**
+   * Finds a {@link Mailbox} with the given role.&lt;br />
+   * This will issue a _getMailboxes_ JMAP request and search for the mailbox in the returned list.
+   *
+   * @param role {MailboxRole|String} The desired mailbox role.
+   * @param [options=null] {Object} The options to the implicit _getMailboxes_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to the {@link Mailbox} if found.
+   *
+   * @see MailboxRole
+   */
+  getMailboxWithRole(role, options) {
+    if (!(role instanceof MailboxRole)) {
+      role = MailboxRole.fromRole(role);
+    }
+
+    if (role === MailboxRole.UNKNOWN) {
+      throw new Error('A valid role is required to find a mailbox by role');
+    }
+
+    return this._jmapRequest('getMailboxes', options)
+      .then((mailboxes) => {
+        for (let i = 0; i &lt; mailboxes.length; i++) {
+          if (mailboxes[i].role === role) {
+            return mailboxes[i];
+          }
+        }
+
+        throw new Error('Cannot find a mailbox with role ' + role.role);
+      });
   }
 
   /**
@@ -255,7 +288,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
