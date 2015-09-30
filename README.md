@@ -23,13 +23,13 @@ The library is provided as a NPM or Bower packages, thus to install either use:
 or
 
     bower install jmap-client
-    
+
 depending on your preferred package manager.
 
 ### Code
 
 The library is very easy to use, all you need to do is create an instance of the *Client* class, then use its fluent API to send some JMAP requests:
-    
+
     new jmap.Client(<your Transport>, <your PromiseProvider>)
         .withAPIUrl('https://jmap.my.server.com')
         .withAuthenticationToken('YourAuthenticationToken')
@@ -51,9 +51,9 @@ There's also some code samples included in the *samples* folder.
     cd jmap-client
 
 ### 2. Install dependencies
-        
+
     npm install
-    
+
 ### 3. Compile the library and run the tests
 
     grunt
@@ -72,7 +72,6 @@ If you are a maintainer of this project, here's how you can release a new versio
 
 * Implement complete error handling.
 * Add support for message attachments.
-* Implement authentication, first using login/password then using oauth.
 * Support entities states, and then getXXXUpdates requests.
 * ...
 
