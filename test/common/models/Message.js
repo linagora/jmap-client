@@ -1,7 +1,8 @@
 'use strict';
 
 var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client');
+    jmap = require('../../../dist/jmap-client'),
+    q = require('q');
 
 require('chai').use(require('chai-datetime'));
 
@@ -222,6 +223,63 @@ describe('The Message class', function() {
           done();
         }
       }, 'id', 'threadId', ['inbox']).move(['mailbox1', 'mailbox2']);
+    });
+
+  });
+
+  describe('The moveToMailboxWithRole method', function() {
+
+    it('should support a MailboxRole argument', function(done) {
+      new jmap.Message({
+        getMailboxWithRole: function() {
+          return q.reject();
+        }
+      }, 'id', 'threadId', ['inbox']).moveToMailboxWithRole(jmap.MailboxRole.TRASH).then(null, done);
+    });
+
+    it('should support a String argument, when it maps to a JMAP role', function(done) {
+      new jmap.Message({
+        getMailboxWithRole: function() {
+          return q.reject();
+        }
+      }, 'id', 'threadId', ['inbox']).moveToMailboxWithRole('inbox').then(null, done);
+    });
+
+    it('should throw an Error if the role is UNKNOWN', function() {
+      expect(function() {
+        new jmap.Message(new jmap.Client({}), 'id', 'threadId', ['inbox']).moveToMailboxWithRole(jmap.MailboxRole.UNKNOWN);
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the role is an unknown String', function() {
+      expect(function() {
+        new jmap.Message(new jmap.Client({}), 'id', 'threadId', ['inbox']).moveToMailboxWithRole('test');
+      }).to.throw(Error);
+    });
+
+    it('should delegate to move if the mailbox exists, passing its id', function(done) {
+      new jmap.Message({
+        getMailboxWithRole: function() {
+          return q({ id: 'mailboxId' });
+        },
+        moveMessage: function(id, mailboxIds) {
+          expect(mailboxIds).to.deep.equal(['mailboxId']);
+
+          done();
+        }
+      }, 'id', 'threadId', ['inbox']).moveToMailboxWithRole('inbox');
+    });
+
+    it('should reject the promise if the mailbox does not exist', function(done) {
+      new jmap.Message({
+        getMailboxWithRole: function() {
+          return q.reject('Does not exist !');
+        }
+      }, 'id', 'threadId', ['inbox'])
+        .moveToMailboxWithRole('inbox')
+        .then(null, function() {
+          done();
+        });
     });
 
   });

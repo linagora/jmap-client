@@ -928,4 +928,106 @@ describe('The Client class', function() {
 
   });
 
+  describe('The getMailboxWithRole method', function() {
+
+    it('should throw an Error if role is not given', function() {
+      expect(function() {
+        new jmap.Client({}).getMailboxWithRole();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if role is an unknown String', function() {
+      expect(function() {
+        new jmap.Client({}).getMailboxWithRole('test');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if role is UNKNOWN', function() {
+      expect(function() {
+        new jmap.Client({}).getMailboxWithRole(jmap.MailboxRole.UNKNOWN);
+      }).to.throw(Error);
+    });
+
+    it('should send a JMAP "getMailboxes" request, passing options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['getMailboxes', { a: 'b' }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMailboxWithRole('inbox', { a: 'b' })
+        .then(null, done);
+    });
+
+    it('should reject the promise if no mailboxes are returned', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['mailboxes', {
+            list: []
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMailboxWithRole('inbox')
+        .then(null, function() { done(); });
+    });
+
+    it('should reject the promise if the mailbox is not found', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['mailboxes', {
+            list: [{
+              id: 'mailbox1',
+              name: 'mailbox1',
+              role: 'inbox'
+            }, {
+              id: 'mailbox2',
+              name: 'mailbox2',
+              role: 'trash'
+            }]
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMailboxWithRole('outbox')
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with the mailbox if found', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['mailboxes', {
+            list: [{
+              id: 'mailbox1',
+              name: 'mailbox1',
+              role: 'inbox'
+            }, {
+              id: 'outbox',
+              name: 'outbox',
+              role: 'outbox'
+            }, {
+              id: 'mailbox2',
+              name: 'mailbox2',
+              role: 'trash'
+            }]
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMailboxWithRole('outbox')
+        .then(function(mailbox) {
+          expect(mailbox.role).to.equal(jmap.MailboxRole.OUTBOX);
+
+          done();
+        });
+    });
+
+  });
+
 });
