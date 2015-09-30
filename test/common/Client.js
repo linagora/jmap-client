@@ -1027,6 +1027,121 @@ describe('The Client class', function() {
           done();
         });
     });
+  });
+
+  describe('withAuthenticationUrl method', function() {
+    it('should store the url as authenticationUrl', function() {
+      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org').authenticationUrl)
+      .to.equal('https://jmap.open-paas.org');
+    });
+  });
+
+  describe('authExternal method', function() {
+    it('should send a request to the authenticationUrl with the right body', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          expect(url).to.equal('https://test');
+          expect(data.username).to.equal('user@domain.com');
+          expect(data.deviceName).to.equal('Device name');
+          expect(data.clientName).to.have.length.above(0);
+          expect(data.clientVersion).to.have.length.above(0);
+          done();
+          return q.Promise(function() {});
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authExternal('user@domain.com', 'Device name', function() {});
+    });
+
+    it('should reject if the server does not support external authentication', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            continuationToken: 'continuationToken1',
+            methods: ['password']
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authExternal('user@domain.com', 'Device name', function() {})
+      .then(null, function(err) {
+        expect(err).to.be.instanceOf(Error);
+        done();
+      });
+    });
+
+    it('should call the provided continuation calback', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            continuationToken: 'continuationToken1',
+            methods: ['password', 'external']
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authExternal('user@domain.com', 'Device name', function(authContinuation) {
+        expect(authContinuation.continuationToken).to.equal('continuationToken1');
+        expect(authContinuation.methods).to.deep.equal(['password', 'external']);
+        done();
+        return q.reject();
+      });
+    });
+
+    it('should request the accessToken', function(done) {
+      var calls =  0;
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (calls === 0) {
+            calls++;
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password', 'external']
+            });
+          } else {
+            expect(data.token).to.equal('continuationToken1');
+            expect(data.method).to.equal('external');
+            done();
+            return q();
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authExternal('user@domain.com', 'Device name', function(authContinuation) {
+        return q(authContinuation.continuationToken);
+      });
+    });
+
+    it('should give back a AuthAccess', function(done) {
+      var authAccessResponse = {
+        accessToken: 'accessToken1',
+        api: '/',
+        eventSource: '/es',
+        upload: '/upload',
+        download: '/download'
+      };
+
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (data.username) {
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password', 'external']
+            });
+          } else {
+            return q(authAccessResponse);
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authExternal('user@domain.com', 'Device name', function(authContinuation) {
+        return q(authContinuation.continuationToken);
+      })
+      .then(function(authAccess) {
+        expect(authAccess).to.deep.equal(authAccessResponse);
+        done();
+      });
+    });
 
   });
 

@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The MailboxRole class
 - Client.getMailboxWithRole
 - Message.moveToMailboxWithRole
+- Client.authExternal
 
 ## [0.0.2] - 2015-09-22
 - First public release
-
