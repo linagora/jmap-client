@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ES6PromiseProvider</title>
+    <title>JSDoc: Source: models/AuthContinuation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,137 +17,40 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ES6PromiseProvider</h1>
+    <h1 class="page-title">Source: models/AuthContinuation.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>ES6PromiseProvider</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
-<article>
-    <div class="container-overview">
-    
-        
+import Utils from '../utils/Utils.js';
 
-    
+export default class AuthContinuation {
+  /**
+   * This class represents a JMAP [Auth Continuation Response]{@link http://jmap.io/spec.html#authentication}.
+   *
+   * @constructor
+   *
+   * @param payload {Object} The server response of an initial auth request.
+   */
+  constructor(payload) {
+    Utils.assertRequiredParameterIsPresent(payload, 'payload');
+    Utils.assertRequiredParameterIsPresent(payload.continuationToken, 'continuationToken');
+    Utils.assertRequiredParameterIsArrayWithMinimumLength(payload.methods, 'methods');
 
-    <h4 class="name" id="ES6PromiseProvider"><span class="type-signature"></span>new ES6PromiseProvider<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>A <a href="PromiseProvider.html">PromiseProvider</a> implementation creating native ES6 Promises.<br />
-This class supposes that the <code>Promise</code> class is available.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promises_ES6PromiseProvider.js.html">promises/ES6PromiseProvider.js</a>, <a href="promises_ES6PromiseProvider.js.html#line5">line 5</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="PromiseProvider.html">PromiseProvider</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    this.continuationToken = payload.continuationToken;
+    this.methods = payload.methods;
+    this.prompt = payload.prompt || null;
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
