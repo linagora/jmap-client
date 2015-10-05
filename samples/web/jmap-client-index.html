@@ -8,11 +8,14 @@
   <script type="text/javascript" src="../../dist/jmap-client.min.js"></script>
 </head>
 <body>
+  <div>jmap-client v<span class="version"></span></div>
   <input type="url" id="url" placeholder="API Url"/>
   <input type="text" id="token" placeholder="Auth Token"/>
   <button name="submit" onclick="fetchJMAPMailboxes()">Go !</button>
 
   <script type="text/javascript">
+    $(".version").text(jmap.Constants.VERSION);
+
     function fetchJMAPMailboxes() {
       new jmap.Client(new jmap.JQueryTransport())
         .withAPIUrl($("#url").val())

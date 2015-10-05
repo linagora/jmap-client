@@ -38,7 +38,8 @@
     "jquery-mockjax": "2.0.1",
     "chai-datetime": "1.4.0",
     "babelify": "6.3.0",
-    "jsdoc": "jsdoc3/jsdoc#a6927b2fbd51acf616d153339f78e6f5703688a0"
+    "jsdoc": "jsdoc3/jsdoc#a6927b2fbd51acf616d153339f78e6f5703688a0",
+    "browserify-versionify": "1.0.6"
   },
   "scripts": {
     "test": "grunt test"
