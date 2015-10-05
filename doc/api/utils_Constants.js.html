@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/AuthAccess.js</title>
+    <title>JSDoc: Source: utils/Constants.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/AuthAccess.js</h1>
+    <h1 class="page-title">Source: utils/Constants.js</h1>
 
     
 
@@ -28,32 +28,16 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-import Utils from '../utils/Utils.js';
-
-export default class AuthAccess {
-  /**
-   * This class represents a JMAP [Auth Access Response]{@link http://jmap.io/spec.html#authentication}.
-   *
-   * @constructor
-   *
-   * @param payload {Object} The server response of an auth access request.
-   */
-
-  constructor(payload) {
-    Utils.assertRequiredParameterIsPresent(payload, 'payload');
-    Utils.assertRequiredParameterIsPresent(payload.accessToken, 'accessToken');
-    Utils.assertRequiredParameterIsPresent(payload.api, 'api');
-    Utils.assertRequiredParameterIsPresent(payload.eventSource, 'eventSource');
-    Utils.assertRequiredParameterIsPresent(payload.upload, 'upload');
-    Utils.assertRequiredParameterIsPresent(payload.download, 'download');
-
-    this.accessToken = payload.accessToken;
-    this.api = payload.api;
-    this.eventSource = payload.eventSource;
-    this.upload = payload.upload;
-    this.download = payload.download;
-  }
-}
+/**
+ * The _Constants_ module exports a single object that is a collection of useful constants.
+ *
+ * @property VERSION {String} The version of this library
+ *
+ * @module Constants
+ */
+export default {
+  VERSION: '__VERSION__'
+};
 </code></pre>
         </article>
     </section>

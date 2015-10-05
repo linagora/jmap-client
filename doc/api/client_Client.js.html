@@ -39,6 +39,7 @@ import MessagesSet from './../models/MessagesSet.js';
 import MailboxRole from './../models/MailboxRole.js';
 import AuthContinuation from './../models/AuthContinuation.js';
 import AuthAccess from './../models/AuthAccess.js';
+import Constants from '../utils/Constants.js';
 
 export default class Client {
   /**
@@ -87,7 +88,7 @@ export default class Client {
         username: username,
         deviceName: deviceName,
         clientName: 'jmap-client (https://github.com/linagora/jmap-client)',
-        clientVersion: '0.x'
+        clientVersion: Constants.VERSION
       })
       .then((data) => {
         var authContinuation = new AuthContinuation(data);
@@ -110,7 +111,7 @@ export default class Client {
   /**
    * Registers an authentication URL, that will be used as the endpoint to send authentication requests to the server.&lt;br />
    * &lt;br />
-   * The token will be exposed as the `authenticationUrl` property afterwards.
+   * The URL will be exposed as the `authenticationUrl` property afterwards.
    *
    * @param url {String} The authentication url to use in JMAP requests.
    *
@@ -252,7 +253,7 @@ export default class Client {
    *
    * @param [options=null] {Object} The options to the _setMessages_ JMAP request.
    *
-   * @return {Promise} A {@link Promise} that eventually resolves to a {@link MessageSet} object.
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link MessagesSet} object.
    *
    * @see http://jmap.io/spec.html#setmessages
    */
@@ -361,7 +362,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
