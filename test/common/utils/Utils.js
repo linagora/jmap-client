@@ -195,4 +195,47 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The fillURITemplate static method', function() {
+
+    it('should throw an Error if uri is not defined', function() {
+      expect(function() {
+        jmap.Utils.fillURITemplate();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if uri is null', function() {
+      expect(function() {
+        jmap.Utils.fillURITemplate(null, {});
+      }).to.throw(Error);
+    });
+
+    it('should return the URI as-is if no parameters are given', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}')).to.equal('http://jmap.org/{test}');
+    });
+
+    it('should return the URI as-is if empty parameters are given', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}', {})).to.equal('http://jmap.org/{test}');
+    });
+
+    it('should return the URI as-is if parameters given doesn not contain the expected variables', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}', { a: 'b' })).to.equal('http://jmap.org/{test}');
+    });
+
+    it('should replace the variables in the URI when parameters contain the values', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}', { test: 'value' })).to.equal('http://jmap.org/value');
+    });
+
+    it('should replace only the variables contained in the parameters', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}/{notPresent}', { test: 'value' })).to.equal('http://jmap.org/value/{notPresent}');
+    });
+
+    it('should replace multiple variables in the URI template', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}/{other}', {
+        test: 'value',
+        other: 'secondValue'
+      })).to.equal('http://jmap.org/value/secondValue');
+    });
+
+  });
+
 });

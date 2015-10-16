@@ -32,7 +32,7 @@ describe('The RequestTransport class', function() {
       newTransport().post('').then(null, function() { done(); });
     });
 
-    it('should reject the promise when status code is not 200', function(done) {
+    it('should reject the promise when status code is not 200 nor 201', function(done) {
       mockery.registerMock('request', function(options, callback) {
         callback(null, {
           statusCode: 400
@@ -51,6 +51,20 @@ describe('The RequestTransport class', function() {
 
       newTransport().post('').then(function(data) {
         expect(data).to.equal('Success !');
+
+        done();
+      });
+    });
+
+    it('should resolve the promise when status code is 201, returning the body', function(done) {
+      mockery.registerMock('request', function(options, callback) {
+        callback(null, {
+          statusCode: 201
+        }, 'Accepted !');
+      });
+
+      newTransport().post('').then(function(data) {
+        expect(data).to.equal('Accepted !');
 
         done();
       });

@@ -45,6 +45,22 @@ describe('The Client class', function() {
 
   });
 
+  describe('The withAuthenticationUrl method', function() {
+
+    it('should store the url as authenticationUrl', function() {
+      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org/auth').authenticationUrl).to.equal('https://jmap.open-paas.org/auth');
+    });
+
+  });
+
+  describe('The withDownloadUrl method', function() {
+
+    it('should store the url as downloadUrl', function() {
+      expect(new jmap.Client({}).withDownloadUrl('https://jmap.open-paas.org/dl').downloadUrl).to.equal('https://jmap.open-paas.org/dl');
+    });
+
+  });
+
   describe('The getAccounts method', function() {
 
     it('should post on the API url', function(done) {
