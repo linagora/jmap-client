@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Account</title>
+    <title>JSDoc: Class: Attachment</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Account</h1>
+    <h1 class="page-title">Class: Attachment</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Account</h2>
+        <h2>Attachment</h2>
         
     
 </header>
@@ -40,14 +40,15 @@
 
     
 
-    <h4 class="name" id="Account"><span class="type-signature"></span>new Account<span class="signature">(jmap, id, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Attachment"><span class="type-signature"></span>new Attachment<span class="signature">(jmap, blobId, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#accounts">Account</a>.</p>
+    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#messages">Attachment</a>.<br />
+An <em>Attachment</em> object holds all information of a given attachment of a <a href="Message.html">Message</a>.</p>
 </div>
 
 
@@ -109,14 +110,14 @@
 
             
 
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>Account</em>.</p></td>
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created the parent <em>Message</em>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>blobId</code></td>
             
 
             <td class="type">
@@ -140,7 +141,7 @@
 
             
 
-            <td class="description last"><p>The unique identifier of this <em>Account</em>.</p></td>
+            <td class="description last"><p>The id of the binary data.</p></td>
         </tr>
 
     
@@ -173,7 +174,7 @@
 
             
 
-            <td class="description last"><p>The optional properties of this <em>Account</em>.</p>
+            <td class="description last"><p>The optional properties of this <em>Attachment</em>.</p>
                 <h6>Properties</h6>
                 
 
@@ -199,6 +200,87 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The URL to download the attachment. If not passed as a parameter, this will be deduced from
+ the configured <code>downloadUrl</code> of the <a href="Client.html">Client</a> instance used to fetch the <a href="Message.html">Message</a> containing this <em>Attachment</em>.
+ If the library does not find a reliable way of knowing the URL for this attachment, for any reason, the <code>url</code> property of this
+ <em>Attachment</em> instance will be set to <code>null</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last"><p>The content-type of the attachment.</p></td>
+        </tr>
+
     
 
         <tr>
@@ -235,20 +317,98 @@
                 </td>
             
 
-            <td class="description last"><p>The name of this <em>Account</em>.</p></td>
+            <td class="description last"><p>The full file name.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isPrimary</code></td>
+                <td class="name"><code>size</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>The size, in bytes, of the attachment when fully decoded.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The id used within the message body to reference this attachment.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isInline</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
 
 
             
@@ -274,20 +434,20 @@
                 </td>
             
 
-            <td class="description last"><p>Whether this <em>Account</em> is the primary email account.</p></td>
+            <td class="description last"><p><code>true</code> if the attachment is referenced by a <code>cid:</code> link from within the HTML body of the message.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isReadOnly</code></td>
+                <td class="name"><code>width</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">String</span>
 
 
             
@@ -308,12 +468,51 @@
             
                 <td class="default">
                 
-                    false
+                    0
                 
                 </td>
             
 
-            <td class="description last"><p>Whether this <em>Account</em> is read-only.</p></td>
+            <td class="description last"><p>The width (in px) of the image, if the attachment is an image.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>TThe height (in px) of the image, if the attachment is an image.</p></td>
         </tr>
 
     
@@ -361,7 +560,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Account.js.html">models/Account.js</a>, <a href="models_Account.js.html#line22">line 22</a>
+        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -428,14 +627,14 @@
 
     
 
-    <h4 class="name" id=".fromJSONObject"><span class="type-signature">(static) </span>fromJSONObject<span class="signature">(jmap, object)</span><span class="type-signature"> &rarr; {<a href="Account.html">Account</a>}</span></h4>
+    <h4 class="name" id=".fromJSONObject"><span class="type-signature">(static) </span>fromJSONObject<span class="signature">(jmap, object)</span><span class="type-signature"> &rarr; {<a href="Attachment.html">Attachment</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Creates an <em>Account</em> from its JSON representation.</p>
+    <p>Creates an <em>Attachment</em> from its JSON representation.</p>
 </div>
 
 
@@ -487,7 +686,7 @@
 
             
 
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance passed to the <em>Account</em> constructor.</p></td>
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance used to fetch the parent <a href="Message.html">Message</a>.</p></td>
         </tr>
 
     
@@ -510,7 +709,7 @@
 
             
 
-            <td class="description last"><p>The JSON representation of the <em>Account</em>, as a Javascript object.</p>
+            <td class="description last"><p>The JSON representation of the <em>Attachment</em>, as a Javascript object.</p>
                 <h6>Properties</h6>
                 
 
@@ -536,7 +735,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>blobId</code></td>
             
 
             <td class="type">
@@ -552,7 +751,7 @@
 
             
 
-            <td class="description last"><p>The identifier of the <em>Account</em>.</p></td>
+            <td class="description last"><p>The id of the binary data for this <em>Attachment</em>.</p></td>
         </tr>
 
     
@@ -600,7 +799,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Account.js.html">models/Account.js</a>, <a href="models_Account.js.html#line62">line 62</a>
+        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -634,183 +833,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Account.html">Account</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getMailboxes"><span class="type-signature"></span>getMailboxes<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Fetches all mailboxes of this <em>Account</em>.<br />
-This will delegate to <a href="Client.html#getMailboxes">Client#getMailboxes</a>, passing this Account's <em>id</em> as the <em>accountId</em> option.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The options object passed to <a href="Client.html#getMailboxes">Client#getMailboxes</a>.
-  Please note that the <em>accountId</em> option will be overriden if defined.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Account.js.html">models/Account.js</a>, <a href="models_Account.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Client.html#getMailboxes">Client#getMailboxes</a></li>
-        
-            <li><a href="PromiseProvider.html">PromiseProvider</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A promise that eventually resolves with an array of <a href="Mailbox.html">Mailbox</a> instances.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
+<span class="param-type"><a href="Attachment.html">Attachment</a></span>
 
 
     </dd>

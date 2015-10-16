@@ -59,6 +59,63 @@ export default class Client {
   }
 
   /**
+   * Registers an authentication URL, that will be used as the endpoint to send authentication requests to the server.&lt;br />
+   * &lt;br />
+   * The URL will be exposed as the `authenticationUrl` property afterwards.
+   *
+   * @param url {String} The authentication url to use in JMAP requests.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAuthenticationUrl(url) {
+    this.authenticationUrl = url;
+    return this;
+  }
+
+  /**
+   * Registers an authentication token, obtained by an external mechanism from the target JMAP server.&lt;br />
+   * This token will then be used as the `Authorization` header, as per {@link http://jmap.io/spec.html#authenticating-http-requests}.&lt;br />
+   * &lt;br />
+   * The token will be exposed as the `authToken` property afterwards.
+   *
+   * @param token {String} The authentication token to use in JMAP requests.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAuthenticationToken(token) {
+    this.authToken = token;
+    return this;
+  }
+
+  /**
+   * Sets the API URL of the target JMAP server. All JMAP requests will be sent to this URL.&lt;br />
+   * &lt;br />
+   * The URL will be exposed as the `apiUrl` property afterwards.
+   *
+   * @param url {String} The API URL of the JMAP server.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAPIUrl(url) {
+    this.apiUrl = url;
+    return this;
+  }
+
+  /**
+   * Sets the download URL, i.e.: the URL used to download attachments to {@link Message}s.&lt;br />
+   * &lt;br />
+   * The URL will be exposed as the `downloadUrl` property afterwards.
+   *
+   * @param url {String} The download URL of the JMAP server.
+   *
+   * @return {Client} This Client instance.
+   */
+  withDownloadUrl(url) {
+    this.downloadUrl = url;
+    return this;
+  }
+
+  /**
    * Implement the JMAP external authentication protocol.&lt;br />
    * This method abstract the two authentication steps:
    *
@@ -106,49 +163,6 @@ export default class Client {
           });
       })
       .then((data) => new AuthAccess(data));
-  }
-
-  /**
-   * Registers an authentication URL, that will be used as the endpoint to send authentication requests to the server.&lt;br />
-   * &lt;br />
-   * The URL will be exposed as the `authenticationUrl` property afterwards.
-   *
-   * @param url {String} The authentication url to use in JMAP requests.
-   *
-   * @return {Client} This Client instance.
-   */
-  withAuthenticationUrl(url) {
-    this.authenticationUrl = url;
-    return this;
-  }
-
-  /**
-   * Registers an authentication token, obtained by an external mechanism from the target JMAP server.&lt;br />
-   * This token will then be used as the `Authorization` header, as per {@link http://jmap.io/spec.html#authenticating-http-requests}.&lt;br />
-   * &lt;br />
-   * The token will be exposed as the `authToken` property afterwards.
-   *
-   * @param token {String} The authentication token to use in JMAP requests.
-   *
-   * @return {Client} This Client instance.
-   */
-  withAuthenticationToken(token) {
-    this.authToken = token;
-    return this;
-  }
-
-  /**
-   * Sets the API URL of the target JMAP server. All JMAP requests will be sent to this URL.&lt;br />
-   * &lt;br />
-   * The URL will be exposed as the `apiUrl` property afterwards.
-   *
-   * @param url {String} The API URL of the JMAP server.
-   *
-   * @return {Client} This Client instance.
-   */
-  withAPIUrl(url) {
-    this.apiUrl = url;
-    return this;
   }
 
   /**
@@ -362,7 +376,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
