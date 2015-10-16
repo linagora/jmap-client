@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- The Attachment class
+- Client.withDownloadUrl
+- Message.attachments
+- Utils.fillURITemplate
 
 ## [0.0.3] - 2015-10-05
 ### Added

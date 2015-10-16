@@ -110,6 +110,27 @@ describe('The Message class', function() {
       expect(message.date).to.equalDate(new Date(Date.UTC(2015, 8, 23, 12, 34, 56)));
     });
 
+    it('should set attachments to an empty array if message has no attachments', function() {
+      expect(new jmap.Message({}, 'id', 'threadId', ['inbox'], {}).attachments).to.deep.equal([]);
+    });
+
+    it('should set attachments to an array of Attachment objects if message has attachments', function() {
+      var client = {
+        downloadUrl: 'https://jmap.org/dl/{blobId}'
+      };
+
+      expect(new jmap.Message(client, 'id', 'threadId', ['inbox'], {
+        attachments: [{
+          blobId: '1234'
+        }, {
+          blobId: '5678'
+        }]
+      }).attachments).to.deep.equal([
+        new jmap.Attachment(client, '1234'),
+        new jmap.Attachment(client, '5678')
+      ]);
+    });
+
   });
 
   describe('The fromJSONObject static method', function() {
