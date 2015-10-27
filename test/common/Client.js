@@ -6,6 +6,14 @@ var expect = require('chai').expect,
 
 describe('The Client class', function() {
 
+  function defaultClient() {
+    return new jmap.Client({
+      post: function() {
+        return q.reject();
+      }
+    });
+  }
+
   describe('The constructor', function() {
 
     it('should throw an Error if transport is not defined', function() {
@@ -32,7 +40,7 @@ describe('The Client class', function() {
   describe('The withAuthenticationToken method', function() {
 
     it('should store the token as authToken', function() {
-      expect(new jmap.Client({}).withAuthenticationToken('token').authToken).to.equal('token');
+      expect(defaultClient().withAuthenticationToken('token').authToken).to.equal('token');
     });
 
   });
@@ -40,7 +48,7 @@ describe('The Client class', function() {
   describe('The withAPIUrl method', function() {
 
     it('should store the url as apiUrl', function() {
-      expect(new jmap.Client({}).withAPIUrl('https://jmap.open-paas.org').apiUrl).to.equal('https://jmap.open-paas.org');
+      expect(defaultClient().withAPIUrl('https://jmap.open-paas.org').apiUrl).to.equal('https://jmap.open-paas.org');
     });
 
   });
@@ -48,7 +56,7 @@ describe('The Client class', function() {
   describe('The withAuthenticationUrl method', function() {
 
     it('should store the url as authenticationUrl', function() {
-      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org/auth').authenticationUrl).to.equal('https://jmap.open-paas.org/auth');
+      expect(defaultClient().withAuthenticationUrl('https://jmap.open-paas.org/auth').authenticationUrl).to.equal('https://jmap.open-paas.org/auth');
     });
 
   });
@@ -56,7 +64,7 @@ describe('The Client class', function() {
   describe('The withDownloadUrl method', function() {
 
     it('should store the url as downloadUrl', function() {
-      expect(new jmap.Client({}).withDownloadUrl('https://jmap.open-paas.org/dl').downloadUrl).to.equal('https://jmap.open-paas.org/dl');
+      expect(defaultClient().withDownloadUrl('https://jmap.open-paas.org/dl').downloadUrl).to.equal('https://jmap.open-paas.org/dl');
     });
 
   });
@@ -867,25 +875,25 @@ describe('The Client class', function() {
 
     it('should throw an Error if id is not given', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage();
+        defaultClient().moveMessage();
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is not given', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id');
+        defaultClient().moveMessage('id');
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is not an Array', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id', 'notAnArray');
+        defaultClient().moveMessage('id', 'notAnArray');
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is zero-length', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id', []);
+        defaultClient().moveMessage('id', []);
       }).to.throw(Error);
     });
 
@@ -948,19 +956,19 @@ describe('The Client class', function() {
 
     it('should throw an Error if role is not given', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole();
+        defaultClient().getMailboxWithRole();
       }).to.throw(Error);
     });
 
     it('should throw an Error if role is an unknown String', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole('test');
+        defaultClient().getMailboxWithRole('test');
       }).to.throw(Error);
     });
 
     it('should throw an Error if role is UNKNOWN', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole(jmap.MailboxRole.UNKNOWN);
+        defaultClient().getMailboxWithRole(jmap.MailboxRole.UNKNOWN);
       }).to.throw(Error);
     });
 
@@ -1047,7 +1055,7 @@ describe('The Client class', function() {
 
   describe('withAuthenticationUrl method', function() {
     it('should store the url as authenticationUrl', function() {
-      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org').authenticationUrl)
+      expect(defaultClient().withAuthenticationUrl('https://jmap.open-paas.org').authenticationUrl)
       .to.equal('https://jmap.open-paas.org');
     });
   });
