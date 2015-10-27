@@ -1197,12 +1197,23 @@ describe('The Client class', function() {
         .saveAsDraft(new jmap.OutboundMessage(jmap));
     });
 
-    it('should assign the draft mailbox id in mailboxIds', function(done) {
-      var client = defaultClient();
-      client._generateClientId = function() {return 'expectedClientId';};
+    function saveAsDraftReadyClient() {
+      var client = defaultClient()
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token');
+
+      client._generateClientId = function() {
+        return 'expectedClientId';
+      };
       client.getMailboxWithRole = function() {
         return q.resolve(new jmap.Mailbox({}, 5, 'my drafts', {role: 'DRAFTS'}));
       };
+
+      return client;
+    }
+
+    it('should assign the draft mailbox id in mailboxIds', function(done) {
+      var client = saveAsDraftReadyClient();
 
       client.transport.post = function(url, headers, body) {
         expect(body).to.deep.equal([['setMessages', {
@@ -1218,20 +1229,14 @@ describe('The Client class', function() {
         return q.reject();
       };
 
-      client.withAPIUrl('https://test')
-        .withAuthenticationToken('token')
-        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+      client.saveAsDraft(new jmap.OutboundMessage(jmap, {
           subject: 'message topic'
         }))
         .then(null, done);
     });
 
     it('should force the isDraft flag', function(done) {
-      var client = defaultClient();
-      client._generateClientId = function() {return 'expectedClientId';};
-      client.getMailboxWithRole = function() {
-        return q.resolve(new jmap.Mailbox({}, 5, 'my drafts', {role: 'DRAFTS'}));
-      };
+      var client = saveAsDraftReadyClient();
 
       client.transport.post = function(url, headers, body) {
         expect(body).to.deep.equal([['setMessages', {
@@ -1247,13 +1252,110 @@ describe('The Client class', function() {
         return q.reject();
       };
 
-      client.withAPIUrl('https://test')
-        .withAuthenticationToken('token')
-        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+      client.saveAsDraft(new jmap.OutboundMessage(jmap, {
           subject: 'message topic',
           isDraft: false
         }))
         .then(null, done);
+    });
+
+    it('should resolve the promise with returned object if clientId in the response.created', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {
+            expectedClientId: {
+              blobId: 'm-ma294202da',
+              id: 'ma294202da',
+              size: 281,
+              threadId: 'ta294202da'
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(function(resolved) {
+          expect(resolved).to.be.an.instanceof(jmap.CreateMessageAck);
+          expect(resolved).to.include({
+            blobId: 'm-ma294202da',
+            id: 'ma294202da',
+            size: 281,
+            threadId: 'ta294202da'
+          });
+          done();
+        });
+    });
+
+    it('should throw an error if response.created does not contains the expected response format', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {
+            expectedClientId: {
+              size: 281
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err).to.be.an.instanceof(Error);
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {},
+          notCreated: {
+            otherId: 'message with different clientId, it should not be taken in account'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to save the message as draft, clientId: expectedClientId, message: none');
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object but in response.notCreated', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {},
+          notCreated: {
+            expectedClientId: 'message with right clientId, it should be taken in account'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to save the message as draft, clientId: expectedClientId, message: message with right clientId, it should be taken in account');
+          done();
+        });
     });
 
   });
