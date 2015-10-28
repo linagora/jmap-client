@@ -78,6 +78,39 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The assertRequiredParameterIsObject static method', function() {
+
+    it('should not throw an Error if the parameter is defined as an object', function() {
+      expect(jmap.Utils.assertRequiredParameterIsObject({})).to.deep.equal({});
+    });
+
+    it('should throw an Error if the parameter is null', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsObject(null, 'parameter');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is undefined', function() {
+      expect(function() {
+        var param;
+        jmap.Utils.assertRequiredParameterIsObject(param, 'parameter');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is an array', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsObject([], 'parameter');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is a fn', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterIsObject(function() {}, 'parameter');
+      }).to.throw(Error);
+    });
+
+  });
+
   describe('The assertValidJMAPResponse static method', function() {
 
     it('should throw an Error if data is undefined', function() {

@@ -147,4 +147,53 @@ describe('The Attachment class', function() {
 
   });
 
+  describe('The toJSONObject', function() {
+
+    it('should produce blobId only object when no opts', function() {
+      expect(new jmap.Attachment({}, 'blobId', {}).toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        isInline: false
+      });
+    });
+
+    it('should produce partial json when only few opts', function() {
+      var attachment = new jmap.Attachment({}, 'blobId', {
+        name: 'jmap.js',
+        isInline: false
+      });
+
+      expect(attachment.toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        name: 'jmap.js',
+        isInline: false
+      });
+    });
+
+    it('should produce full json when full opts', function() {
+      var attachment = new jmap.Attachment({}, 'blobId', {
+        url: 'https://jmap.org/download/blob/blobId/filename',
+        type: 'application/javascript',
+        name: 'jmap.js',
+        size: 100,
+        isInline: true,
+        cid: 'cid',
+        width: 20,
+        height: 30
+      });
+
+      expect(attachment.toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        url: 'https://jmap.org/download/blob/blobId/filename',
+        type: 'application/javascript',
+        name: 'jmap.js',
+        size: 100,
+        isInline: true,
+        cid: 'cid',
+        width: 20,
+        height: 30
+      });
+    });
+
+  });
+
 });
