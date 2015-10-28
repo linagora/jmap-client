@@ -111,6 +111,51 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The assertRequiredParameterHasType static method', function() {
+
+    function TestType() {
+
+    }
+
+    it('should not throw an Error if the parameter has the expected type for string', function() {
+      expect(jmap.Utils.assertRequiredParameterHasType('bla', 'name', 'string')).to.equal('bla');
+    });
+
+    it('should not throw an Error if the parameter has the expected type for number', function() {
+      expect(jmap.Utils.assertRequiredParameterHasType(5, 'name', 'number')).to.equal(5);
+    });
+
+    it('should not throw an Error if the parameter has the expected type for custom type', function() {
+      var val = new TestType();
+      expect(jmap.Utils.assertRequiredParameterHasType(val, 'name', TestType)).to.equal(val);
+    });
+
+    it('should throw an Error if the parameter has not the expected type', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterHasType('bla', 'name', 'number');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter has not the expected class type', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterHasType({}, 'name', TestType);
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the parameter is null', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterHasType(null, 'name', 'string');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the type is null', function() {
+      expect(function() {
+        jmap.Utils.assertRequiredParameterHasType({}, 'name', null);
+      }).to.throw(Error);
+    });
+
+  });
+
   describe('The assertValidJMAPResponse static method', function() {
 
     it('should throw an Error if data is undefined', function() {

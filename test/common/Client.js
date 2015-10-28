@@ -1169,4 +1169,93 @@ describe('The Client class', function() {
 
   });
 
+  describe('The saveAsDraft method', function() {
+
+    it('should throw an Error if the message is undefined', function() {
+      expect(function() {
+        defaultClient().saveAsDraft();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if message has not the expected type', function() {
+      expect(function() {
+        defaultClient().saveAsDraft('message');
+      }).to.throw(Error);
+    });
+
+    it('should call getMailboxWithRole to find the draft mailbox id', function(done) {
+      var client = defaultClient();
+      client.getMailboxWithRole = function(role) {
+        expect(role).to.deep.equal(new jmap.MailboxRole('drafts'));
+        done();
+        return q.reject();
+      };
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .saveAsDraft(new jmap.OutboundMessage(jmap));
+    });
+
+    it('should assign the draft mailbox id in mailboxIds', function(done) {
+      var client = defaultClient();
+      client._generateClientId = function() {return 'expectedClientId';};
+      client.getMailboxWithRole = function() {
+        return q.resolve(new jmap.Mailbox({}, 5, 'my drafts', {role: 'DRAFTS'}));
+      };
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          create: {
+            expectedClientId: {
+              subject: 'message topic',
+              mailboxIds: [5],
+              isDraft: true
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, done);
+    });
+
+    it('should force the isDraft flag', function(done) {
+      var client = defaultClient();
+      client._generateClientId = function() {return 'expectedClientId';};
+      client.getMailboxWithRole = function() {
+        return q.resolve(new jmap.Mailbox({}, 5, 'my drafts', {role: 'DRAFTS'}));
+      };
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          create: {
+            expectedClientId: {
+              subject: 'message topic',
+              mailboxIds: [5],
+              isDraft: true
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic',
+          isDraft: false
+        }))
+        .then(null, done);
+    });
+
+  });
+
 });
