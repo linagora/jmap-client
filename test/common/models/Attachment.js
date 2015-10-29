@@ -24,13 +24,13 @@ describe('The Attachment class', function() {
 
       expect(attachment.blobId).to.equal('blobId');
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should use default value for all other fields iif an empty opts object is given', function() {
@@ -38,13 +38,13 @@ describe('The Attachment class', function() {
 
       expect(attachment.blobId).to.equal('blobId');
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should allow defining other fields through the opts object', function() {
@@ -112,13 +112,13 @@ describe('The Attachment class', function() {
       var attachment = jmap.Attachment.fromJSONObject({}, { blobId: 'blobId' });
 
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should copy values for all other fields if defined', function() {
