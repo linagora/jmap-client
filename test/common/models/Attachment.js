@@ -24,13 +24,13 @@ describe('The Attachment class', function() {
 
       expect(attachment.blobId).to.equal('blobId');
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should use default value for all other fields iif an empty opts object is given', function() {
@@ -38,13 +38,13 @@ describe('The Attachment class', function() {
 
       expect(attachment.blobId).to.equal('blobId');
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should allow defining other fields through the opts object', function() {
@@ -112,13 +112,13 @@ describe('The Attachment class', function() {
       var attachment = jmap.Attachment.fromJSONObject({}, { blobId: 'blobId' });
 
       expect(attachment.url).to.equal(null);
-      expect(attachment.type).to.equal('');
-      expect(attachment.name).to.equal('');
-      expect(attachment.size).to.equal(0);
+      expect(attachment.type).to.equal(null);
+      expect(attachment.name).to.equal(null);
+      expect(attachment.size).to.equal(null);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
-      expect(attachment.width).to.equal(0);
-      expect(attachment.height).to.equal(0);
+      expect(attachment.width).to.equal(null);
+      expect(attachment.height).to.equal(null);
     });
 
     it('should copy values for all other fields if defined', function() {
@@ -143,6 +143,55 @@ describe('The Attachment class', function() {
       expect(attachment.isInline).to.equal(true);
       expect(attachment.width).to.equal(20);
       expect(attachment.height).to.equal(30);
+    });
+
+  });
+
+  describe('The toJSONObject', function() {
+
+    it('should produce blobId only object when no opts', function() {
+      expect(new jmap.Attachment({}, 'blobId', {}).toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        isInline: false
+      });
+    });
+
+    it('should produce partial json when only few opts', function() {
+      var attachment = new jmap.Attachment({}, 'blobId', {
+        name: 'jmap.js',
+        isInline: false
+      });
+
+      expect(attachment.toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        name: 'jmap.js',
+        isInline: false
+      });
+    });
+
+    it('should produce full json when full opts', function() {
+      var attachment = new jmap.Attachment({}, 'blobId', {
+        url: 'https://jmap.org/download/blob/blobId/filename',
+        type: 'application/javascript',
+        name: 'jmap.js',
+        size: 100,
+        isInline: true,
+        cid: 'cid',
+        width: 20,
+        height: 30
+      });
+
+      expect(attachment.toJSONObject()).to.deep.equal({
+        blobId: 'blobId',
+        url: 'https://jmap.org/download/blob/blobId/filename',
+        type: 'application/javascript',
+        name: 'jmap.js',
+        size: 100,
+        isInline: true,
+        cid: 'cid',
+        width: 20,
+        height: 30
+      });
     });
 
   });

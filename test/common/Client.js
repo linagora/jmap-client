@@ -6,6 +6,14 @@ var expect = require('chai').expect,
 
 describe('The Client class', function() {
 
+  function defaultClient() {
+    return new jmap.Client({
+      post: function() {
+        return q.reject();
+      }
+    });
+  }
+
   describe('The constructor', function() {
 
     it('should throw an Error if transport is not defined', function() {
@@ -32,7 +40,7 @@ describe('The Client class', function() {
   describe('The withAuthenticationToken method', function() {
 
     it('should store the token as authToken', function() {
-      expect(new jmap.Client({}).withAuthenticationToken('token').authToken).to.equal('token');
+      expect(defaultClient().withAuthenticationToken('token').authToken).to.equal('token');
     });
 
   });
@@ -40,7 +48,7 @@ describe('The Client class', function() {
   describe('The withAPIUrl method', function() {
 
     it('should store the url as apiUrl', function() {
-      expect(new jmap.Client({}).withAPIUrl('https://jmap.open-paas.org').apiUrl).to.equal('https://jmap.open-paas.org');
+      expect(defaultClient().withAPIUrl('https://jmap.open-paas.org').apiUrl).to.equal('https://jmap.open-paas.org');
     });
 
   });
@@ -48,7 +56,7 @@ describe('The Client class', function() {
   describe('The withAuthenticationUrl method', function() {
 
     it('should store the url as authenticationUrl', function() {
-      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org/auth').authenticationUrl).to.equal('https://jmap.open-paas.org/auth');
+      expect(defaultClient().withAuthenticationUrl('https://jmap.open-paas.org/auth').authenticationUrl).to.equal('https://jmap.open-paas.org/auth');
     });
 
   });
@@ -56,7 +64,7 @@ describe('The Client class', function() {
   describe('The withDownloadUrl method', function() {
 
     it('should store the url as downloadUrl', function() {
-      expect(new jmap.Client({}).withDownloadUrl('https://jmap.open-paas.org/dl').downloadUrl).to.equal('https://jmap.open-paas.org/dl');
+      expect(defaultClient().withDownloadUrl('https://jmap.open-paas.org/dl').downloadUrl).to.equal('https://jmap.open-paas.org/dl');
     });
 
   });
@@ -867,25 +875,25 @@ describe('The Client class', function() {
 
     it('should throw an Error if id is not given', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage();
+        defaultClient().moveMessage();
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is not given', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id');
+        defaultClient().moveMessage('id');
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is not an Array', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id', 'notAnArray');
+        defaultClient().moveMessage('id', 'notAnArray');
       }).to.throw(Error);
     });
 
     it('should throw an Error if mailboxIds is zero-length', function() {
       expect(function() {
-        new jmap.Client({}).moveMessage('id', []);
+        defaultClient().moveMessage('id', []);
       }).to.throw(Error);
     });
 
@@ -948,19 +956,19 @@ describe('The Client class', function() {
 
     it('should throw an Error if role is not given', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole();
+        defaultClient().getMailboxWithRole();
       }).to.throw(Error);
     });
 
     it('should throw an Error if role is an unknown String', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole('test');
+        defaultClient().getMailboxWithRole('test');
       }).to.throw(Error);
     });
 
     it('should throw an Error if role is UNKNOWN', function() {
       expect(function() {
-        new jmap.Client({}).getMailboxWithRole(jmap.MailboxRole.UNKNOWN);
+        defaultClient().getMailboxWithRole(jmap.MailboxRole.UNKNOWN);
       }).to.throw(Error);
     });
 
@@ -1047,7 +1055,7 @@ describe('The Client class', function() {
 
   describe('withAuthenticationUrl method', function() {
     it('should store the url as authenticationUrl', function() {
-      expect(new jmap.Client({}).withAuthenticationUrl('https://jmap.open-paas.org').authenticationUrl)
+      expect(defaultClient().withAuthenticationUrl('https://jmap.open-paas.org').authenticationUrl)
       .to.equal('https://jmap.open-paas.org');
     });
   });
@@ -1157,6 +1165,197 @@ describe('The Client class', function() {
         expect(authAccess).to.deep.equal(authAccessResponse);
         done();
       });
+    });
+
+  });
+
+  describe('The saveAsDraft method', function() {
+
+    it('should throw an Error if the message is undefined', function() {
+      expect(function() {
+        defaultClient().saveAsDraft();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if message has not the expected type', function() {
+      expect(function() {
+        defaultClient().saveAsDraft('message');
+      }).to.throw(Error);
+    });
+
+    it('should call getMailboxWithRole to find the draft mailbox id', function(done) {
+      var client = defaultClient();
+      client.getMailboxWithRole = function(role) {
+        expect(role).to.deep.equal(new jmap.MailboxRole('drafts'));
+        done();
+        return q.reject();
+      };
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .saveAsDraft(new jmap.OutboundMessage(jmap));
+    });
+
+    function saveAsDraftReadyClient() {
+      var client = defaultClient()
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token');
+
+      client._generateClientId = function() {
+        return 'expectedClientId';
+      };
+      client.getMailboxWithRole = function() {
+        return q.resolve(new jmap.Mailbox({}, 5, 'my drafts', {role: 'DRAFTS'}));
+      };
+
+      return client;
+    }
+
+    it('should assign the draft mailbox id in mailboxIds', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          create: {
+            expectedClientId: {
+              subject: 'message topic',
+              mailboxIds: [5],
+              isDraft: true
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, done);
+    });
+
+    it('should force the isDraft flag', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          create: {
+            expectedClientId: {
+              subject: 'message topic',
+              mailboxIds: [5],
+              isDraft: true
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic',
+          isDraft: false
+        }))
+        .then(null, done);
+    });
+
+    it('should resolve the promise with returned object if clientId in the response.created', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {
+            expectedClientId: {
+              blobId: 'm-ma294202da',
+              id: 'ma294202da',
+              size: 281,
+              threadId: 'ta294202da'
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(function(resolved) {
+          expect(resolved).to.be.an.instanceof(jmap.CreateMessageAck);
+          expect(resolved).to.include({
+            blobId: 'm-ma294202da',
+            id: 'ma294202da',
+            size: 281,
+            threadId: 'ta294202da'
+          });
+          done();
+        });
+    });
+
+    it('should throw an error if response.created does not contains the expected response format', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {
+            expectedClientId: {
+              size: 281
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err).to.be.an.instanceof(Error);
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {},
+          notCreated: {
+            otherId: 'message with different clientId, it should not be taken in account'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to save the message as draft, clientId: expectedClientId, message: none');
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object but in response.notCreated', function(done) {
+      var client = saveAsDraftReadyClient();
+
+      client.transport.post = function() {
+        return q([['setMessages', {
+          created: {},
+          notCreated: {
+            expectedClientId: 'message with right clientId, it should be taken in account'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .saveAsDraft(new jmap.OutboundMessage(jmap, {
+          subject: 'message topic'
+        }))
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to save the message as draft, clientId: expectedClientId, message: message with right clientId, it should be taken in account');
+          done();
+        });
     });
 
   });
