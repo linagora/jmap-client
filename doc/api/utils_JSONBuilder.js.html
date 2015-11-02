@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/Thread.js</title>
+    <title>JSDoc: Source: utils/JSONBuilder.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/Thread.js</h1>
+    <h1 class="page-title">Source: utils/JSONBuilder.js</h1>
 
     
 
@@ -28,66 +28,82 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-import Model from './Model.js';
 import Utils from '../utils/Utils.js';
 
-export default class Thread extends Model {
+export default class JSONBuilder {
   /**
-   * This class represents a JMAP [Thread]{@link http://jmap.io/spec.html#threads}.
+   * This class helps to create JSON representation from a model.
+   * Usage:
+   *
+   *       return new JSONBuilder()
+   *         .appendIfDefined('inReplyToMessageId', this.inReplyToMessageId)
+   *         .appendIfDefined('isUnread', this.isUnread)
+   *         .appendIfDefined('isFlagged', this.isFlagged)
+   *         .build();
    *
    * @constructor
-   * @extends Model
-   *
-   * @param jmap {Client} The {@link Client} instance that created this _Thread_.
-   * @param id {String} The unique identifier of this _Thread_.
-   * @param [opts] {Object} The optional properties of this _Thread_.
-   * @param [opts.messageIds=[]] {String[]} An array of message identifiers contained in this _Thread_.
-   *
-   * @see Model
-   */
-  constructor(jmap, id, opts) {
-    super(jmap);
-
-    Utils.assertRequiredParameterIsPresent(id, 'id');
-
-    opts = opts || {};
-
-    this.id = id;
-    this.messageIds = opts.messageIds || [];
+   **/
+  constructor() {
+    this.result = {};
   }
 
   /**
-   * Fetches all messages contained in this _Thread_.&lt;br />
-   * This will delegate to {@link Client#getMessages}, passing this Thread's _messageIds_ as the _ids_ option.
+   * Will append the _value_ to the building object, using the _name_ as key.
    *
-   * @param [options] {Object} The options object passed to {@link Client#getMessages}.
-   *   Please note that the _ids_ option will be overriden if defined.
-   * @returns {Promise} A promise that eventually resolves with an array of {@link Message} instances.
+   * @param name {String} The name to use as key.
+   * @param value {*} The value to append.
    *
-   * @see Client#getMessages
-   * @see PromiseProvider
-   */
-  getMessages(options) {
-    options = options || {};
-    options.ids = this.messageIds;
+   * @return this builder
+   **/
+  append(name, value) {
+    Utils.assertRequiredParameterIsPresent(name, 'name');
+    Utils.assertRequiredParameterIsPresent(value, 'value');
 
-    return this._jmap.getMessages(options);
+    this.result[name] = value;
+
+    return this;
   }
 
   /**
-   * Creates a _Thread_ from its JSON representation.
+   * If defined, it will append the _value_ to the building object, using the _name_ as key.
    *
-   * @param jmap {Client} The {@link Client} instance passed to the _Thread_ constructor.
-   * @param object {Object} The JSON representation of the _Thread_, as a Javascript object.
-   * @param object.id {String} The identifier of the _Thread_.
+   * @param name {String} The name to use as key.
+   * @param [value] {*} The value to append.
    *
-   * @return {Thread}
-   */
-  static fromJSONObject(jmap, object) {
-    Utils.assertRequiredParameterIsPresent(object, 'object');
-
-    return new Thread(jmap, object.id, object);
+   * @return this builder
+   **/
+  appendIfDefined(name, value) {
+    if (Utils.isDefined(value)) {
+      this.append(name, value);
+    }
+    return this;
   }
+
+  /**
+   * If defined and not empty, it will append the _value_ array to the building object, using the _name_ as key.
+   *
+   * @param name {String} The name to use as key.
+   * @param [value] {Array} The value to append.
+   *
+   * @return this builder
+   **/
+  appendIfNotEmpty(name, value) {
+    if (value) {
+      Utils.assertRequiredParameterIsArrayWithMinimumLength(value, name);
+      if (value.length > 0) {
+        this.append(name, value.map(item => item.toJSONObject ? item.toJSONObject() : item));
+      }
+    }
+    return this;
+  }
+
+  /**
+   * @return an object with all appended values
+   **/
+  build() {
+    return this.result;
+  }
+
 }
 </code></pre>
         </article>

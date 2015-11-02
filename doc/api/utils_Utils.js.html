@@ -40,6 +40,17 @@ export default class Utils {
   }
 
   /**
+   * Check is the `parameter` is not undefined and not null.
+   *
+   * @param parameter {*} The parameter to check.
+   *
+   * @return {Boolean} True if `parameter` is not undefined and not null.
+   */
+  static isDefined(parameter) {
+    return typeof parameter !== 'undefined' &amp;&amp; parameter !== null;
+  }
+
+  /**
    * Asserts that the given `parameter` is present (read: truthy).&lt;br />
    * This method is intended to be called when you need to validate input parameters of functions.
    *
@@ -52,8 +63,60 @@ export default class Utils {
    * @throws {Error} If the parameter is not defined.
    */
   static assertRequiredParameterIsPresent(parameter, name) {
-    if (!parameter) {
+    if (!Utils.isDefined(parameter)) {
       throw new Error('The "' + name + '" parameter is required.');
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `parameter` is present and is an object.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not defined or is not an object.
+   */
+  static assertRequiredParameterIsObject(parameter, name) {
+    Utils.assertRequiredParameterIsPresent(parameter, name);
+
+    if (typeof parameter !== 'object' || Array.isArray(parameter)) {
+      throw new Error('The "' + name + '" parameter is not an object.');
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `parameter` is present and has the expected type.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   * Examples:
+   *     assertRequiredParameterHasType(5, 'name', 'number') => returns 5
+   *     assertRequiredParameterHasType({}, 'name', CustomClass) => throws an Error
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   * @param type {String|Type} The expected type of the parameter.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not defined or is not an object.
+   */
+  static assertRequiredParameterHasType(parameter, name, type) {
+    Utils.assertRequiredParameterIsPresent(parameter, name);
+
+    if (typeof type === 'string') {
+      if (typeof parameter !== type) {
+        throw new Error('The "' + name + '" parameter has not the expected type: ' + type);
+      }
+    } else if (!(parameter instanceof type)) {
+      throw new Error('The "' + name + '" parameter has not the expected type: ' + type);
     }
 
     return parameter;
@@ -193,7 +256,7 @@ export default class Utils {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">

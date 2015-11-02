@@ -35,6 +35,8 @@ import Mailbox from './../models/Mailbox.js';
 import MessageList from './../models/MessageList.js';
 import Thread from './../models/Thread.js';
 import Message from './../models/Message.js';
+import OutboundMessage from './../models/OutboundMessage.js';
+import CreateMessageAck from './../models/CreateMessageAck.js';
 import MessagesSet from './../models/MessagesSet.js';
 import MailboxRole from './../models/MailboxRole.js';
 import AuthContinuation from './../models/AuthContinuation.js';
@@ -276,6 +278,39 @@ export default class Client {
   }
 
   /**
+   * Save a message as draft by sending a _setMessages_ JMAP request.&lt;br />
+   * The _mailboxIds_ and _isDraft_ properties of the given _message_ will be overridden by this method.
+   *
+   * @param message {OutboundMessage} The message to save.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link CreateMessageAck}.
+   *
+   * @see http://jmap.io/spec.html#saving-a-draft
+   */
+  saveAsDraft(message) {
+    Utils.assertRequiredParameterHasType(message, 'message', OutboundMessage);
+
+    var clientId = this._generateClientId();
+    return this
+      .getMailboxWithRole(MailboxRole.DRAFTS)
+      .then(mailbox => {
+        message.mailboxIds = [mailbox.id];
+        message.isDraft = true;
+
+        return this.setMessages({
+          create: {
+            [clientId]: message.toJSONObject()
+          }
+        });
+      }).then(response => {
+        if (!response.created[clientId]) {
+          throw new Error('Failed to save the message as draft, clientId: ' + clientId + ', message: ' + (response.notCreated[clientId] || 'none'));
+        }
+        return new CreateMessageAck(this, response.created[clientId]);
+      });
+  }
+
+  /**
    * Moves a {@link Message} to a different set of mailboxes.&lt;br />
    * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
    *
@@ -301,6 +336,10 @@ export default class Client {
         throw new Error('Failed to move message ' + id + ', reason is ' + messagesSet.notUpdated[id]);
       }
     });
+  }
+
+  _generateClientId() {
+    return Date.now();
   }
 
   _defaultNonAuthenticatedHeaders() {
@@ -376,7 +415,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">

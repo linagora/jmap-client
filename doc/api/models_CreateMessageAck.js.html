@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/Thread.js</title>
+    <title>JSDoc: Source: models/CreateMessageAck.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/Thread.js</h1>
+    <h1 class="page-title">Source: models/CreateMessageAck.js</h1>
 
     
 
@@ -31,63 +31,34 @@
 import Model from './Model.js';
 import Utils from '../utils/Utils.js';
 
-export default class Thread extends Model {
+export default class CreateMessageAck extends Model {
   /**
-   * This class represents a JMAP [Thread]{@link http://jmap.io/spec.html#threads}.
+   * This class should be used to wrap a create response item from a setMessages request.&lt;br />
    *
    * @constructor
    * @extends Model
    *
-   * @param jmap {Client} The {@link Client} instance that created this _Thread_.
-   * @param id {String} The unique identifier of this _Thread_.
-   * @param [opts] {Object} The optional properties of this _Thread_.
-   * @param [opts.messageIds=[]] {String[]} An array of message identifiers contained in this _Thread_.
+   * @param jmap {Client} The {@link Client} instance that created this _OutboundMessage_.
+   * @param response {Object} The raw created response object.
+   * @param response.blobId {String} The server side generated blobId of the created message.
+   * @param response.size {Number} The server side size of the created message.
+   * @param [response.id=null] {String} The server side generated message id of the created message.
+   * @param [response.threadId=null] {String} The server side assigned threadId of the created message.
    *
    * @see Model
    */
-  constructor(jmap, id, opts) {
+  constructor(jmap, response) {
     super(jmap);
+    Utils.assertRequiredParameterIsObject(response, 'response');
+    Utils.assertRequiredParameterIsPresent(response.blobId, 'response.blobId');
+    Utils.assertRequiredParameterHasType(response.size, 'response.size', 'number');
 
-    Utils.assertRequiredParameterIsPresent(id, 'id');
-
-    opts = opts || {};
-
-    this.id = id;
-    this.messageIds = opts.messageIds || [];
+    this.id = response.id;
+    this.blobId = response.blobId;
+    this.size = response.size;
+    this.threadId = response.threadId;
   }
 
-  /**
-   * Fetches all messages contained in this _Thread_.&lt;br />
-   * This will delegate to {@link Client#getMessages}, passing this Thread's _messageIds_ as the _ids_ option.
-   *
-   * @param [options] {Object} The options object passed to {@link Client#getMessages}.
-   *   Please note that the _ids_ option will be overriden if defined.
-   * @returns {Promise} A promise that eventually resolves with an array of {@link Message} instances.
-   *
-   * @see Client#getMessages
-   * @see PromiseProvider
-   */
-  getMessages(options) {
-    options = options || {};
-    options.ids = this.messageIds;
-
-    return this._jmap.getMessages(options);
-  }
-
-  /**
-   * Creates a _Thread_ from its JSON representation.
-   *
-   * @param jmap {Client} The {@link Client} instance passed to the _Thread_ constructor.
-   * @param object {Object} The JSON representation of the _Thread_, as a Javascript object.
-   * @param object.id {String} The identifier of the _Thread_.
-   *
-   * @return {Thread}
-   */
-  static fromJSONObject(jmap, object) {
-    Utils.assertRequiredParameterIsPresent(object, 'object');
-
-    return new Thread(jmap, object.id, object);
-  }
 }
 </code></pre>
         </article>

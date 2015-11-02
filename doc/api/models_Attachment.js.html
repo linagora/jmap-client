@@ -30,6 +30,7 @@
 
 import Model from './Model.js';
 import Utils from '../utils/Utils.js';
+import JSONBuilder from '../utils/JSONBuilder.js';
 
 export default class Attachment extends Model {
   /**
@@ -48,11 +49,11 @@ export default class Attachment extends Model {
    *  _Attachment_ instance will be set to `null`.
    * @param [opts.type=''] {String} The content-type of the attachment.
    * @param [opts.name=''] {String} The full file name.
-   * @param [opts.size=0] {Number} The size, in bytes, of the attachment when fully decoded.
+   * @param [opts.size=null] {Number} The size, in bytes, of the attachment when fully decoded.
    * @param [opts.cid=null] {String} The id used within the message body to reference this attachment.
    * @param [opts.isInline=false] {String} `true` if the attachment is referenced by a `cid:` link from within the HTML body of the message.
-   * @param [opts.width=0] {String} The width (in px) of the image, if the attachment is an image.
-   * @param [opts.height=0] {String} TThe height (in px) of the image, if the attachment is an image.
+   * @param [opts.width=null] {String} The width (in px) of the image, if the attachment is an image.
+   * @param [opts.height=null] {String} TThe height (in px) of the image, if the attachment is an image.
    *
    * @see Model
    */
@@ -64,13 +65,13 @@ export default class Attachment extends Model {
     opts = opts || {};
 
     this.blobId = blobId;
-    this.type = opts.type || '';
-    this.name = opts.name || '';
-    this.size = opts.size || 0;
+    this.type = opts.type || null;
+    this.name = opts.name || null;
+    this.size = opts.size || null;
     this.cid = opts.cid || null;
     this.isInline = opts.isInline || false;
-    this.width = opts.width || 0;
-    this.height = opts.height || 0;
+    this.width = opts.width || null;
+    this.height = opts.height || null;
     this.url = opts.url || null;
 
     // Some JMAP servers might return an already defined attachment URL, some others don't; the spec is vague about that
@@ -81,6 +82,25 @@ export default class Attachment extends Model {
         name: this.name || this.blobId
       });
     }
+  }
+
+  /**
+   * Creates a JSON representation from this model.
+   *
+   * @return JSON object with only owned properties and non default values.
+   */
+  toJSONObject() {
+    return new JSONBuilder()
+      .appendIfDefined('blobId', this.blobId)
+      .appendIfDefined('type', this.type)
+      .appendIfDefined('name', this.name)
+      .appendIfDefined('size', this.size)
+      .appendIfDefined('cid', this.cid)
+      .appendIfDefined('width', this.width)
+      .appendIfDefined('height', this.height)
+      .appendIfDefined('url', this.url)
+      .appendIfDefined('isInline', this.isInline)
+      .build();
   }
 
   /**
@@ -108,7 +128,7 @@ export default class Attachment extends Model {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
