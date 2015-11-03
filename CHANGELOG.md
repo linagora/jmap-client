@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.0.5] - 2015-11-02
+### Added
+- The OutboundMessage and CreateMessageAck classes
+- The Client.saveAsDraft method
+- The JSONBuilder class to serialize models
+
 ## [0.0.4] - 2015-10-16
 ### Added
 - The Attachment class
