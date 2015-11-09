@@ -60,6 +60,8 @@ There's also some code samples included in the *samples* folder.
 
 ### 4. Code, execute tests then pull request !
 
+More detailled instructions can be found in the [contributing section](./CONTRIBUTING.md).
+
 ## Release
 
 If you are a maintainer of this project, here's how you can release a new version:
