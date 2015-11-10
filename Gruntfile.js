@@ -70,16 +70,22 @@ module.exports = function(grunt) {
       }
     },
 
-    mochacli: {
-      options: {
-        require: ['chai'],
-        reporter: 'spec',
-        timeout: 3000
-      },
-      all: [
-        '<%= project.test %>/common/**/*.js',
-        '<%= project.test %>/backend/**/*.js'
-      ]
+    mocha_istanbul: {
+      coverage: {
+        src: [
+          '<%= project.test %>/common/',
+          '<%= project.test %>/backend/'
+        ],
+        options: {
+          require: ['chai'],
+          reporter: 'spec',
+          reportFormats: ['lcov', 'text-summary'],
+          timeout: 3000,
+          coverageFolder: 'coverage/backend',
+          mask: '**/*.js',
+          root: 'dist/'
+        }
+      }
     },
 
     watch: {
@@ -174,10 +180,12 @@ module.exports = function(grunt) {
   });
 
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-mocha-istanbul');
+
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'browserify', 'uglify']);
   grunt.registerTask('dist', ['test']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
-  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
+  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mocha_istanbul:coverage', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
   grunt.registerTask('apidoc', 'Generates API documentation', ['clean:apidoc', 'jsdoc']);
 
