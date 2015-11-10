@@ -99,6 +99,15 @@ module.exports = function(grunt) {
       ]
     },
 
+    coveralls: {
+      options: {
+        force: false // When true, grunt-coveralls will only print a warning rather than an error
+      },
+      publish: {
+        src: 'coverage/lcov-merged.info'
+      }
+    },
+
     watch: {
       files: ['<%= jshint.all.src %>'],
       tasks: ['test']
@@ -192,11 +201,12 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-mocha-istanbul');
+  grunt.loadNpmTasks('grunt-coveralls');
 
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'browserify', 'uglify']);
-  grunt.registerTask('dist', ['test']);
+  grunt.registerTask('dist', ['test', 'lcovMerge', 'coveralls:publish']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
-  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mocha_istanbul:coverage', 'karma', 'lcovMerge']);
+  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mocha_istanbul:coverage', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
   grunt.registerTask('apidoc', 'Generates API documentation', ['clean:apidoc', 'jsdoc']);
 
