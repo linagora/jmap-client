@@ -70,6 +70,16 @@ module.exports = function(grunt) {
       }
     },
 
+    coveralls: {
+      // Options relevant to all targets
+      options: {
+        force: true
+      },
+      publish: {
+        src: 'coverage/lcov/lcov.info'
+      }
+    },
+
     mochacli: {
       options: {
         require: ['chai'],
@@ -174,10 +184,11 @@ module.exports = function(grunt) {
   });
 
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-coveralls');
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'browserify', 'uglify']);
   grunt.registerTask('dist', ['test']);
   grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
-  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma']);
+  grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mochacli', 'karma', 'coveralls']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
   grunt.registerTask('apidoc', 'Generates API documentation', ['clean:apidoc', 'jsdoc']);
 
