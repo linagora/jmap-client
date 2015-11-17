@@ -7,14 +7,32 @@ module.exports = function(config) {
     singleRun: true,
     browsers: ['PhantomJS'],
     frameworks: ['mocha'],
-    reporters: ['spec'],
+
+    reporters: ['spec', 'coverage'],
+
+    preprocessors: {
+      'dist/*.js': ['babel', 'coverage']
+    },
+
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'text-summary'},
+        { type: 'html', subdir: 'html' },
+        { type: 'lcovonly', subdir: 'lcov' },
+        { type: 'cobertura', subdir: 'cobertura' }
+      ]
+    },
+
     plugins: [
       'karma-phantomjs-launcher',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-mocha',
-      'karma-spec-reporter'
+      'karma-spec-reporter',
+      'karma-coverage'
     ],
+
     colors: true,
     autoWatch: true,
     files: [
