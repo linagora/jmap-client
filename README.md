@@ -1,6 +1,6 @@
 # JMAP-CLIENT
 
-[![Build Status](https://ci.open-paas.org/jenkins/buildStatus/icon?job=jmap-client)](https://ci.open-paas.org/jenkins/job/jmap-client/)
+[![Join the chat at https://gitter.im/linagora/jmap-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/linagora/jmap-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/linagora/jmap-client.svg?branch=master)](https://travis-ci.org/linagora/jmap-client) [![Coverage Status](https://coveralls.io/repos/linagora/jmap-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/linagora/jmap-client?branch=master)
 
 This repository provides a Javascript library to make requests against a JMAP server.
 It is a client-side implementation of the [JMAP](http://jmap.io/spec.html) specification.
