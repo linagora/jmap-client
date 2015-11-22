@@ -1060,7 +1060,7 @@ describe('The Client class', function() {
     });
   });
 
-  describe('authExternal method', function() {
+  describe('The authenticate method', function() {
     it('should send a request to the authenticationUrl with the right body', function(done) {
       new jmap.Client({
         post: function(url, headers, data) {
@@ -1074,9 +1074,108 @@ describe('The Client class', function() {
         }
       })
       .withAuthenticationUrl('https://test')
-      .authExternal('user@domain.com', 'Device name', function() {});
+      .authenticate('user@domain.com', 'Device name', function() {});
     });
 
+    it('should call the provided continuation calback', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            continuationToken: 'continuationToken1',
+            methods: ['password', 'external']
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        expect(authContinuation.continuationToken).to.equal('continuationToken1');
+        expect(authContinuation.methods).to.deep.equal(['password', 'external']);
+        done();
+        return q.reject();
+      });
+    });
+
+    it('should request the accessToken with the selected method', function(done) {
+      var calls =  0;
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (calls === 0) {
+            calls++;
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password', 'external']
+            });
+          } else {
+            expect(data.token).to.equal('continuationToken1');
+            expect(data.method).to.equal('password');
+            expect(data.password).to.equal('password1');
+            done();
+            return q();
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        return q({
+          method: 'password',
+          password: 'password1'
+        });
+      });
+    });
+
+    it('should reject if an unsupported auth method is requested', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            continuationToken: 'continuationToken1',
+            methods: ['password']
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        return q({ method: 'external' });
+      })
+      .then(null, function(err) {
+        expect(err).to.be.instanceOf(Error);
+        done();
+      });
+    });
+
+    it('should resolve with AuthAccess', function(done) {
+      var authAccessResponse = {
+        accessToken: 'accessToken1',
+        api: '/',
+        eventSource: '/es',
+        upload: '/upload',
+        download: '/download'
+      };
+
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (data.username) {
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password', 'external']
+            });
+          } else {
+            return q(authAccessResponse);
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        return q({ method: 'external' });
+      })
+      .then(function(authAccess) {
+        expect(authAccess).to.deep.equal(authAccessResponse);
+        done();
+      });
+    });
+
+  });
+
+  describe('The authExternal method', function() {
     it('should reject if the server does not support external authentication', function(done) {
       new jmap.Client({
         post: function(url, headers, data) {
@@ -1112,30 +1211,6 @@ describe('The Client class', function() {
       });
     });
 
-    it('should request the accessToken', function(done) {
-      var calls =  0;
-      new jmap.Client({
-        post: function(url, headers, data) {
-          if (calls === 0) {
-            calls++;
-            return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password', 'external']
-            });
-          } else {
-            expect(data.token).to.equal('continuationToken1');
-            expect(data.method).to.equal('external');
-            done();
-            return q();
-          }
-        }
-      })
-      .withAuthenticationUrl('https://test')
-      .authExternal('user@domain.com', 'Device name', function(authContinuation) {
-        return q(authContinuation.continuationToken);
-      });
-    });
-
     it('should give back a AuthAccess', function(done) {
       var authAccessResponse = {
         accessToken: 'accessToken1',
@@ -1161,6 +1236,55 @@ describe('The Client class', function() {
       .authExternal('user@domain.com', 'Device name', function(authContinuation) {
         return q(authContinuation.continuationToken);
       })
+      .then(function(authAccess) {
+        expect(authAccess).to.deep.equal(authAccessResponse);
+        done();
+      });
+    });
+
+  });
+
+  describe('The authPassword method', function() {
+    it('should reject if the server does not support password authentication', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            continuationToken: 'continuationToken1',
+            methods: ['external']
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authPassword('user@domain.com', 'xxxxxx', 'Device name')
+      .then(null, function(err) {
+        expect(err).to.be.instanceOf(Error);
+        done();
+      });
+    });
+
+    it('should give back a AuthAccess', function(done) {
+      var authAccessResponse = {
+        accessToken: 'accessToken1',
+        api: '/',
+        eventSource: '/es',
+        upload: '/upload',
+        download: '/download'
+      };
+
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (data.username) {
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password', 'external']
+            });
+          } else {
+            return q(authAccessResponse);
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authPassword('user@domain.com', 'xxxxxx', 'Device name')
       .then(function(authAccess) {
         expect(authAccess).to.deep.equal(authAccessResponse);
         done();
