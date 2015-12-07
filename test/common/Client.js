@@ -1070,6 +1070,7 @@ describe('The Client class', function() {
           expect(data.clientName).to.have.length.above(0);
           expect(data.clientVersion).to.have.length.above(0);
           done();
+
           return q.Promise(function() {});
         }
       })
@@ -1108,16 +1109,19 @@ describe('The Client class', function() {
         expect(authContinuation.continuationToken).to.equal('continuationToken1');
         expect(authContinuation.methods).to.deep.equal(['password', 'external']);
         done();
+
         return q.reject();
       });
     });
 
     it('should request the accessToken', function(done) {
       var calls =  0;
+
       new jmap.Client({
         post: function(url, headers, data) {
           if (calls === 0) {
             calls++;
+
             return q({
               continuationToken: 'continuationToken1',
               methods: ['password', 'external']
@@ -1126,6 +1130,7 @@ describe('The Client class', function() {
             expect(data.token).to.equal('continuationToken1');
             expect(data.method).to.equal('external');
             done();
+
             return q();
           }
         }
@@ -1185,9 +1190,11 @@ describe('The Client class', function() {
 
     it('should call getMailboxWithRole to find the draft mailbox id', function(done) {
       var client = defaultClient();
+
       client.getMailboxWithRole = function(role) {
         expect(role).to.deep.equal(new jmap.MailboxRole('drafts'));
         done();
+
         return q.reject();
       };
 

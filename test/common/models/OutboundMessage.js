@@ -28,11 +28,13 @@ describe('The OutboundMessage class', function() {
 
     it('should use default values for fields if opts is not defined', function() {
       var message = new jmap.OutboundMessage({});
+
       expectDefaultValues(message);
     });
 
     it('should use default values for fields if opts is empty', function() {
       var message = new jmap.OutboundMessage({}, {});
+
       expectDefaultValues(message);
     });
 

@@ -93,6 +93,7 @@ describe('The Utils class', function() {
     it('should throw an Error if the parameter is undefined', function() {
       expect(function() {
         var param;
+
         jmap.Utils.assertRequiredParameterIsObject(param, 'parameter');
       }).to.throw(Error);
     });
@@ -127,6 +128,7 @@ describe('The Utils class', function() {
 
     it('should not throw an Error if the parameter has the expected type for custom type', function() {
       var val = new TestType();
+
       expect(jmap.Utils.assertRequiredParameterHasType(val, 'name', TestType)).to.equal(val);
     });
 
