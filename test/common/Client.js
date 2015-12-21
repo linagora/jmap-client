@@ -1484,4 +1484,78 @@ describe('The Client class', function() {
 
   });
 
+  describe('The destroyMessage method', function() {
+
+    it('should throw an Error if the id is undefined', function() {
+      expect(function() {
+        defaultClient().destroyMessage();
+      }).to.throw(Error);
+    });
+
+    it('should call setMessages with the expected id', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          destroy: ['the id']
+        }, '#0']]);
+        done();
+
+        return q.reject();
+      };
+
+      client.destroyMessage('the id');
+    });
+
+    it('should resolve the promise with nothing if the message was destroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['messagesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: ['the id']
+        }, '#0']]);
+      };
+
+      client.destroyMessage('the id').then(done);
+    });
+
+    it('should throw an error if the given id is not in response.destroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['messagesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: [],
+          notDestroyed: {'the id': 'expected message'}
+        }, '#0']]);
+      };
+
+      client.destroyMessage('the id').then(null, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.equal('Failed to destroy the id, the reason is: expected message');
+        done();
+      });
+    });
+
+    it('should throw an error if the given id is neither in response.destroyed nor in response.notDestroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['messagesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: [],
+          notDestroyed: {}
+        }, '#0']]);
+      };
+
+      client.destroyMessage('the id').then(null, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.equal('Failed to destroy the id, the reason is: missing');
+        done();
+      });
+    });
+
+  });
+
 });

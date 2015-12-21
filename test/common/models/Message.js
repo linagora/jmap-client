@@ -248,6 +248,20 @@ describe('The Message class', function() {
 
   });
 
+  describe('The destroy method', function() {
+
+    it('should delegate to the jmap client, passing the id as arg', function(done) {
+      new jmap.Message({
+        destroyMessage: function(id) {
+          expect(id).to.equal('id');
+
+          done();
+        }
+      }, 'id', 'threadId', ['inbox']).destroy();
+    });
+
+  });
+
   describe('The moveToMailboxWithRole method', function() {
 
     it('should support a MailboxRole argument', function(done) {
