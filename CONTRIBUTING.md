@@ -96,3 +96,13 @@ You can run tests at any moment in your development process by using the grunt c
 ```javascript
 grunt
 ```
+
+### Fill the change log
+
+The last step!
+
+Please before to open your pull-request, write in the CHANGELOG.md file a line explaining briefly your changes under the 'master' section.
+
+    ## [master]
+    ### Added
+    - What I did #GITHUB_ISSUE
