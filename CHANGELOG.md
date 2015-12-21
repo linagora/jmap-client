@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [master]
 ### Added
 
-## [0.0.6] - 2015-12-21
+## [0.0.7] - 2015-12-21
 ### Added
 - Code style rules #9
 - Client.destroyMessage and Message.destroy #14
