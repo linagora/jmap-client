@@ -4,6 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [master]
+### Added
+
+## [0.0.6] - 2015-12-21
+### Added
+- Code style rules #9
+- Client.destroyMessage and Message.destroy #14
+- Password authentication method #8
+- Coverage tools #3
+- Add contribution detailled instructions
+
 ## [0.0.5] - 2015-11-02
 ### Added
 - The OutboundMessage and CreateMessageAck classes
