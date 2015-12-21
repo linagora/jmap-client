@@ -18,6 +18,7 @@ describe('The AuthAccess class', function() {
         upload: 'http://localhost:8899/upload',
         download: 'http://localhost:8899/download'
       };
+
       expect(function() {
         new jmap.AuthAccess(payload);
       }).to.throw(Error);
@@ -30,6 +31,7 @@ describe('The AuthAccess class', function() {
         upload: 'http://localhost:8899/upload',
         download: 'http://localhost:8899/download'
       };
+
       expect(function() {
         new jmap.AuthAccess(payload);
       }).to.throw(Error);
@@ -42,6 +44,7 @@ describe('The AuthAccess class', function() {
         upload: 'http://localhost:8899/upload',
         download: 'http://localhost:8899/download'
       };
+
       expect(function() {
         new jmap.AuthAccess(payload);
       }).to.throw(Error);
@@ -54,6 +57,7 @@ describe('The AuthAccess class', function() {
         eventSource: 'http://localhost:8899/upload',
         download: 'http://localhost:8899/download'
       };
+
       expect(function() {
         new jmap.AuthAccess(payload);
       }).to.throw(Error);
@@ -66,6 +70,7 @@ describe('The AuthAccess class', function() {
         upload: 'http://localhost:8899/upload',
         eventSource: 'http://localhost:8899/download'
       };
+
       expect(function() {
         new jmap.AuthAccess(payload);
       }).to.throw(Error);
@@ -81,6 +86,7 @@ describe('The AuthAccess class', function() {
       };
 
       var authToken = new jmap.AuthAccess(payload);
+
       expect(authToken.accessToken).to.equal(payload.accessToken);
       expect(authToken.api).to.equal(payload.api);
       expect(authToken.eventSource).to.equal(payload.eventSource);
