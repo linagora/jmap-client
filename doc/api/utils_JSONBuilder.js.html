@@ -76,6 +76,7 @@ export default class JSONBuilder {
     if (Utils.isDefined(value)) {
       this.append(name, value);
     }
+
     return this;
   }
 
@@ -94,6 +95,7 @@ export default class JSONBuilder {
         this.append(name, value.map(item => item.toJSONObject ? item.toJSONObject() : item));
       }
     }
+
     return this;
   }
 

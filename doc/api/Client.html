@@ -247,7 +247,213 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
 
     
 
-    <h4 class="name" id="authExternal"><span class="type-signature"></span>authExternal<span class="signature">(username, deviceName, continuationCallback)</span><span class="type-signature"> &rarr; {<a href="Client.html">Client</a>}</span></h4>
+    <h4 class="name" id="authenticate"><span class="type-signature"></span>authenticate<span class="signature">(username, deviceName, continuationCallback)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Implement the 2-step JMAP authentication protocol.<br />
+This method abstract the two authentication steps:</p>
+<ol>
+<li>query the JMAP server to get a continuation token</li>
+<li>query the JMAP server with the continuation token (and password), to get the final accessToken.</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The username to authenticate with</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deviceName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A unique device name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>continuationCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that takes an <a href="AuthContinuation.html">AuthContinuation</a>
+  object as argument, and should return a promise, that will eventually resolve with an
+  object denoting the chosen authentication method and the optional password (if method == password).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line111">line 111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise that will eventually be resovled with a <a href="AuthAccess.html">AuthAccess</a> object</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="authExternal"><span class="type-signature"></span>authExternal<span class="signature">(username, deviceName, continuationCallback)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -258,7 +464,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
 This method abstract the two authentication steps:</p>
 <ol>
 <li>query the JMAP server to get a continuation token</li>
-<li>query the JMAP server with the authentication token, to get the final accessToken.</li>
+<li>query the JMAP server with the continuation token, to get the final accessToken.</li>
 </ol>
 <p><br />
 Between those two steps, a user provided function wil be called to handle the external
@@ -365,7 +571,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
 
             
 
-            <td class="description last"><p>A function that takes an <a href="AuthContinuation.html">AuthContinuation</a> object as argument, and should return a promise, that will resolve with the continuation token.</p></td>
+            <td class="description last"><p>A function that takes an <a href="AuthContinuation.html">AuthContinuation</a> object as argument, and should return a promise, that will resolve once the external authentication is complete.</p></td>
         </tr>
 
     
@@ -406,7 +612,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line116">line 116</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -433,7 +639,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
 
         
 <div class="param-desc">
-    <p>This Client instance.</p>
+    <p>A Promise that will eventually be resovled with a <a href="AuthAccess.html">AuthAccess</a> object</p>
 </div>
 
 
@@ -444,7 +650,372 @@ It's the responsability of the caller to then set the AuthToken using for exampl
     </dt>
     <dd>
         
-<span class="param-type"><a href="Client.html">Client</a></span>
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="authPassword"><span class="type-signature"></span>authPassword<span class="signature">(username, password, deviceName)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Implement the JMAP password authentication protocol.<br />
+This method abstract the two authentication steps:</p>
+<ol>
+<li>query the JMAP server to get a continuation token</li>
+<li>query the JMAP server with the continuation token and the password, to get the final accessToken.</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The username of the user to authenticate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The password of the user to authenticate</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deviceName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A unique device name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line191">line 191</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise that will eventually be resovled with a <a href="AuthAccess.html">AuthAccess</a> object</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="destroyMessage"><span class="type-signature"></span>destroyMessage<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Destroy the <a href="Message.html">Message</a> related to the given <em>id</em> on the server.<br />
+This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP request under the hoods, passing the correct options.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The id of the object to destroy.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line380">line 380</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="Client.html#setMessages">Client#setMessages</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise that eventually resolves to nothing if the <a href="Message.html">Message</a> was destroyed successfully.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
     </dd>
@@ -579,7 +1150,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line151">line 151</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -759,7 +1330,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line164">line 164</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line219">line 219</a>
     </li></ul></dd>
     
 
@@ -978,7 +1549,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line179">line 179</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line234">line 234</a>
     </li></ul></dd>
     
 
@@ -1158,7 +1729,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line209">line 209</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line264">line 264</a>
     </li></ul></dd>
     
 
@@ -1338,7 +1909,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line235">line 235</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -1518,7 +2089,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line222">line 222</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line277">line 277</a>
     </li></ul></dd>
     
 
@@ -1702,7 +2273,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line296">line 296</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line353">line 353</a>
     </li></ul></dd>
     
 
@@ -1863,7 +2434,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line262">line 262</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line317">line 317</a>
     </li></ul></dd>
     
 
@@ -2043,7 +2614,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line248">line 248</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line303">line 303</a>
     </li></ul></dd>
     
 
@@ -2205,7 +2776,7 @@ The URL will be exposed as the <code>apiUrl</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line73">line 73</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -2361,7 +2932,7 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line59">line 59</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -2671,7 +3242,7 @@ The URL will be exposed as the <code>downloadUrl</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line87">line 87</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line90">line 90</a>
     </li></ul></dd>
     
 

@@ -71,6 +71,7 @@ export default class Client {
    */
   withAuthenticationUrl(url) {
     this.authenticationUrl = url;
+
     return this;
   }
 
@@ -86,6 +87,7 @@ export default class Client {
    */
   withAuthenticationToken(token) {
     this.authToken = token;
+
     return this;
   }
 
@@ -100,6 +102,7 @@ export default class Client {
    */
   withAPIUrl(url) {
     this.apiUrl = url;
+
     return this;
   }
 
@@ -114,7 +117,58 @@ export default class Client {
    */
   withDownloadUrl(url) {
     this.downloadUrl = url;
+
     return this;
+  }
+
+  /**
+   * Implement the 2-step JMAP authentication protocol.&lt;br />
+   * This method abstract the two authentication steps:
+   *
+   * 1. query the JMAP server to get a continuation token
+   * 2. query the JMAP server with the continuation token (and password), to get the final accessToken.
+   *
+   * @param username {String} The username to authenticate with
+   * @param deviceName {String} A unique device name
+   * @param continuationCallback {Function} A function that takes an {@link AuthContinuation}
+   *   object as argument, and should return a promise, that will eventually resolve with an
+   *   object denoting the chosen authentication method and the optional password (if method == password).
+   *
+   * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
+   */
+  authenticate(username, deviceName, continuationCallback) {
+    var authContinuation;
+
+    return this.transport
+      .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), {
+        username: username,
+        deviceName: deviceName,
+        clientName: Constants.CLIENT_NAME,
+        clientVersion: Constants.VERSION
+      })
+      .then(data => {
+        authContinuation = new AuthContinuation(data);
+
+        return authContinuation;
+      })
+      .then(authContinuation => continuationCallback(authContinuation))
+      .then(continueData => {
+        if (authContinuation.methods.indexOf(continueData.method) &lt; 0) {
+          throw new Error('The "' + continueData.method + '" authentication protocol is not supported by the server.');
+        }
+        let param = {
+          token: authContinuation.continuationToken,
+          method: continueData.method,
+        };
+
+        if (continueData.password) {
+          param.password = continueData.password;
+        }
+
+        return this.transport
+          .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), param);
+      })
+      .then(data => new AuthAccess(data));
   }
 
   /**
@@ -122,7 +176,7 @@ export default class Client {
    * This method abstract the two authentication steps:
    *
    * 1. query the JMAP server to get a continuation token
-   * 2. query the JMAP server with the authentication token, to get the final accessToken.
+   * 2. query the JMAP server with the continuation token, to get the final accessToken.
    *
    * &lt;br />
    * Between those two steps, a user provided function wil be called to handle the external
@@ -136,35 +190,36 @@ export default class Client {
    *
    * @param username {String} The username of the user to authenticate.
    * @param deviceName {String} A unique device name
-   * @param continuationCallback {Function} A function that takes an {@link AuthContinuation} object as argument, and should return a promise, that will resolve with the continuation token.
+   * @param continuationCallback {Function} A function that takes an {@link AuthContinuation} object as argument, and should return a promise, that will resolve once the external authentication is complete.
    *
-   * @return {Client} This Client instance.
+   * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
    */
-
   authExternal(username, deviceName, continuationCallback) {
-    return this.transport
-      .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), {
-        username: username,
-        deviceName: deviceName,
-        clientName: 'jmap-client (https://github.com/linagora/jmap-client)',
-        clientVersion: Constants.VERSION
-      })
-      .then((data) => {
-        var authContinuation = new AuthContinuation(data);
-        if (authContinuation.methods.indexOf('external') &lt; 0) {
-          throw new Error('The "external" authentication protocol is not supported by the server.');
-        }
-        return authContinuation;
-      })
-      .then((authContinuation) => continuationCallback(authContinuation))
-      .then((continuationToken) => {
-        return this.transport
-          .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), {
-            token: continuationToken,
-            method: 'external'
-          });
-      })
-      .then((data) => new AuthAccess(data));
+    return this.authenticate(username, deviceName, function(authContinuation) {
+      // wrap the continuationCallback to resolve with method:'external'
+      return continuationCallback(authContinuation).then(() => {
+        return { method: 'external' };
+      });
+    });
+  }
+
+  /**
+   * Implement the JMAP password authentication protocol.&lt;br />
+   * This method abstract the two authentication steps:
+   *
+   * 1. query the JMAP server to get a continuation token
+   * 2. query the JMAP server with the continuation token and the password, to get the final accessToken.
+   *
+   * @param username {String} The username of the user to authenticate
+   * @param password {String} The password of the user to authenticate
+   * @param deviceName {String} A unique device name
+   *
+   * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
+   */
+  authPassword(username, password, deviceName) {
+    return this.authenticate(username, deviceName, function(authContinuation) {
+      return { method: 'password', password: password };
+    });
   }
 
   /**
@@ -291,6 +346,7 @@ export default class Client {
     Utils.assertRequiredParameterHasType(message, 'message', OutboundMessage);
 
     var clientId = this._generateClientId();
+
     return this
       .getMailboxWithRole(MailboxRole.DRAFTS)
       .then(mailbox => {
@@ -306,6 +362,7 @@ export default class Client {
         if (!response.created[clientId]) {
           throw new Error('Failed to save the message as draft, clientId: ' + clientId + ', message: ' + (response.notCreated[clientId] || 'none'));
         }
+
         return new CreateMessageAck(this, response.created[clientId]);
       });
   }
@@ -333,9 +390,30 @@ export default class Client {
       }
     }).then(function(messagesSet) {
       if (messagesSet.updated.indexOf(id) &lt; 0) {
-        throw new Error('Failed to move message ' + id + ', reason is ' + messagesSet.notUpdated[id]);
+        throw new Error('Failed to move message ' + id + ', the reason is: ' + messagesSet.notUpdated[id]);
       }
     });
+  }
+
+  /**
+   * Destroy the {@link Message} related to the given _id_ on the server.&lt;br />
+   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the object to destroy.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the {@link Message} was destroyed successfully.
+   *
+   * @see Client#setMessages
+   */
+  destroyMessage(id) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+
+    return this.setMessages({destroy: [id]})
+      .then(function(messagesSet) {
+        if (messagesSet.destroyed.indexOf(id) &lt; 0) {
+          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
+        }
+      });
   }
 
   _generateClientId() {

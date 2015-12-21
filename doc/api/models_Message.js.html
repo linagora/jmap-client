@@ -31,7 +31,6 @@
 import Model from './Model.js';
 import EMailer from './EMailer.js';
 import Utils from '../utils/Utils.js';
-import MailboxRole from './MailboxRole.js';
 import Attachment from './Attachment.js';
 
 export default class Message extends Model {
@@ -135,6 +134,17 @@ export default class Message extends Model {
       .then((mailbox) => {
         return this.move([mailbox.id]);
       });
+  }
+
+  /**
+   * Destroy this {@link Message} on the server.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.destroyMessage}.
+   *
+   * @see Client#destroyMessage
+   */
+  destroy() {
+    return this._jmap.destroyMessage(this.id);
   }
 
   /**
