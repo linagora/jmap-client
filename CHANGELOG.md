@@ -7,6 +7,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [master]
 ### Added
 
+## [0.0.8] - 2016-01-18
+### Added
+- Support setMailboxes #20
+- Add CreateMailboxAck class
+- Add MailboxesSet class
+- Add Client.setMailboxes
+- Add Client.createMailbox
+- Add Client.updateMailbox
+- Add Client.destroyMailbox
+- Add Mailbox.update
+- Add Mailbox.destroy
+
 ## [0.0.7] - 2015-12-21
 ### Added
 - Code style rules #9
