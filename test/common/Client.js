@@ -263,6 +263,365 @@ describe('The Client class', function() {
 
   });
 
+  describe('The setMailboxes method', function() {
+
+    it('should post on the API url', function(done) {
+      new jmap.Client({
+        post: function(url) {
+          expect(url).to.equal('https://test');
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes()
+        .then(null, done);
+    });
+
+    it('should send correct HTTP headers, including Authorization=token', function(done) {
+      new jmap.Client({
+        post: function(url, headers) {
+          expect(headers).to.deep.equal({
+            Authorization: 'token',
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          });
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "setMailboxes" request body when there is no options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMailboxes', {}, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes()
+        .then(null, done);
+    });
+
+    it('should send a valid JMAP "setMailboxes" request body, forwarding options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMailboxes', {
+            create: {
+              property: {
+                mailboxIds: ['mailboxId']
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes({
+          create: {
+            property: {
+              mailboxIds: ['mailboxId']
+            }
+          }
+        })
+        .then(null, done);
+    });
+
+    it('should reject the promise if the JMAP response is invalid', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q('Invalid JMAP response');
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes()
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with a Mailbox object when the response is valid', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([['mailboxesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          }, '#0']]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .setMailboxes()
+        .then(function(data) {
+          expect(data).to.deep.equal(new jmap.MailboxesSet(client, { accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa' }));
+          done();
+        });
+    });
+
+  });
+
+  describe('The createMailbox method', function() {
+
+    it('should throw an Error if the name is undefined', function() {
+      expect(function() {
+        defaultClient().createMailbox();
+      }).to.throw(Error);
+    });
+
+    it('should not throw an Error if the parent id is not undefined', function() {
+      expect(function() {
+        defaultClient().createMailbox('name');
+      }).to.not.throw(Error);
+    });
+
+    function createMailboxClient() {
+      var client = defaultClient()
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token');
+
+      client._generateClientId = function() {
+        return 'expectedClientId';
+      };
+
+      return client;
+    }
+
+    it('should resolve the promise with returned object if clientId in the response.created', function(done) {
+      var client = createMailboxClient();
+
+      client.transport.post = function() {
+        return q([['mailboxesSet', {
+          created: {
+            expectedClientId: {
+              id: 'id',
+              mustBeOnlyMailbox: true
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .createMailbox('name')
+        .then(function(resolved) {
+          expect(resolved).to.be.an.instanceof(jmap.CreateMailboxAck);
+          expect(resolved).to.include({
+            id: 'id',
+            mustBeOnlyMailbox: true
+          });
+          done();
+        });
+    });
+
+    it('should throw an error if response.created does not contains the expected response format', function(done) {
+      var client = createMailboxClient();
+
+      client.transport.post = function() {
+        return q([['mailboxesSet', {
+          created: {
+            expectedClientId: {
+              otherProperty: 'otherProperty'
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .createMailbox('name')
+        .then(null, function(err) {
+          expect(err).to.be.an.instanceof(Error);
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object', function(done) {
+      var client = createMailboxClient();
+
+      client.transport.post = function() {
+        return q([['mailboxesSet', {
+          created: {},
+          notCreated: {
+            otherId: 'otherId'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .createMailbox('name')
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to create mailbox, clientId: expectedClientId, message: none');
+          done();
+        });
+    });
+
+    it('should trigger an error if no clientId in the response.created object but in response.notCreated', function(done) {
+      var client = createMailboxClient();
+
+      client.transport.post = function() {
+        return q([['mailboxesSet', {
+          created: {},
+          notCreated: {
+            expectedClientId: 'this is the error message'
+          }
+        }, '#0']]);
+      };
+
+      client
+        .createMailbox('name')
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to create mailbox, clientId: expectedClientId, message: this is the error message');
+          done();
+        });
+    });
+
+  });
+
+  describe('The updateMailbox method', function() {
+
+    it('should throw an Error if id is not given', function() {
+      expect(function() {
+        defaultClient().updateMailbox();
+      }).to.throw(Error);
+    });
+
+    it('should send a JMAP "setMailboxes" request, passing correct options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMailboxes', {
+            update: {
+              id: {
+                property: 'property'
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMailbox('id', {property: 'property'})
+        .then(null, done);
+    });
+
+    it('should reject the promise if the mailbox was not updated', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['mailboxesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: [],
+            notUpdated: {
+              id: 'notFound'
+            }
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMailbox('id', {})
+        .then(null, function() { done(); });
+    });
+
+    it('should resolve the promise with nothing if the mailbox was updated', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['mailboxesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['id']
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMailbox('id', {})
+        .then(done);
+    });
+
+  });
+
+  describe('The destroyMailbox method', function() {
+
+    it('should throw an Error if the id is undefined', function() {
+      expect(function() {
+        defaultClient().destroyMailbox();
+      }).to.throw(Error);
+    });
+
+    it('should call setMailboxes with the expected id', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMailboxes', {
+          destroy: ['id']
+        }, '#0']]);
+        done();
+
+        return q.reject();
+      };
+
+      client.destroyMailbox('id');
+    });
+
+    it('should resolve the promise with nothing if the mailbox was destroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['mailboxesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: ['id']
+        }, '#0']]);
+      };
+
+      client.destroyMailbox('id').then(done);
+    });
+
+    it('should throw an error if the given id is not in response.destroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['mailboxesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: [],
+          notDestroyed: {id: 'reason'}
+        }, '#0']]);
+      };
+
+      client.destroyMailbox('id').then(null, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.equal('Failed to destroy id, the reason is: reason');
+        done();
+      });
+    });
+
+    it('should throw an error if the given id is neither in response.destroyed nor in response.notDestroyed', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        return q([['mailboxesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: [],
+          notDestroyed: {}
+        }, '#0']]);
+      };
+
+      client.destroyMailbox('id').then(null, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.equal('Failed to destroy id, the reason is: missing');
+        done();
+      });
+    });
+
+  });
+
   describe('The getMessageList method', function() {
 
     it('should post on the API url', function(done) {
@@ -1396,7 +1755,7 @@ describe('The Client class', function() {
       var client = saveAsDraftReadyClient();
 
       client.transport.post = function() {
-        return q([['setMessages', {
+        return q([['messagesSet', {
           created: {
             expectedClientId: {
               blobId: 'm-ma294202da',
@@ -1428,7 +1787,7 @@ describe('The Client class', function() {
       var client = saveAsDraftReadyClient();
 
       client.transport.post = function() {
-        return q([['setMessages', {
+        return q([['messagesSet', {
           created: {
             expectedClientId: {
               size: 281
@@ -1451,7 +1810,7 @@ describe('The Client class', function() {
       var client = saveAsDraftReadyClient();
 
       client.transport.post = function() {
-        return q([['setMessages', {
+        return q([['messagesSet', {
           created: {},
           notCreated: {
             otherId: 'message with different clientId, it should not be taken in account'
@@ -1473,7 +1832,7 @@ describe('The Client class', function() {
       var client = saveAsDraftReadyClient();
 
       client.transport.post = function() {
-        return q([['setMessages', {
+        return q([['messagesSet', {
           created: {},
           notCreated: {
             expectedClientId: 'message with right clientId, it should be taken in account'

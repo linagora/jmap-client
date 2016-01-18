@@ -180,4 +180,33 @@ describe('The Mailbox class', function() {
 
   });
 
+  describe('The update method', function() {
+
+    it('should delegate to the jmap client, passing the id and the given options', function(done) {
+      new jmap.Mailbox({
+        updateMailbox: function(id, options) {
+          expect(id).to.equal('id');
+          expect(options).to.deep.equal({newAttr1: 'newAttr1', newAttr2: 'newAttr2'});
+
+          done();
+        }
+      }, 'id', 'name', {options: 'options'}).update({newAttr1: 'newAttr1', newAttr2: 'newAttr2'});
+    });
+
+  });
+
+  describe('The destroy method', function() {
+
+    it('should delegate to the jmap client, passing the id as arg', function(done) {
+      new jmap.Mailbox({
+        destroyMailbox: function(id) {
+          expect(id).to.equal('id');
+
+          done();
+        }
+      }, 'id', 'name', {options: 'options'}).destroy();
+    });
+
+  });
+
 });
