@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: AuthAccess</title>
+    <title>JSDoc: Source: models/CreateMailboxAck.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,178 +17,48 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: AuthAccess</h1>
+    <h1 class="page-title">Source: models/CreateMailboxAck.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>AuthAccess</h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="AuthAccess"><span class="type-signature"></span>new AuthAccess<span class="signature">(payload)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#authentication">Auth Access Response</a>.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>payload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The server response of an auth access request.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_AuthAccess.js.html">models/AuthAccess.js</a>, <a href="models_AuthAccess.js.html#line14">line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import Model from './Model.js';
+import Utils from '../utils/Utils.js';
+
+export default class CreateMailboxAck extends Model {
+  /**
+   * This class should be used to wrap a create response item from a setMailboxes request.&lt;br />
+   *
+   * @constructor
+   * @extends Model
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _Mailbox_.
+   * @param response {Object} The raw created response object.
+   * @param response.Id {String} The server side generated id of the created mailbox.
+   * @param response.mustBeOnlyMailbox {Boolean} The server decision whether messages in this mailbox may/may not be in any other mailbox.
+   *
+   * @see Model
+   */
+  constructor(jmap, response) {
+    super(jmap);
+    Utils.assertRequiredParameterIsObject(response, 'response');
+    Utils.assertRequiredParameterIsPresent(response.id, 'response.id');
+    Utils.assertRequiredParameterHasType(response.mustBeOnlyMailbox, 'response.mustBeOnlyMailbox', 'boolean');
+
+    this.id = response.id;
+    this.mustBeOnlyMailbox = response.mustBeOnlyMailbox;
+  }
+
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

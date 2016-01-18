@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: OutboundMessage</title>
+    <title>JSDoc: Class: MailboxesSet</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: OutboundMessage</h1>
+    <h1 class="page-title">Class: MailboxesSet</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>OutboundMessage</h2>
+        <h2>MailboxesSet</h2>
         
     
 </header>
@@ -40,18 +40,14 @@
 
     
 
-    <h4 class="name" id="OutboundMessage"><span class="type-signature"></span>new OutboundMessage<span class="signature">(jmap, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MailboxesSet"><span class="type-signature"></span>new MailboxesSet<span class="signature">(jmap, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#messages">Message</a> but for client-to-server purpose.<br />
-When creating a new <em>OutboundMessage</em> instance, the following requirements must be met:</p>
-<ul>
-<li>The <em>id</em>, <em>blobId</em>, <em>threadId</em>, <em>size</em>, <em>preview</em>, <em>hasAttachment</em> and <em>attachedMessages</em> must be not defined (it is set by the server upon creation)</li>
-</ul>
+    <p>This class represents a JMAP [MailboxesSet] <a href="http://jmap.io/spec.html#setmailboxes">http://jmap.io/spec.html#setmailboxes</a>.</p>
 </div>
 
 
@@ -113,7 +109,7 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 
             
 
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>OutboundMessage</em>.</p></td>
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>MailboxesSet</em>.</p></td>
         </tr>
 
     
@@ -146,7 +142,7 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 
             
 
-            <td class="description last"><p>The optional properties of this <em>OutboundMessage</em>.</p>
+            <td class="description last"><p>The optional properties of this <em>MailboxesSet</em>.</p>
                 <h6>Properties</h6>
                 
 
@@ -176,7 +172,125 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 
         <tr>
             
-                <td class="name"><code>mailboxIds</code></td>
+                <td class="name"><code>accountId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last"><p>The id of the <a href="Account.html">Account</a> used in the request that originated this <em>MailboxesSet</em>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last"><p>The state string that would have been returned by <em>getMailboxes</em> before making the requested changes,
+       or null if the server doesn’t know what the previous state string was.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last"><p>The state string that will now be returned by <em>getMailboxes</em>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>created</code></td>
             
 
             <td class="type">
@@ -208,565 +322,21 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
                 </td>
             
 
-            <td class="description last"><p>The array of <em>Mailbox</em> identifiers which will contain this <em>OutboundMessage</em>.</p></td>
+            <td class="description last"><p>A map of the creation id to an object containing the id and mustBeOnlyMailbox
+       properties for each successfully created <em>Mailbox</em>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>inReplyToMessageId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The id of the <em>Message</em> this <em>OutboundMessage</em> is a reply to.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isUnread</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Has the message not yet been read? This maps to the opposite of the \Seen flag in IMAP.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isFlagged</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Is the message flagged? This maps to the \Flagged flag in IMAP.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isAnswered</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Has the message been replied to? This maps to the \Answered flag in IMAP.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>isDraft</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Is the message a draft? This maps to the \Draft flag in IMAP.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>headers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>A hash of header name to header value for all headers in the message.
-  For headers that occur multiple times, the values are concatenated with a single new line (\n) character in between each one.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Overrides the value used as <em>From:</em> in the headers.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
+                <td class="name"><code>updated</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">Array.&lt;String></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Overrides the value used as <em>To:</em> in the headers.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cc</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;String></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Overrides the value used as <em>CC:</em> in the headers.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>bcc</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;String></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Overrides the value used as <em>BCC:</em> in the headers.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>replyTo</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>Overrides the value used as <em>Reply-To:</em> in the headers.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>subject</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The subject of this <em>OutboundMessage</em>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>textBody</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The plain text body part.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>htmlBody</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The HTML body part.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>attachments</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="Attachment.html">Attachment</a>></span>
 
 
             
@@ -792,8 +362,166 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
                 </td>
             
 
-            <td class="description last"><p>An array of <a href="Attachment.html">Attachment</a> objects detailing all the attachments to the message.
-  Attachments must first be uploaded using the standard upload mechanism.</p></td>
+            <td class="description last"><p>A list of ids for Mailboxes that were successfully updated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>destroyed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A list of ids for Mailboxes that were successfully destroyed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notCreated</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of creation id to a SetError object for each <em>Mailbox</em> that failed to be created.
+       The possible errors are defined above.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notUpdated</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of <em>Mailbox</em> id to a SetError object for each <em>Mailbox</em> that failed to be updated.
+       The possible errors are defined above.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notDestroyed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of <em>Mailbox</em> id to a SetError object for each <em>Mailbox</em> that failed to be destroyed.
+       The possible errors are defined above.</p></td>
         </tr>
 
     
@@ -841,7 +569,7 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_OutboundMessage.js.html">models/OutboundMessage.js</a>, <a href="models_OutboundMessage.js.html#line40">line 40</a>
+        <a href="models_MailboxesSet.js.html">models/MailboxesSet.js</a>, <a href="models_MailboxesSet.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -908,14 +636,14 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 
     
 
-    <h4 class="name" id="toJSONObject"><span class="type-signature"></span>toJSONObject<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".fromJSONObject"><span class="type-signature">(static) </span>fromJSONObject<span class="signature">(jmap, object)</span><span class="type-signature"> &rarr; {<a href="MailboxesSet.html">MailboxesSet</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Creates a JSON representation from this model.</p>
+    <p>Creates a <em>MailboxesSet</em> from its JSON representation.</p>
 </div>
 
 
@@ -924,6 +652,78 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jmap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance passed to the <em>MailboxesSet</em> constructor.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JSON representation of the <em>MailboxesSet</em>, as a Javascript object.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -959,7 +759,7 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_OutboundMessage.js.html">models/OutboundMessage.js</a>, <a href="models_OutboundMessage.js.html#line68">line 68</a>
+        <a href="models_MailboxesSet.js.html">models/MailboxesSet.js</a>, <a href="models_MailboxesSet.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -985,11 +785,19 @@ When creating a new <em>OutboundMessage</em> instance, the following requirement
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>JSON object with only owned properties and non default values.</p>
-</div>
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="MailboxesSet.html">MailboxesSet</a></span>
+
+
+    </dd>
+</dl>
 
     
 

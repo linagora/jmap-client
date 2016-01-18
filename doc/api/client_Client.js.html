@@ -33,10 +33,12 @@ import Utils from './../utils/Utils.js';
 import Account from './../models/Account.js';
 import Mailbox from './../models/Mailbox.js';
 import MessageList from './../models/MessageList.js';
+import MailboxesSet from './../models/MailboxesSet.js';
 import Thread from './../models/Thread.js';
 import Message from './../models/Message.js';
 import OutboundMessage from './../models/OutboundMessage.js';
 import CreateMessageAck from './../models/CreateMessageAck.js';
+import CreateMailboxAck from './../models/CreateMailboxAck.js';
 import MessagesSet from './../models/MessagesSet.js';
 import MailboxRole from './../models/MailboxRole.js';
 import AuthContinuation from './../models/AuthContinuation.js';
@@ -246,6 +248,96 @@ export default class Client {
    */
   getMailboxes(options) {
     return this._jmapRequest('getMailboxes', options);
+  }
+
+  /**
+   * Sends a _setMailboxes_ JMAP request.
+   *
+   * @param [options=null] {Object} The options to the _setMailboxes_ JMAP request.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link Mailbox} object.
+   *
+   * @see http://jmap.io/spec.html#setmailboxes
+   */
+  setMailboxes(options) {
+    return this._jmapRequest('setMailboxes', options);
+  }
+
+  /**
+   * Creates a mailbox  by sending a _setMailboxes_ JMAP request.&lt;br />
+   *
+   * @param name {String} The name of the mailbox to create.
+   * @param [parentId=null] {String} The id of the parent of the mailbox to create.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link CreateMailboxAck}.
+   *
+   * @see http://jmap.io/spec.html#creating-mailboxes
+   */
+  createMailbox(name, parentId) {
+    Utils.assertRequiredParameterIsPresent(name, 'name');
+
+    var clientId = this._generateClientId();
+
+    return this.setMailboxes({
+      create: {
+        [clientId]: {
+          name: name,
+          parentId: parentId
+        }
+      }
+    }).then((mailboxesSet) => {
+      if (!mailboxesSet.created[clientId]) {
+        throw new Error('Failed to create mailbox, clientId: ' + clientId + ', message: ' + (mailboxesSet.notCreated[clientId] || 'none'));
+      }
+
+      return new CreateMailboxAck(this, mailboxesSet.created[clientId]);
+    });
+  }
+
+  /**
+   * Updates properties of a {@link Mailbox}.&lt;br />
+   * This will issue a {@link Client#setMailboxes} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the {@link Mailboxe} to update.
+   * @param options {Object} The options of the target mailbox to be updated.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the mailbox was updated successfully.
+   *
+   * @see http://jmap.io/spec.html#updating-mailboxes
+   */
+  updateMailbox(id, options) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+
+    return this.setMailboxes({
+      update: {
+        [id]: options
+      }
+    }).then((mailboxesSet) => {
+      if (mailboxesSet.updated.indexOf(id) &lt; 0) {
+        throw new Error('Failed to update mailbox ' + id + ', the reason is: ' + mailboxesSet.notUpdated[id]);
+      }
+    });
+  }
+
+  /**
+   * Destroy the {@link Mailbox} related to the given _id_ on the server.&lt;br />
+   * This will issue a {@link Client#setMailboxes} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the mailbox to destroy.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the {@link Mailbox} was destroyed successfully.
+   *
+   * @see http://jmap.io/spec.html#destroying-mailboxes
+   */
+  destroyMailbox(id) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+
+    return this.setMailboxes({destroy: [id]})
+      .then((mailboxesSet) => {
+        if (mailboxesSet.destroyed.indexOf(id) &lt; 0) {
+          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (mailboxesSet.notDestroyed[id] || 'missing'));
+        }
+      });
   }
 
   /**
@@ -475,6 +567,10 @@ export default class Client {
     return this._handleListResponse(response, Mailbox);
   }
 
+  _handleMailboxesSetResponse(response) {
+    return MailboxesSet.fromJSONObject(this, response[1]);
+  }
+
   _handleMessageListResponse(response) {
     return MessageList.fromJSONObject(this, response[1]);
   }
@@ -493,7 +589,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">
