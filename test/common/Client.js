@@ -1230,6 +1230,102 @@ describe('The Client class', function() {
 
   });
 
+  describe('The updateMessage method', function() {
+
+    it('should throw an Error if id is not given', function() {
+      expect(function() {
+        defaultClient().updateMessage();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if options is not given', function() {
+      expect(function() {
+        defaultClient().updateMessage('id');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if options is not an object', function() {
+      expect(function() {
+        defaultClient().updateMessage('id', 'options');
+      }).to.throw(Error);
+    });
+
+    it('should send a JMAP "setMessages" request, passing correct options', function(done) {
+      new jmap.Client({
+        post: function(url, headers, body) {
+          expect(body).to.deep.equal([['setMessages', {
+            update: {
+              id: {
+                property: 'property'
+              }
+            }
+          }, '#0']]);
+
+          return q.reject();
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMessage('id', { property: 'property' })
+        .then(null, done);
+    });
+
+    it('should reject the promise leveraging the returned error message if the message was not updated', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: [],
+            notUpdated: {
+              id: 'notFound'
+            }
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMessage('id',  { property: 'property' })
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to update message id, the reason is: notFound');
+          done();
+        });
+    });
+
+    it('should reject the promise leveraging the default error message if the message was not updated', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: [],
+            notUpdated: {}
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMessage('id',  { property: 'property' })
+        .then(null, function(err) {
+          expect(err.message).to.equal('Failed to update message id, the reason is: missing');
+          done();
+        });
+    });
+
+    it('should resolve the promise with nothing is the message was updated', function(done) {
+      new jmap.Client({
+        post: function() {
+          return q([['messagesSet', {
+            accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+            updated: ['id']
+          }, '#0']]);
+        }
+      })
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .updateMessage('id', { property: 'property' })
+        .then(done);
+    });
+  });
+
   describe('The moveMessage method', function() {
 
     it('should throw an Error if id is not given', function() {

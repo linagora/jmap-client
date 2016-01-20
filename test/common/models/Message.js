@@ -248,6 +248,107 @@ describe('The Message class', function() {
 
   });
 
+  describe('The update method', function() {
+
+    it('should delegate to the jmap client, passing the id and the given options', function(done) {
+      new jmap.Message({
+        updateMessage: function(id, option) {
+          expect(id).to.equal('id');
+          expect(option).to.deep.equal({ property: 'property' });
+
+          done();
+        }
+      }, 'id', 'threadId', ['inbox']).update({ property: 'property' });
+    });
+  });
+
+  describe('The setIsFlagged method', function() {
+
+    it('should throw an Error if isFlagged is not provided', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsFlagged();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if isFlagged is not Boolean', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsFlagged('true');
+      }).to.throw(Error);
+    });
+
+    it('should delegate to message.update, passing the required option', function(done) {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox']);
+
+      message.update = function(option) {
+        expect(option).to.deep.equal({ isFlagged: true });
+        done();
+      };
+      message.setIsFlagged(true);
+    });
+  });
+
+  describe('The setIsUnread method', function() {
+
+    it('should throw an Error if isUnread is not provided', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsUnread();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if isUnread is not Boolean', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsUnread('true');
+      }).to.throw(Error);
+    });
+
+    it('should delegate to message.update, passing the required option', function(done) {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox']);
+
+      message.update = function(option) {
+        expect(option).to.deep.equal({ isUnread: true });
+        done();
+      };
+      message.setIsUnread(true);
+    });
+  });
+
+  describe('The setIsAnswered method', function() {
+
+    it('should throw an Error if isAnswered is not provided', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsAnswered();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if isAnswered is not Boolean', function() {
+      expect(function() {
+        new jmap.Message({
+          updateMessage: function() {}
+        }, 'id', 'threadId', ['inbox']).setIsAnswered('true');
+      }).to.throw(Error);
+    });
+
+    it('should delegate to message.update, passing the required option', function(done) {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox']);
+
+      message.update = function(option) {
+        expect(option).to.deep.equal({ isAnswered: true });
+        done();
+      };
+      message.setIsAnswered(true);
+    });
+  });
+
   describe('The destroy method', function() {
 
     it('should delegate to the jmap client, passing the id as arg', function(done) {
