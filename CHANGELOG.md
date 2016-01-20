@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [master]
 ### Added
 
+## [0.0.10] - 2016-01-20
+### Added
+- Support updateMessage #23
+- Add Client.updateMessage
+- Add Message.update
+- Add Message.setIsFlagged
+- Add Message.setIsUnread
+- Add Message.setIsAnswered
+
 ## [0.0.8] - 2016-01-18
 ### Added
 - Support setMailboxes #20
