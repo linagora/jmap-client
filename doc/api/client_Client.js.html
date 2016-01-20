@@ -425,6 +425,57 @@ export default class Client {
   }
 
   /**
+   * Updates properties of a {@link Message}.&lt;br />
+   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the {@link Message} to update.
+   * @param options {Object} The options of the target message to be updated.
+   * @param options.mailboxIds {String[]} The identifiers of the new mailboxes for the message.
+   * @param options.isFlagged {Boolean} This corresponds whether the message is flagged or not
+   * @param options.isUnread {Boolean} This corresponds whether the message has been yet read or not
+   * @param options.isAnswered {Boolean} This corresponds whether the message has been yet replied or not
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the message was updated successfully.
+   *
+   * @see http://jmap.io/spec.html#updating-messages
+   */
+  updateMessage(id, options) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+    Utils.assertRequiredParameterIsObject(options, 'options');
+
+    return this.setMessages({
+      update: {
+        [id]: options
+      }
+    }).then(messagesSet => {
+      if (messagesSet.updated.indexOf(id) &lt; 0) {
+        throw new Error('Failed to update message ' + id + ', the reason is: ' + (messagesSet.notUpdated[id] || 'missing'));
+      }
+    });
+  }
+
+  /**
+   * Destroy the {@link Message} related to the given _id_ on the server.&lt;br />
+   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
+   *
+   * @param id {String} The id of the object to destroy.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the {@link Message} was destroyed successfully.
+   *
+   * @see Client#setMessages
+   */
+  destroyMessage(id) {
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+
+    return this.setMessages({destroy: [id]})
+      .then(function(messagesSet) {
+        if (messagesSet.destroyed.indexOf(id) &lt; 0) {
+          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
+        }
+      });
+  }
+
+  /**
    * Save a message as draft by sending a _setMessages_ JMAP request.&lt;br />
    * The _mailboxIds_ and _isDraft_ properties of the given _message_ will be overridden by this method.
    *
@@ -474,38 +525,7 @@ export default class Client {
     Utils.assertRequiredParameterIsPresent(id, 'id');
     Utils.assertRequiredParameterIsArrayWithMinimumLength(mailboxIds, 'mailboxIds', 1);
 
-    return this.setMessages({
-      update: {
-        [id]: {
-          mailboxIds: mailboxIds
-        }
-      }
-    }).then(function(messagesSet) {
-      if (messagesSet.updated.indexOf(id) &lt; 0) {
-        throw new Error('Failed to move message ' + id + ', the reason is: ' + messagesSet.notUpdated[id]);
-      }
-    });
-  }
-
-  /**
-   * Destroy the {@link Message} related to the given _id_ on the server.&lt;br />
-   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
-   *
-   * @param id {String} The id of the object to destroy.
-   *
-   * @return {Promise} A {@link Promise} that eventually resolves to nothing if the {@link Message} was destroyed successfully.
-   *
-   * @see Client#setMessages
-   */
-  destroyMessage(id) {
-    Utils.assertRequiredParameterIsPresent(id, 'id');
-
-    return this.setMessages({destroy: [id]})
-      .then(function(messagesSet) {
-        if (messagesSet.destroyed.indexOf(id) &lt; 0) {
-          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
-        }
-      });
+    return this.updateMessage(id, { mailboxIds: mailboxIds });
   }
 
   _generateClientId() {

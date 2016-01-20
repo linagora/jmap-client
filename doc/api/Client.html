@@ -1346,7 +1346,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line472">line 472</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line439">line 439</a>
     </li></ul></dd>
     
 
@@ -2649,7 +2649,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line445">line 445</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line496">line 496</a>
     </li></ul></dd>
     
 
@@ -2810,7 +2810,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line409">line 409</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line460">line 460</a>
     </li></ul></dd>
     
 
@@ -3389,6 +3389,308 @@ This will issue a <a href="Client.html#setMailboxes">Client#setMailboxes</a> JMA
         
 <div class="param-desc">
     <p>A Promise that eventually resolves to nothing if the mailbox was updated successfully.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="updateMessage"><span class="type-signature"></span>updateMessage<span class="signature">(id, options)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Updates properties of a <a href="Message.html">Message</a>.<br />
+This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP request under the hoods, passing the correct options.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The id of the <a href="Message.html">Message</a> to update.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The options of the target message to be updated.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mailboxIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The identifiers of the new mailboxes for the message.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isFlagged</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>This corresponds whether the message is flagged or not</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isUnread</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>This corresponds whether the message has been yet read or not</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAnswered</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>This corresponds whether the message has been yet replied or not</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line414">line 414</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://jmap.io/spec.html#updating-messages">http://jmap.io/spec.html#updating-messages</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise that eventually resolves to nothing if the message was updated successfully.</p>
 </div>
 
 
