@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [master]
 ### Added
 
+## [0.0.11] - 2016-02-01
+### Added
+- Client.destroyMessages
+- Thread.destroy
+- Thread.setIsFlagged
+- Thread.setIsUnread
+- Thread.move
+- Thread.moveToMailboxWithRole
+
 ## [0.0.10] - 2016-01-20
 ### Added
 - Support updateMessage #23
