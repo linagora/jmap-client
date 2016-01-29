@@ -60,6 +60,22 @@ describe('The Thread class', function() {
 
   });
 
+  describe('The destroy method', function() {
+
+    it('should delegate to the jmap client, passing ids in the options', function(done) {
+      new jmap.Thread({
+        destroyMessages: function(ids) {
+          expect(ids).to.deep.equal(['id1', 'id2']);
+
+          done();
+        }
+      }, 'threadId', {
+        messageIds: ['id1', 'id2']
+      }).destroy();
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {
