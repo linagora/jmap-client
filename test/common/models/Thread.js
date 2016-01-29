@@ -1,7 +1,8 @@
 'use strict';
 
 var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client');
+    jmap = require('../../../dist/jmap-client'),
+    q = require('q');
 
 describe('The Thread class', function() {
 
@@ -72,6 +73,55 @@ describe('The Thread class', function() {
       }, 'threadId', {
         messageIds: ['id1', 'id2']
       }).destroy();
+    });
+
+  });
+
+  describe('The moveToMailboxWithRole method', function() {
+
+    it('should delegate to the jmap client, passing the correct options', function(done) {
+      new jmap.Thread({
+        getMailboxWithRole: function(role) {
+          expect(role).to.equal('inbox');
+
+          return q({ id: 'inbox' });
+        },
+        setMessages: function(options) {
+          expect(options).to.deep.equal({
+            update: {
+              id1: { mailboxIds: ['inbox'] },
+              id2: { mailboxIds: ['inbox'] },
+              id3: { mailboxIds: ['inbox'] }
+            }
+          });
+
+          done();
+        }
+      }, 'threadId', {
+        messageIds: ['id1', 'id2', 'id3']
+      }).moveToMailboxWithRole('inbox');
+    });
+
+  });
+
+  describe('The move method', function() {
+
+    it('should delegate to the jmap client, passing the correct options', function(done) {
+      new jmap.Thread({
+        setMessages: function(options) {
+          expect(options).to.deep.equal({
+            update: {
+              id1: { mailboxIds: ['m1', 'm2'] },
+              id2: { mailboxIds: ['m1', 'm2'] },
+              id3: { mailboxIds: ['m1', 'm2'] }
+            }
+          });
+
+          done();
+        }
+      }, 'threadId', {
+        messageIds: ['id1', 'id2', 'id3']
+      }).move(['m1', 'm2']);
     });
 
   });
