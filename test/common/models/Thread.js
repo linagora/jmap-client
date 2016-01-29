@@ -126,6 +126,74 @@ describe('The Thread class', function() {
 
   });
 
+  describe('The setIsFlagged method', function() {
+
+    it('should throw an Error if isFlagged is not defined', function() {
+      expect(function() {
+        jmap.Thread.setIsFlagged();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if isFlagged is not a Boolean', function() {
+      expect(function() {
+        jmap.Thread.setIsFlagged(1);
+      }).to.throw(Error);
+    });
+
+    it('should delegate to the jmap client, passing the correct options', function(done) {
+      new jmap.Thread({
+        setMessages: function(options) {
+          expect(options).to.deep.equal({
+            update: {
+              id1: { isFlagged: true },
+              id2: { isFlagged: true },
+              id3: { isFlagged: true }
+            }
+          });
+
+          done();
+        }
+      }, 'threadId', {
+        messageIds: ['id1', 'id2', 'id3']
+      }).setIsFlagged(true);
+    });
+
+  });
+
+  describe('The setIsUnread method', function() {
+
+    it('should throw an Error if isUnread is not defined', function() {
+      expect(function() {
+        jmap.Thread.setIsUnread();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if isUnread is not a Boolean', function() {
+      expect(function() {
+        jmap.Thread.setIsUnread(1);
+      }).to.throw(Error);
+    });
+
+    it('should delegate to the jmap client, passing the correct options', function(done) {
+      new jmap.Thread({
+        setMessages: function(options) {
+          expect(options).to.deep.equal({
+            update: {
+              id1: { isUnread: true },
+              id2: { isUnread: true },
+              id3: { isUnread: true }
+            }
+          });
+
+          done();
+        }
+      }, 'threadId', {
+        messageIds: ['id1', 'id2', 'id3']
+      }).setIsUnread(true);
+    });
+
+  });
+
   describe('The fromJSONObject static method', function() {
 
     it('should throw an Error if object is not defined', function() {
