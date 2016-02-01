@@ -1634,6 +1634,99 @@ describe('The Client class', function() {
       });
     });
 
+    it('should repeat authentication steps if server demands to', function(done) {
+      var authAccessResponse = {
+        accessToken: 'accessToken1',
+        api: '/',
+        eventSource: '/es',
+        upload: '/upload',
+        download: '/download'
+      };
+
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (data.username) {
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['password']
+            });
+          } else if (data.password === 'pwd1') {
+            return q({
+              continuationToken: 'continuationToken2',
+              prompt: '2nd Auth Factor',
+              methods: ['password']
+            });
+          } else if (data.password === 'pwd2') {
+            return q({
+              continuationToken: 'continuationToken3',
+              prompt: '3rd Auth Factor',
+              methods: ['password']
+            });
+          } else {
+            return q(authAccessResponse);
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        if (authContinuation.continuationToken === 'continuationToken1') {
+          return q({ method: 'password', password: 'pwd1' });
+        } else if (authContinuation.continuationToken === 'continuationToken2') {
+          return q({ method: 'password', password: 'pwd2' });
+        } else {
+          return q({ method: 'password', password: 'pwd3' });
+        }
+      })
+      .then(function(authAccess) {
+        expect(authAccess).to.deep.equal(authAccessResponse);
+        done();
+      }, done);
+    });
+
+    it('should reject on ambiguous server response', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          return q({
+            accessToken: 'accessToken1',
+            continuationToken: 'continuationToken1'
+          });
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        return q({ method: 'external' });
+      })
+      .then(null, function(err) {
+        expect(err).to.be.instanceOf(Error);
+        done();
+      });
+    });
+
+    it('should reject on invalid server responses', function(done) {
+      new jmap.Client({
+        post: function(url, headers, data) {
+          if (data.username) {
+            return q({
+              continuationToken: 'continuationToken1',
+              methods: ['external']
+            });
+          } else {
+            return q({
+              some: 'rubbish response'
+            });
+          }
+        }
+      })
+      .withAuthenticationUrl('https://test')
+      .authenticate('user@domain.com', 'Device name', function(authContinuation) {
+        return q({ method: 'external' });
+      })
+      .then(null, function(err) {
+        expect(err).to.be.instanceOf(Error);
+        done();
+      });
+    });
+
   });
 
   describe('The authExternal method', function() {
@@ -1707,6 +1800,8 @@ describe('The Client class', function() {
   });
 
   describe('The authPassword method', function() {
+    var promiseProvider = new jmap.QPromiseProvider();
+
     it('should reject if the server does not support password authentication', function(done) {
       new jmap.Client({
         post: function(url, headers, data) {
@@ -1715,7 +1810,7 @@ describe('The Client class', function() {
             methods: ['external']
           });
         }
-      })
+      }, promiseProvider)
       .withAuthenticationUrl('https://test')
       .authPassword('user@domain.com', 'xxxxxx', 'Device name')
       .then(null, function(err) {
@@ -1744,7 +1839,7 @@ describe('The Client class', function() {
             return q(authAccessResponse);
           }
         }
-      })
+      }, promiseProvider)
       .withAuthenticationUrl('https://test')
       .authPassword('user@domain.com', 'xxxxxx', 'Device name')
       .then(function(authAccess) {
