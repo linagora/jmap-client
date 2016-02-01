@@ -2022,4 +2022,59 @@ describe('The Client class', function() {
 
   });
 
+  describe('The destroyMessages method', function() {
+
+    it('should throw an Error if ids is undefined', function() {
+      expect(function() {
+        defaultClient().destroyMessages();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if ids is not an array', function() {
+      expect(function() {
+        defaultClient().destroyMessages('abcd');
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if ids is zero-length', function() {
+      expect(function() {
+        defaultClient().destroyMessages([]);
+      }).to.throw(Error);
+    });
+
+    it('should call setMessages with the expected ids', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setMessages', {
+          destroy: ['id', 'id2']
+        }, '#0']]);
+
+        done();
+
+        return q.reject();
+      };
+
+      client.destroyMessages(['id', 'id2']);
+    });
+
+    it('should resolve the promise with a MessagesSet', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['messagesSet', {
+          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+          destroyed: ['id']
+        }, '#0']]);
+      };
+
+      client.destroyMessages(['id']).then(function(messagesSet) {
+        expect(messagesSet).to.be.an.instanceof(jmap.MessagesSet);
+
+        done();
+      });
+    });
+
+  });
+
 });
