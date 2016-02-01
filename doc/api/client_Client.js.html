@@ -160,7 +160,7 @@ export default class Client {
         }
         let param = {
           token: authContinuation.continuationToken,
-          method: continueData.method,
+          method: continueData.method
         };
 
         if (continueData.password) {
@@ -219,7 +219,7 @@ export default class Client {
    * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
    */
   authPassword(username, password, deviceName) {
-    return this.authenticate(username, deviceName, function(authContinuation) {
+    return this.authenticate(username, deviceName, function() {
       return { method: 'password', password: password };
     });
   }
@@ -298,7 +298,7 @@ export default class Client {
    * Updates properties of a {@link Mailbox}.&lt;br />
    * This will issue a {@link Client#setMailboxes} JMAP request under the hoods, passing the correct options.
    *
-   * @param id {String} The id of the {@link Mailboxe} to update.
+   * @param id {String} The id of the {@link Mailbox} to update.
    * @param options {Object} The options of the target mailbox to be updated.
    *
    * @return {Promise} A {@link Promise} that eventually resolves to nothing if the mailbox was updated successfully.
@@ -465,14 +465,27 @@ export default class Client {
    * @see Client#setMessages
    */
   destroyMessage(id) {
-    Utils.assertRequiredParameterIsPresent(id, 'id');
+    return this.destroyMessages(id &amp;&amp; [id]).then(messagesSet => {
+      if (messagesSet.destroyed.indexOf(id) &lt; 0) {
+        throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
+      }
+    });
+  }
 
-    return this.setMessages({destroy: [id]})
-      .then(function(messagesSet) {
-        if (messagesSet.destroyed.indexOf(id) &lt; 0) {
-          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
-        }
-      });
+  /**
+   * Destroy several {@link Message}s at once.&lt;br />
+   * This will issue a {@link Client#setMessages} JMAP request under the hoods, passing the correct options.
+   *
+   * @param ids {String[]} The list of ids of the messages to destroy.
+   *
+   * @return {Promise} A {@link Promise} that resolves to a {@link MessagesSet}, containing the result of the operation.
+   *
+   * @see Client#setMessages
+   */
+  destroyMessages(ids) {
+    Utils.assertRequiredParameterIsArrayWithMinimumLength(ids, 'ids', 1);
+
+    return this.setMessages({ destroy: ids });
   }
 
   /**
