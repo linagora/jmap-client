@@ -2,12 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-
 ## [master]
 ### Added
 - Support multiple auth continue iterations #12
-- Add Client.promiseProvider
+- Client.promiseProvider
+- Client.send
 
 ## [0.0.11] - 2016-02-01
 ### Added
