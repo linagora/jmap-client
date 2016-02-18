@@ -58,8 +58,9 @@ export default class Client {
   constructor(transport, promiseProvider) {
     Utils.assertRequiredParameterIsPresent(transport, 'transport');
 
+    this.promiseProvider = promiseProvider || new ES6PromiseProvider();
     this.transport = transport;
-    this.transport.promiseProvider = promiseProvider || new ES6PromiseProvider();
+    this.transport.promiseProvider = this.promiseProvider;
   }
 
   /**
@@ -139,8 +140,6 @@ export default class Client {
    * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
    */
   authenticate(username, deviceName, continuationCallback) {
-    var authContinuation;
-
     return this.transport
       .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), {
         username: username,
@@ -148,29 +147,51 @@ export default class Client {
         clientName: Constants.CLIENT_NAME,
         clientVersion: Constants.VERSION
       })
-      .then(data => {
-        authContinuation = new AuthContinuation(data);
+      .then(data => this._authenticateResponse(data, continuationCallback));
+  }
 
-        return authContinuation;
-      })
-      .then(authContinuation => continuationCallback(authContinuation))
-      .then(continueData => {
-        if (authContinuation.methods.indexOf(continueData.method) &lt; 0) {
-          throw new Error('The "' + continueData.method + '" authentication protocol is not supported by the server.');
-        }
-        let param = {
-          token: authContinuation.continuationToken,
-          method: continueData.method
-        };
+  /**
+   * Sub-routine handling JMAP server responses on authentication requests
+   *
+   * Depending on the server's response, this either (recursively) executes the second
+   * authentication step by calling the provided continuationCallback or resolves on
+   * successfully completed authentication.
+   *
+   * @param data {Object} The JMAP response data
+   * @param continuationCallback {Function} The callback function initially passed to the authenticate() method
+   *
+   * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
+   */
+  _authenticateResponse(data, continuationCallback) {
+    if (data.continuationToken &amp;&amp; data.accessToken === undefined) {
+      // got an AuthContinuation response
+      var authContinuation = new AuthContinuation(data);
 
-        if (continueData.password) {
-          param.password = continueData.password;
-        }
+      return continuationCallback(authContinuation)
+        .then(continueData => {
+          if (authContinuation.methods.indexOf(continueData.method) &lt; 0) {
+            throw new Error('The "' + continueData.method + '" authentication protocol is not supported by the server.');
+          }
+          let param = {
+            token: authContinuation.continuationToken,
+            method: continueData.method
+          };
 
-        return this.transport
-          .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), param);
-      })
-      .then(data => new AuthAccess(data));
+          if (continueData.password) {
+            param.password = continueData.password;
+          }
+
+          return this.transport
+            .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), param);
+        })
+        .then(resp => this._authenticateResponse(resp, continuationCallback));
+    } else if (data.accessToken &amp;&amp; data.continuationToken === undefined) {
+      // got auth access response
+      return new AuthAccess(data);
+    } else {
+      // got unknown response data
+      throw new Error('Unexpected response on authorization request');
+    }
   }
 
   /**
@@ -220,8 +241,10 @@ export default class Client {
    */
   authPassword(username, password, deviceName) {
     return this.authenticate(username, deviceName, function() {
-      return { method: 'password', password: password };
-    });
+      return this.promiseProvider.newPromise(function(resolve, reject) {
+        resolve({ method: 'password', password: password });
+      });
+    }.bind(this));
   }
 
   /**
@@ -499,28 +522,21 @@ export default class Client {
    * @see http://jmap.io/spec.html#saving-a-draft
    */
   saveAsDraft(message) {
-    Utils.assertRequiredParameterHasType(message, 'message', OutboundMessage);
+    return this._createMessage(message, MailboxRole.DRAFTS);
+  }
 
-    var clientId = this._generateClientId();
-
-    return this
-      .getMailboxWithRole(MailboxRole.DRAFTS)
-      .then(mailbox => {
-        message.mailboxIds = [mailbox.id];
-        message.isDraft = true;
-
-        return this.setMessages({
-          create: {
-            [clientId]: message.toJSONObject()
-          }
-        });
-      }).then(response => {
-        if (!response.created[clientId]) {
-          throw new Error('Failed to save the message as draft, clientId: ' + clientId + ', message: ' + (response.notCreated[clientId] || 'none'));
-        }
-
-        return new CreateMessageAck(this, response.created[clientId]);
-      });
+  /**
+   * Sends a message by issuing a _setMessages_ JMAP request.&lt;br />
+   * The _mailboxIds_ and _isDraft_ properties of the given _message_ will be overridden by this method.
+   *
+   * @param message {OutboundMessage} The message to send.
+   *
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link CreateMessageAck}.
+   *
+   * @see http://jmap.io/spec.html#sending-messages
+   */
+  send(message) {
+    return this._createMessage(message, MailboxRole.OUTBOX);
   }
 
   /**
@@ -539,6 +555,31 @@ export default class Client {
     Utils.assertRequiredParameterIsArrayWithMinimumLength(mailboxIds, 'mailboxIds', 1);
 
     return this.updateMessage(id, { mailboxIds: mailboxIds });
+  }
+
+  _createMessage(message, role) {
+    Utils.assertRequiredParameterHasType(message, 'message', OutboundMessage);
+
+    var clientId = this._generateClientId();
+
+    return this
+      .getMailboxWithRole(role)
+      .then(mailbox => {
+        message.mailboxIds = [mailbox.id];
+        message.isDraft = MailboxRole.DRAFTS.value === role.value ? true : null;
+
+        return this.setMessages({
+          create: {
+            [clientId]: message.toJSONObject()
+          }
+        });
+      }).then(response => {
+        if (!response.created[clientId]) {
+          throw new Error('Failed to store message with clientId ' + clientId + '. Error: ' + (response.notCreated[clientId] || 'none'));
+        }
+
+        return new CreateMessageAck(this, response.created[clientId]);
+      });
   }
 
   _generateClientId() {
