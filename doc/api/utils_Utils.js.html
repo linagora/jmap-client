@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/Utils.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/Utils.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+export default class Utils {
+  /**
+   * This class contains some useful utility methods.&lt;br />
+   * The Utils class cannot be instantiated (its constructor will throw if called), all its methods are static.
+   *
+   * @constructor
+   */
+  constructor() {
+    throw new Error('The Utils class cannot be instantiated.');
+  }
+
+  /**
+   * Check is the `parameter` is not undefined and not null.
+   *
+   * @param parameter {*} The parameter to check.
+   *
+   * @return {Boolean} True if `parameter` is not undefined and not null.
+   */
+  static isDefined(parameter) {
+    return typeof parameter !== 'undefined' &amp;&amp; parameter !== null;
+  }
+
+  /**
+   * Asserts that the given `parameter` is present (read: truthy).&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not defined.
+   */
+  static assertRequiredParameterIsPresent(parameter, name) {
+    if (!Utils.isDefined(parameter)) {
+      throw new Error('The "' + name + '" parameter is required.');
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `parameter` is present and is an object.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not defined or is not an object.
+   */
+  static assertRequiredParameterIsObject(parameter, name) {
+    Utils.assertRequiredParameterIsPresent(parameter, name);
+
+    if (typeof parameter !== 'object' || Array.isArray(parameter)) {
+      throw new Error('The "' + name + '" parameter is not an object.');
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `parameter` is present and has the expected type.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   * Examples:
+   *     assertRequiredParameterHasType(5, 'name', 'number') => returns 5
+   *     assertRequiredParameterHasType({}, 'name', CustomClass) => throws an Error
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   * @param type {String|Type} The expected type of the parameter.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not defined or is not an object.
+   */
+  static assertRequiredParameterHasType(parameter, name, type) {
+    Utils.assertRequiredParameterIsPresent(parameter, name);
+
+    if (typeof type === 'string') {
+      if (typeof parameter !== type) {
+        throw new Error('The "' + name + '" parameter has not the expected type: ' + type);
+      }
+    } else if (!(parameter instanceof type)) {
+      throw new Error('The "' + name + '" parameter has not the expected type: ' + type);
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `parameter` is an {@link Array} with a minimum length.&lt;br />
+   * This method is intended to be called when you need to validate input parameters of functions.
+   *
+   * @param parameter {*} The parameter to validate.
+   * @param name {String} The name of the parameter, as given to the calling function.
+   *   This is used to format the error message contained by the thrown {@link Error}.
+   * @param [length=0] {Number} The minimum required length of the array.
+   *
+   * @return {*} The validated parameter, as-is.
+   *
+   * @throws {Error} If the parameter is not an array of does not have the minimum length.
+   */
+  static assertRequiredParameterIsArrayWithMinimumLength(parameter, name, length) {
+    if (!Array.isArray(parameter)) {
+      throw new Error('The "' + name + '" parameter must be an Array.');
+    }
+
+    if (length &amp;&amp; parameter.length &lt; length) {
+      throw new Error('The "' + name + '" parameter must have at least ' + length + ' element(s).');
+    }
+
+    return parameter;
+  }
+
+  /**
+   * Asserts that the given `data` is a valid JMAP response.&lt;br />
+   * This method is intended to be called by instances of {@link Client}, or by any other object making JMAP requests,
+   * when validation of the response is required.&lt;br />
+   * &lt;br />
+   * The following checks are made by this method:
+   * * `data` is defined and is an array
+   * * `data` has one or more elements, and all elements are arrays
+   * * `data[0][0]` is either
+   *   * the expected response string (computed with the help of the `request` parameter)
+   *   * an unknown response
+   * * `data[0][1]` exists
+   *
+   * @param request {String} The JMAP request to check the response for. This should be a valid JMAP request name.
+   * @param data {*} The JMAP response to validate.
+   *
+   * @return {*} The data, as-is, if it is detected as a valid JMAP response.
+   *
+   * @throws {Error} If the received data is not a valid JMAP response.
+   */
+  static assertValidJMAPResponse(request, data) {
+    function allArrayElementsAreArray(array) {
+      return array.filter(function(element) {
+        return !Array.isArray(element);
+      }).length === 0;
+    }
+
+    if (!data || !Array.isArray(data)) {
+      throw new Error('Expected an array as the JMAP response for a "' + request + '" request.');
+    }
+
+    if (data.length === 0 || !allArrayElementsAreArray(data)) {
+      throw new Error('Expected an array of exactly 1 array element as the JMAP response for a "' + request + '" request.');
+    }
+
+    let expectedResponse = Utils._expectedResponseFor(request);
+
+    if (expectedResponse &amp;&amp; data[0][0] !== expectedResponse) {
+      throw new Error('Expected "' + expectedResponse + '" as the JMAP response for a "' + request + '" request, but got "' + data[0][0] + '".');
+    }
+
+    if (!data[0][1]) {
+      throw new Error('The JMAP response for a "' + request + '" request should return some data.');
+    }
+
+    return data;
+  }
+
+  /**
+   * Capitalizes the given {@link String}, that is, returns the same string with the first character in uppercase.&lt;br />
+   * If `undefined`, `null`, the _empty string_ or something else that a string is given, the argument is returned as-is.
+   *
+   * @param str {String} The {@link String} to capitalize.
+   *
+   * @return {String} The capitalized {@link String}.
+   */
+  static capitalize(str) {
+    if (!str || typeof str !== 'string') {
+      return str;
+    }
+
+    return str.charAt(0).toUpperCase() + str.substring(1);
+  }
+
+  /**
+   * Fills a URI template by substituting variables by their corresponding values.&lt;br />
+   * This supports Level 1 URI templates *only*, as per [this RFC](https://tools.ietf.org/html/rfc6570#section-1.2).
+   *
+   * @param uri {String} The URI template to fill.
+   * @param parameters {Object} A hash of name/value pairs used for variables substitution.
+   *
+   * @return {String} The filled URI template.
+   */
+  static fillURITemplate(uri, parameters) {
+    Utils.assertRequiredParameterIsPresent(uri, 'uri');
+
+    if (!parameters) {
+      return uri;
+    }
+
+    return uri.replace(/{(.+?)}/g, function(match, variable) {
+      return parameters[variable] || match;
+    });
+  }
+
+  static _jsonArrayToModelList(jmap, Model, array, filter) {
+    if (!Array.isArray(array)) {
+      return [];
+    }
+
+    if (filter) {
+      array = array.filter(filter);
+    }
+
+    return array.map(Model.fromJSONObject.bind(null, jmap));
+  }
+
+  static _expectedResponseFor(request) {
+    return ({
+      getAccounts: 'accounts',
+      getMailboxes: 'mailboxes',
+      getMessageList: 'messageList',
+      getThreads: 'threads',
+      getMessages: 'messages',
+      setMessages: 'messagesSet',
+      setMailboxes: 'mailboxesSet'
+    })[request];
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
