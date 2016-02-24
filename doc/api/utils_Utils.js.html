@@ -232,8 +232,16 @@ export default class Utils {
     });
   }
 
-  static _jsonArrayToModelList(jmap, Model, array) {
-    return Array.isArray(array) ? array.map(Model.fromJSONObject.bind(null, jmap)) : [];
+  static _jsonArrayToModelList(jmap, Model, array, filter) {
+    if (!Array.isArray(array)) {
+      return [];
+    }
+
+    if (filter) {
+      array = array.filter(filter);
+    }
+
+    return array.map(Model.fromJSONObject.bind(null, jmap));
   }
 
   static _expectedResponseFor(request) {
