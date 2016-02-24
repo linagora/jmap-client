@@ -1110,6 +1110,47 @@ describe('The Client class', function() {
         }).then(null, done);
     });
 
+    it('should filter messages with no mailboxIds from the response', function(done) {
+      var client = new jmap.Client({
+        post: function() {
+          return q([['messages', {
+            accountId: 'user@example.com',
+            list: [{
+              id: 'fm1u312',
+              threadId: 'fed75e7fb4f512aa',
+              mailboxIds: ['mailbox1']
+            }, {
+              id: 'fm1azf52',
+              threadId: 'fed75e7fb4f512aa',
+              mailboxIds: null
+            }, {
+              id: 'fm2u12',
+              threadId: 'fed75e7fb4f512aa',
+              mailboxIds: ['mailbox2']
+            }, {
+              id: 'fm1ab32',
+              threadId: 'fed75e7fb4f512aa',
+              mailboxIds: []
+            }],
+            notFound: null
+          }, '#0']]);
+        }
+      });
+
+      client
+        .withAPIUrl('https://test')
+        .withAuthenticationToken('token')
+        .getMessages({ ids: ['fm1u312', 'fm2u12'] })
+        .then(function(data) {
+          expect(data).to.deep.equal([
+            new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', ['mailbox1']),
+            new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', ['mailbox2'])
+          ]);
+
+          done();
+        }).then(null, done);
+    });
+
   });
 
   describe('The setMessages method', function() {
