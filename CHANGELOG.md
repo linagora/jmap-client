@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.13] - 2016-02-24
+### Fixed
+- getMessages responses now filter messages without mailboxIds
+
 ## [0.0.12] - 2016-02-18
 ### Added
 - Support multiple auth continue iterations #12
