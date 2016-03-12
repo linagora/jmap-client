@@ -36,7 +36,8 @@ module.exports = function(grunt) {
         src: [
           'Gruntfile.js',
           '<%= project.test %>/**/*.js',
-          '<%= project.lib %>/**/*.js'
+          '<%= project.lib %>/**/*.js',
+          'index.js'
         ]
       }
     },
