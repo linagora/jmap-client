@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Added
+- The AccountCapabilities class
+- The MailCapabilities class
+- Refactored Account capabilities to match the spec. #13
+- Account.hasMail
+- Account.hasCalendars
+- Account.hasContacts
 
 ## [0.0.13] - 2016-02-24
 ### Fixed
