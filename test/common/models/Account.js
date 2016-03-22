@@ -5,6 +5,19 @@ var expect = require('chai').expect,
 
 describe('The Account class', function() {
 
+  function accountWithDefaultValues(id) {
+    return {
+      _jmap: {},
+      id: id,
+      name: '',
+      isPrimary: false,
+      capabilities: null,
+      mail: null,
+      contacts: null,
+      calendars: null
+    };
+  }
+
   describe('The constructor', function() {
 
     it('should throw an Error if id is not defined', function() {
@@ -13,24 +26,40 @@ describe('The Account class', function() {
       }).to.throw(Error);
     });
 
-    it('should use default values for name, isPrimary and isReadOnly if not defined', function() {
-      var account = new jmap.Account({}, 'id');
-
-      expect(account.name).to.equal('');
-      expect(account.isPrimary).to.equal(false);
-      expect(account.isReadOnly).to.equal(false);
+    it('should use default values if opts is not defined', function() {
+      expect(new jmap.Account({}, 'id')).to.deep.equal(accountWithDefaultValues('id'));
     });
 
-    it('should use default values for name, isPrimary and isReadOnly an empty opts object is given', function() {
-      var account = new jmap.Account({}, 'id', {});
-
-      expect(account.name).to.equal('');
-      expect(account.isPrimary).to.equal(false);
-      expect(account.isReadOnly).to.equal(false);
+    it('should use default values if an empty opts object is given', function() {
+      expect(new jmap.Account({}, 'id', {})).to.deep.equal(accountWithDefaultValues('id'));
     });
 
     it('should allow defining optional properties through the opts object', function() {
-      expect(new jmap.Account({}, 'id', { name: 'name' }).name).to.equal('name');
+      var expectedAccount = {
+        name: 'name',
+        isPrimary: true,
+        capabilities: {
+          maxSizeUpload: 123
+        },
+        mail: {
+          isReadOnly: false,
+          maxSizeMessageAttachments: 456,
+          canDelaySend: true,
+          messageListSortOptions: ['date']
+        },
+        contacts: {
+          isReadOnly: true
+        },
+        calendars: {
+          isReadOnly: true
+        }
+      };
+      var account = new jmap.Account({}, 'id', expectedAccount);
+
+      expectedAccount._jmap = {};
+      expectedAccount.id = 'id';
+
+      expect(account).to.deep.equal(expectedAccount);
     });
 
   });
@@ -81,26 +110,25 @@ describe('The Account class', function() {
       expect(jmap.Account.fromJSONObject({}, { id: 'id' })).to.be.an.instanceof(jmap.Account);
     });
 
-    it('should use default values for name, isPrimary and isReadOnly if not defined', function() {
-      var account = jmap.Account.fromJSONObject({}, { id: 'id' });
-
-      expect(account.name).to.equal('');
-      expect(account.isPrimary).to.equal(false);
-      expect(account.isReadOnly).to.equal(false);
+    it('should use default values if no opts is given', function() {
+      expect(jmap.Account.fromJSONObject({}, { id: 'myId' })).to.deep.equal(accountWithDefaultValues('myId'));
     });
 
-    it('should copy values for id, name, isPrimary and isReadOnly if defined', function() {
+    it('should copy values for id, name and isPrimary if defined', function() {
       var account = jmap.Account.fromJSONObject({}, {
         id: 'id',
         name: 'name',
         isPrimary: true,
-        isReadOnly: true
+        calendars: {
+          isReadOnly: true
+        }
       });
 
       expect(account.id).to.equal('id');
       expect(account.name).to.equal('name');
       expect(account.isPrimary).to.equal(true);
-      expect(account.isReadOnly).to.equal(true);
+      expect(account.calendars).to.deep.equal({ isReadOnly: true });
+      expect(account.mail).to.equal(null);
     });
 
   });
