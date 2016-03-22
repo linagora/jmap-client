@@ -133,4 +133,40 @@ describe('The Account class', function() {
 
   });
 
+  describe('The hasMail method', function() {
+
+    it('should return false when the account has no mail capabilities', function() {
+      expect(new jmap.Account({}, 'id').hasMail()).to.equal(false);
+    });
+
+    it('should return true when the account has mail capabilities defined', function() {
+      expect(new jmap.Account({}, 'id', { mail: {} }).hasMail()).to.equal(true);
+    });
+
+  });
+
+  describe('The hasCalendars method', function() {
+
+    it('should return false when the account has no calendars capabilities', function() {
+      expect(new jmap.Account({}, 'id').hasCalendars()).to.equal(false);
+    });
+
+    it('should return true when the account has calendars capabilities defined', function() {
+      expect(new jmap.Account({}, 'id', { calendars: {} }).hasCalendars()).to.equal(true);
+    });
+
+  });
+
+  describe('The hasContacts method', function() {
+
+    it('should return false when the account has no contacts capabilities', function() {
+      expect(new jmap.Account({}, 'id').hasContacts()).to.equal(false);
+    });
+
+    it('should return true when the account has contacts capabilities defined', function() {
+      expect(new jmap.Account({}, 'id', { contacts: {} }).hasContacts()).to.equal(true);
+    });
+
+  });
+
 });
