@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [master]
 ### Added
 - The AccountCapabilities class
+- The MailCapabilities class
 
 ## [0.0.13] - 2016-02-24
 ### Fixed
