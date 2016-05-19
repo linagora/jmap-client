@@ -51,10 +51,10 @@ describe('The Message class', function() {
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
       expect(message.from).to.deep.equal(jmap.EMailer.unknown());
-      expect(message.to).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.cc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.bcc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.replyTo).to.deep.equal(jmap.EMailer.unknown());
+      expect(message.to).to.deep.equal([]);
+      expect(message.cc).to.deep.equal([]);
+      expect(message.bcc).to.deep.equal([]);
+      expect(message.replyTo).to.deep.equal([]);
       expect(message.subject).to.equal(null);
       expect(message.date).to.equal(null);
       expect(message.size).to.equal(0);
@@ -74,10 +74,10 @@ describe('The Message class', function() {
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
       expect(message.from).to.deep.equal(jmap.EMailer.unknown());
-      expect(message.to).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.cc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.bcc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.replyTo).to.deep.equal(jmap.EMailer.unknown());
+      expect(message.to).to.deep.equal([]);
+      expect(message.cc).to.deep.equal([]);
+      expect(message.bcc).to.deep.equal([]);
+      expect(message.replyTo).to.deep.equal([]);
       expect(message.subject).to.equal(null);
       expect(message.date).to.equal(null);
       expect(message.size).to.equal(0);
@@ -88,10 +88,10 @@ describe('The Message class', function() {
 
     it('should allow defining optional properties through the opts object', function() {
       var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
-        from: {
+        from: [{
           name: '',
           email: 'me@open-paas.org'
-        },
+        }],
         subject: 'subject'
       });
 
@@ -99,6 +99,37 @@ describe('The Message class', function() {
       expect(message.from).to.deep.equal(new jmap.EMailer({
         name: '',
         email: 'me@open-paas.org'
+      }));
+    });
+
+    it('should take the first item of the From option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        from: [{
+          name: '',
+          email: 'me@open-paas.org'
+        }, {
+          name: 'another',
+          email: 'another@linagora.com'
+        }]
+      });
+
+      expect(message.from).to.deep.equal(new jmap.EMailer({
+        name: '',
+        email: 'me@open-paas.org'
+      }));
+    });
+
+    it('should support a single EMailer in the From option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        from: {
+          name: 'notanarray',
+          email: 'notanarray@open-paas.org'
+        }
+      });
+
+      expect(message.from).to.deep.equal(new jmap.EMailer({
+        name: 'notanarray',
+        email: 'notanarray@open-paas.org'
       }));
     });
 
@@ -189,7 +220,7 @@ describe('The Message class', function() {
         headers: {
           To: 'To'
         },
-        from: { name: 'Jane Doe', email: 'janedoe@open-paas.org' },
+        from: [{ name: 'Jane Doe', email: 'janedoe@open-paas.org' }],
         to: [
           { name: 'James Connor', email: 'jamesconnorwork@open-paas.org' },
           { name: 'Joe Bloggs', email: 'joebloggs@open-paas.org' }

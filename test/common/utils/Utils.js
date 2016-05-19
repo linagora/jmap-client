@@ -361,4 +361,48 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The nthElementOrDefault static method', function() {
+
+    it('should return nothing if array is undefined and no default given', function() {
+      expect(jmap.Utils.nthElementOrDefault()).to.equal(undefined);
+    });
+
+    it('should return the default value if array is undefined', function() {
+      expect(jmap.Utils.nthElementOrDefault(undefined, 0, 'Default')).to.equal('Default');
+    });
+
+    it('should return nothing if array is null and no default given', function() {
+      expect(jmap.Utils.nthElementOrDefault(null)).to.equal(undefined);
+    });
+
+    it('should return the default value if array is null', function() {
+      expect(jmap.Utils.nthElementOrDefault(null, 0, 'Default')).to.equal('Default');
+    });
+
+    it('should return the default value if array is not an array', function() {
+      expect(jmap.Utils.nthElementOrDefault('String', 0, 'Default')).to.equal('Default');
+    });
+
+    it('should return the default value if index is negative', function() {
+      expect(jmap.Utils.nthElementOrDefault([], -1, 'Default')).to.equal('Default');
+    });
+
+    it('should return the default value if array is empty and index=0', function() {
+      expect(jmap.Utils.nthElementOrDefault([], 0, 'Default')).to.equal('Default');
+    });
+
+    it('should return the default value if array is not large enough', function() {
+      expect(jmap.Utils.nthElementOrDefault(['A', 'B'], 2, 'Default')).to.equal('Default');
+    });
+
+    it('should return the correct value from the array when index=0', function() {
+      expect(jmap.Utils.nthElementOrDefault(['A', 'B'], 0, 'Default')).to.equal('A');
+    });
+
+    it('should return the correct value from the array when index>0', function() {
+      expect(jmap.Utils.nthElementOrDefault(['A', 'B'], 1, 'Default')).to.equal('B');
+    });
+
+  });
+
 });
