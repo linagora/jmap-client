@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/OutboundMessage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/OutboundMessage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import Model from './Model.js';
+import Utils from '../utils/Utils.js';
+import Attachment from './Attachment.js';
+import JSONBuilder from '../utils/JSONBuilder.js';
+
+export default class OutboundMessage extends Model {
+  /**
+   * This class represents a JMAP [Message]{@link http://jmap.io/spec.html#messages} but for client-to-server purpose.&lt;br />
+   * When creating a new _OutboundMessage_ instance, the following requirements must be met:
+   *   * The _id_, _blobId_, _threadId_, _size_, _preview_, _hasAttachment_ and _attachedMessages_ must be not defined (it is set by the server upon creation)
+   *
+   * @constructor
+   * @extends Model
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _OutboundMessage_.
+   * @param [opts] {Object} The optional properties of this _OutboundMessage_.
+   * @param [opts.mailboxIds=[]] {String[]} The array of _Mailbox_ identifiers which will contain this _OutboundMessage_.
+   * @param [opts.inReplyToMessageId=null] {String} The id of the _Message_ this _OutboundMessage_ is a reply to.
+   * @param [opts.isUnread=null] {Boolean} Has the message not yet been read? This maps to the opposite of the \Seen flag in IMAP.
+   * @param [opts.isFlagged=null] {Boolean} Is the message flagged? This maps to the \Flagged flag in IMAP.
+   * @param [opts.isAnswered=null] {Boolean} Has the message been replied to? This maps to the \Answered flag in IMAP.
+   * @param [opts.isDraft=null] {Boolean} Is the message a draft? This maps to the \Draft flag in IMAP.
+   * @param [opts.headers] {Object} A hash of header name to header value for all headers in the message.
+   *   For headers that occur multiple times, the values are concatenated with a single new line (\n) character in between each one.
+   * @param [opts.from=null] {String} Overrides the value used as _From:_ in the headers.
+   * @param [opts.to=null] {String[]} Overrides the value used as _To:_ in the headers.
+   * @param [opts.cc=null] {String[]} Overrides the value used as _CC:_ in the headers.
+   * @param [opts.bcc=null] {String[]} Overrides the value used as _BCC:_ in the headers.
+   * @param [opts.replyTo=null] {String} Overrides the value used as _Reply-To:_ in the headers.
+   * @param [opts.subject=null] {String} The subject of this _OutboundMessage_.
+   * @param [opts.textBody=null] {String} The plain text body part.
+   * @param [opts.htmlBody=null] {String} The HTML body part.
+   * @param [opts.attachments=[]] {Attachment[]} An array of {@link Attachment} objects detailing all the attachments to the message.
+   *   Attachments must first be uploaded using the standard upload mechanism.
+   *
+   * @see Model
+   */
+  constructor(jmap, opts) {
+    super(jmap);
+
+    opts = opts || {};
+
+    this.mailboxIds = opts.mailboxIds || [];
+    this.inReplyToMessageId = opts.inReplyToMessageId || null;
+    this.isUnread = opts.isUnread;
+    this.isFlagged = opts.isFlagged;
+    this.isAnswered = opts.isAnswered;
+    this.isDraft = opts.isDraft;
+    this.headers = opts.headers || null;
+    this.from = opts.from || null;
+    this.to = opts.to || null;
+    this.cc = opts.cc || null;
+    this.bcc = opts.bcc || null;
+    this.replyTo = opts.replyTo || null;
+    this.subject = opts.subject || null;
+    this.textBody = opts.textBody || null;
+    this.htmlBody = opts.htmlBody || null;
+    this.attachments = Utils._jsonArrayToModelList(jmap, Attachment, opts.attachments);
+  }
+
+  /**
+   * Creates a JSON representation from this model.
+   *
+   * @return JSON object with only owned properties and non default values.
+   */
+  toJSONObject() {
+    return new JSONBuilder()
+      .appendIfNotEmpty('mailboxIds', this.mailboxIds)
+      .appendIfDefined('inReplyToMessageId', this.inReplyToMessageId)
+      .appendIfDefined('isUnread', this.isUnread)
+      .appendIfDefined('isFlagged', this.isFlagged)
+      .appendIfDefined('isAnswered', this.isAnswered)
+      .appendIfDefined('isDraft', this.isDraft)
+      .appendIfDefined('headers', this.headers)
+      .appendIfDefined('from', this.from)
+      .appendIfDefined('to', this.to)
+      .appendIfDefined('cc', this.cc)
+      .appendIfDefined('bcc', this.bcc)
+      .appendIfDefined('replyTo', this.replyTo)
+      .appendIfDefined('subject', this.subject)
+      .appendIfDefined('textBody', this.textBody)
+      .appendIfDefined('htmlBody', this.htmlBody)
+      .appendIfNotEmpty('attachments', this.attachments)
+      .build();
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
