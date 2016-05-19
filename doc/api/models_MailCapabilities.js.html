@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/AuthContinuation.js</title>
+    <title>JSDoc: Source: models/MailCapabilities.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/AuthContinuation.js</h1>
+    <h1 class="page-title">Source: models/MailCapabilities.js</h1>
 
     
 
@@ -28,24 +28,31 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-import Utils from '../utils/Utils.js';
+import Capabilities from './Capabilities';
 
-export default class AuthContinuation {
+export default class MailCapabilities extends Capabilities {
   /**
-   * This class represents a JMAP [Auth Continuation Response]{@link http://jmap.io/spec.html#authentication}.
+   * This class represents a JMAP [MailCapabilities]{@link http://jmap.io/spec.html#accounts*}.&lt;br />
+   * An _MailCapabilities_ object describes mail-related capabilities of a JMAP server.
    *
    * @constructor
+   * @extends Capabilities
    *
-   * @param payload {Object} The server response of an initial auth request.
+   * @param [opts] {Object} The optional properties of this _MailCapabilities_.
+   * @param [opts.maxSizeMessageAttachments=0] {Number} The maximum total size of attachments, in bytes, allowed for messages.
+   * @param [opts.canDelaySend=false] {Boolean} Whether the server supports inserting a message into the outbox to be sent later.
+   * @param [opts.messageListSortOptions=0] {String[]} A list of all the message properties the server supports for sorting by.
+   *
+   * @see Capabilities
    */
-  constructor(payload) {
-    Utils.assertRequiredParameterIsPresent(payload, 'payload');
-    Utils.assertRequiredParameterIsPresent(payload.continuationToken, 'continuationToken');
-    Utils.assertRequiredParameterIsArrayWithMinimumLength(payload.methods, 'methods');
+  constructor(opts) {
+    opts = opts || {};
 
-    this.continuationToken = payload.continuationToken;
-    this.methods = payload.methods;
-    this.prompt = payload.prompt || null;
+    super(opts);
+
+    this.maxSizeMessageAttachments = opts.maxSizeMessageAttachments || 0;
+    this.canDelaySend = !!opts.canDelaySend;
+    this.messageListSortOptions = opts.messageListSortOptions || [];
   }
 }
 </code></pre>

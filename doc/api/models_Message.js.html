@@ -56,11 +56,11 @@ export default class Message extends Model {
    * @param [opts.hasAttachment=false] {Boolean} Does the message have any attachments?
    * @param [opts.headers] {Object} A hash of header name to header value for all headers in the message.
    *   For headers that occur multiple times, the values are concatenated with a single new line (\n) character in between each one.
-   * @param [opts.from=null] {EMailer} The {@link EMailer} object representing the _From:_ of this _Message_.
+   * @param [opts.from=null] {EMailer} The {@link EMailer} object representing the first identified sender of this _Message_.
    * @param [opts.to=[{@link EMailer.unknown}]] {EMailer[]} The array of {@link EMailer} objects representing the _To:_ of this _Message_.
    * @param [opts.cc=[{@link EMailer.unknown}]] {EMailer[]} The array of {@link EMailer} objects representing the _CC:_ of this _Message_.
    * @param [opts.bcc=[{@link EMailer.unknown}]] {EMailer[]} The array of {@link EMailer} objects representing the _BCC:_ of this _Message_.
-   * @param [opts.replyTo={@link EMailer.unknown}] {EMailer} The {@link EMailer} object representing the _Reply-To:_ of this _Message_.
+   * @param [opts.replyTo={@link EMailer.unknown}] {EMailer[]} The array of {@link EMailer} objects representing the _Reply-To:_ of this _Message_.
    * @param [opts.subject=null] {String} The subject of this _Message_.
    * @param [opts.date=null] {Date} The date the _Message_ was sent (or saved, if the message is a draft).
    * @param [opts.size=0] {String} The size in bytes of the whole message as counted by the server.
@@ -91,11 +91,11 @@ export default class Message extends Model {
     this.isDraft = opts.isDraft || false;
     this.hasAttachment = opts.hasAttachment || false;
     this.headers = opts.headers || {};
-    this.from = opts.from || EMailer.unknown();
-    this.to = opts.to || [EMailer.unknown()];
-    this.cc = opts.cc || [EMailer.unknown()];
-    this.bcc = opts.bcc || [EMailer.unknown()];
-    this.replyTo = opts.replyTo || EMailer.unknown();
+    this.from = Utils.nthElementOrDefault(opts.from, 0, new EMailer(opts.from));
+    this.to = opts.to || [];
+    this.cc = opts.cc || [];
+    this.bcc = opts.bcc || [];
+    this.replyTo = opts.replyTo || [];
     this.subject = opts.subject || null;
     this.date = opts.date ? new Date(opts.date) : null;
     this.size = opts.size || 0;
@@ -232,7 +232,7 @@ export default class Message extends Model {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: CreateMessageAck</title>
+    <title>JSDoc: Class: MailCapabilities</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: CreateMessageAck</h1>
+    <h1 class="page-title">Class: MailCapabilities</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>CreateMessageAck</h2>
+        <h2>MailCapabilities</h2>
         
     
 </header>
@@ -40,14 +40,15 @@
 
     
 
-    <h4 class="name" id="CreateMessageAck"><span class="type-signature"></span>new CreateMessageAck<span class="signature">(jmap, response)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MailCapabilities"><span class="type-signature"></span>new MailCapabilities<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class should be used to wrap a create response item from a setMessages request.<br /></p>
+    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#accounts*">MailCapabilities</a>.<br />
+An <em>MailCapabilities</em> object describes mail-related capabilities of a JMAP server.</p>
 </div>
 
 
@@ -71,6 +72,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -83,30 +86,7 @@
 
         <tr>
             
-                <td class="name"><code>jmap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>OutboundMessage</em>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
+                <td class="name"><code>opts</code></td>
             
 
             <td class="type">
@@ -119,10 +99,20 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>The raw created response object.</p>
+            <td class="description last"><p>The optional properties of this <em>MailCapabilities</em>.</p>
                 <h6>Properties</h6>
                 
 
@@ -152,42 +142,7 @@
 
         <tr>
             
-                <td class="name"><code>blobId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>The server side generated blobId of the created message.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>size</code></td>
+                <td class="name"><code>maxSizeMessageAttachments</code></td>
             
 
             <td class="type">
@@ -202,6 +157,8 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -212,23 +169,25 @@
             
                 <td class="default">
                 
+                    0
+                
                 </td>
             
 
-            <td class="description last"><p>The server side size of the created message.</p></td>
+            <td class="description last"><p>The maximum total size of attachments, in bytes, allowed for messages.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>canDelaySend</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -249,25 +208,25 @@
             
                 <td class="default">
                 
-                    null
+                    false
                 
                 </td>
             
 
-            <td class="description last"><p>The server side generated message id of the created message.</p></td>
+            <td class="description last"><p>Whether the server supports inserting a message into the outbox to be sent later.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>threadId</code></td>
+                <td class="name"><code>messageListSortOptions</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Array.&lt;String></span>
 
 
             
@@ -288,12 +247,12 @@
             
                 <td class="default">
                 
-                    null
+                    0
                 
                 </td>
             
 
-            <td class="description last"><p>The server side assigned threadId of the created message.</p></td>
+            <td class="description last"><p>A list of all the message properties the server supports for sorting by.</p></td>
         </tr>
 
     
@@ -341,7 +300,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_CreateMessageAck.js.html">models/CreateMessageAck.js</a>, <a href="models_CreateMessageAck.js.html#line22">line 22</a>
+        <a href="models_MailCapabilities.js.html">models/MailCapabilities.js</a>, <a href="models_MailCapabilities.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -351,7 +310,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="Model.html">Model</a></li>
+            <li><a href="Capabilities.html">Capabilities</a></li>
         </ul>
     </dd>
     
@@ -384,7 +343,7 @@
 
 
     <ul>
-        <li><a href="Model.html">Model</a></li>
+        <li><a href="Capabilities.html">Capabilities</a></li>
     </ul>
 
 

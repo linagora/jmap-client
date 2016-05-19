@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/AuthContinuation.js</title>
+    <title>JSDoc: Source: models/Capabilities.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/AuthContinuation.js</h1>
+    <h1 class="page-title">Source: models/Capabilities.js</h1>
 
     
 
@@ -28,24 +28,18 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-import Utils from '../utils/Utils.js';
-
-export default class AuthContinuation {
+export default class Capabilities {
   /**
-   * This class represents a JMAP [Auth Continuation Response]{@link http://jmap.io/spec.html#authentication}.
+   * This class represents an abstract JMAP "capabilities" object. See {@link http://jmap.io/spec.html#accounts*}.&lt;br />
+   * It is subclassed in more specific xxxCapabilities classes.
    *
-   * @constructor
-   *
-   * @param payload {Object} The server response of an initial auth request.
+   * @param [opts] {Object} The optional properties of this _AccountCapabilities_.
+   * @param [opts.isReadOnly=false] {Boolean} Whether the feature denoted by this _Capabilities_ instance is read-only.
    */
-  constructor(payload) {
-    Utils.assertRequiredParameterIsPresent(payload, 'payload');
-    Utils.assertRequiredParameterIsPresent(payload.continuationToken, 'continuationToken');
-    Utils.assertRequiredParameterIsArrayWithMinimumLength(payload.methods, 'methods');
+  constructor(opts) {
+    opts = opts || {};
 
-    this.continuationToken = payload.continuationToken;
-    this.methods = payload.methods;
-    this.prompt = payload.prompt || null;
+    this.isReadOnly = !!opts.isReadOnly;
   }
 }
 </code></pre>
