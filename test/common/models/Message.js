@@ -51,10 +51,10 @@ describe('The Message class', function() {
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
       expect(message.from).to.deep.equal(jmap.EMailer.unknown());
-      expect(message.to).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.cc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.bcc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.replyTo).to.deep.equal([jmap.EMailer.unknown()]);
+      expect(message.to).to.deep.equal([]);
+      expect(message.cc).to.deep.equal([]);
+      expect(message.bcc).to.deep.equal([]);
+      expect(message.replyTo).to.deep.equal([]);
       expect(message.subject).to.equal(null);
       expect(message.date).to.equal(null);
       expect(message.size).to.equal(0);
@@ -74,10 +74,10 @@ describe('The Message class', function() {
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
       expect(message.from).to.deep.equal(jmap.EMailer.unknown());
-      expect(message.to).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.cc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.bcc).to.deep.equal([jmap.EMailer.unknown()]);
-      expect(message.replyTo).to.deep.equal([jmap.EMailer.unknown()]);
+      expect(message.to).to.deep.equal([]);
+      expect(message.cc).to.deep.equal([]);
+      expect(message.bcc).to.deep.equal([]);
+      expect(message.replyTo).to.deep.equal([]);
       expect(message.subject).to.equal(null);
       expect(message.date).to.equal(null);
       expect(message.size).to.equal(0);
@@ -116,6 +116,20 @@ describe('The Message class', function() {
       expect(message.from).to.deep.equal(new jmap.EMailer({
         name: '',
         email: 'me@open-paas.org'
+      }));
+    });
+
+    it('should support a single EMailer in the From option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        from: {
+          name: 'notanarray',
+          email: 'notanarray@open-paas.org'
+        }
+      });
+
+      expect(message.from).to.deep.equal(new jmap.EMailer({
+        name: 'notanarray',
+        email: 'notanarray@open-paas.org'
       }));
     });
 
