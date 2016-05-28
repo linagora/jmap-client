@@ -13,10 +13,11 @@ describe('The AuthAccess class', function() {
 
     it('should throw if payload.accessToken parameter is not defined', function() {
       var payload = {
-        api: 'http://localhost:8899',
-        eventSource: 'http://localhost:8899/eventSource',
-        upload: 'http://localhost:8899/upload',
-        download: 'http://localhost:8899/download'
+        username: 'user',
+        apiUrl: 'http://localhost:8899',
+        eventSourceUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download'
       };
 
       expect(function() {
@@ -26,10 +27,11 @@ describe('The AuthAccess class', function() {
 
     it('should throw if payload.api parameter is not defined', function() {
       var payload = {
+        username: 'user',
         accessToken: 'http://localhost:8899',
-        eventSource: 'http://localhost:8899/eventSource',
-        upload: 'http://localhost:8899/upload',
-        download: 'http://localhost:8899/download'
+        eventSourceUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download'
       };
 
       expect(function() {
@@ -39,10 +41,11 @@ describe('The AuthAccess class', function() {
 
     it('should throw if payload.eventSource parameter is not defined', function() {
       var payload = {
+        username: 'user',
         accessToken: 'http://localhost:8899',
-        api: 'http://localhost:8899/eventSource',
-        upload: 'http://localhost:8899/upload',
-        download: 'http://localhost:8899/download'
+        apiUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download'
       };
 
       expect(function() {
@@ -52,10 +55,11 @@ describe('The AuthAccess class', function() {
 
     it('should throw if payload.upload parameter is not defined', function() {
       var payload = {
+        username: 'user',
         accessToken: 'http://localhost:8899',
-        api: 'http://localhost:8899/eventSource',
-        eventSource: 'http://localhost:8899/upload',
-        download: 'http://localhost:8899/download'
+        apiUrl: 'http://localhost:8899/eventSource',
+        eventSourceUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download'
       };
 
       expect(function() {
@@ -65,10 +69,11 @@ describe('The AuthAccess class', function() {
 
     it('should throw if payload.download parameter is not defined', function() {
       var payload = {
+        username: 'user',
         accessToken: 'http://localhost:8899',
-        api: 'http://localhost:8899/eventSource',
-        upload: 'http://localhost:8899/upload',
-        eventSource: 'http://localhost:8899/download'
+        apiUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        eventSourceUrl: 'http://localhost:8899/download'
       };
 
       expect(function() {
@@ -76,22 +81,40 @@ describe('The AuthAccess class', function() {
       }).to.throw(Error);
     });
 
-    it('should expose accessToken, api, eventSource, download and upload properties', function() {
+    it('should throw if payload.username parameter is not defined', function() {
       var payload = {
         accessToken: 'http://localhost:8899',
-        api: 'http://localhost:8899/eventSource',
-        eventSource: 'http://localhost:8899/eventSource',
-        upload: 'http://localhost:8899/upload',
-        download: 'http://localhost:8899/download'
+        apiUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download',
+        eventSourceUrl: 'http://localhost:8899/download'
+      };
+
+      expect(function() {
+        new jmap.AuthAccess(payload);
+      }).to.throw(Error);
+    });
+
+    it('should expose username, accessToken, apiUrl, eventSourceUrl, downloadUrl and uploadUrl properties', function() {
+      var payload = {
+        username: 'user',
+        versions: [1],
+        extensions: { 'com.fastmail.message': [1] },
+        accessToken: 'http://localhost:8899',
+        apiUrl: 'http://localhost:8899/eventSource',
+        eventSourceUrl: 'http://localhost:8899/eventSource',
+        uploadUrl: 'http://localhost:8899/upload',
+        downloadUrl: 'http://localhost:8899/download'
       };
 
       var authToken = new jmap.AuthAccess(payload);
 
+      expect(authToken.username).to.equal(payload.username);
       expect(authToken.accessToken).to.equal(payload.accessToken);
-      expect(authToken.api).to.equal(payload.api);
-      expect(authToken.eventSource).to.equal(payload.eventSource);
-      expect(authToken.download).to.equal(payload.download);
-      expect(authToken.upload).to.equal(payload.upload);
+      expect(authToken.apiUrl).to.equal(payload.apiUrl);
+      expect(authToken.eventSourceUrl).to.equal(payload.eventSourceUrl);
+      expect(authToken.downloadUrl).to.equal(payload.downloadUrl);
+      expect(authToken.uploadUrl).to.equal(payload.uploadUrl);
     });
   });
 });

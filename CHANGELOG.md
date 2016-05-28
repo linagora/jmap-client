@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Fixed
+- New/changed JMAP endpoint properties in AuthAcces. #38
 
 ## [0.0.14] - 2016-05-19
 ### Added

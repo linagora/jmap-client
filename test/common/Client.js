@@ -1646,11 +1646,14 @@ describe('The Client class', function() {
 
     it('should resolve with AuthAccess', function(done) {
       var authAccessResponse = {
+        username: 'user@domain.com',
+        versions: [1],
+        extensions: {},
         accessToken: 'accessToken1',
-        api: '/',
-        eventSource: '/es',
-        upload: '/upload',
-        download: '/download'
+        apiUrl: '/',
+        eventSourceUrl: '/es',
+        uploadUrl: '/upload',
+        downloadUrl: '/download'
       };
 
       new jmap.Client({
@@ -1677,11 +1680,14 @@ describe('The Client class', function() {
 
     it('should repeat authentication steps if server demands to', function(done) {
       var authAccessResponse = {
+        username: 'user@domain.com',
+        versions: [1],
+        extensions: {},
         accessToken: 'accessToken1',
-        api: '/',
-        eventSource: '/es',
-        upload: '/upload',
-        download: '/download'
+        apiUrl: '/',
+        eventSourceUrl: '/es',
+        uploadUrl: '/upload',
+        downloadUrl: '/download'
       };
 
       new jmap.Client({
@@ -1809,11 +1815,14 @@ describe('The Client class', function() {
 
     it('should give back a AuthAccess', function(done) {
       var authAccessResponse = {
+        username: 'user@domain.com',
+        versions: [1],
+        extensions: {},
         accessToken: 'accessToken1',
-        api: '/',
-        eventSource: '/es',
-        upload: '/upload',
-        download: '/download'
+        apiUrl: '/',
+        eventSourceUrl: '/es',
+        uploadUrl: '/upload',
+        downloadUrl: '/download'
       };
 
       new jmap.Client({
@@ -1862,11 +1871,14 @@ describe('The Client class', function() {
 
     it('should give back a AuthAccess', function(done) {
       var authAccessResponse = {
+        username: 'user@domain.com',
+        versions: [1],
+        extensions: {},
         accessToken: 'accessToken1',
-        api: '/',
-        eventSource: '/es',
-        upload: '/upload',
-        download: '/download'
+        apiUrl: '/',
+        eventSourceUrl: '/es',
+        uploadUrl: '/upload',
+        downloadUrl: '/download'
       };
 
       new jmap.Client({
