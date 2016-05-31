@@ -109,12 +109,9 @@ describe('The AuthAccess class', function() {
 
       var authToken = new jmap.AuthAccess(payload);
 
-      expect(authToken.username).to.equal(payload.username);
-      expect(authToken.accessToken).to.equal(payload.accessToken);
-      expect(authToken.apiUrl).to.equal(payload.apiUrl);
-      expect(authToken.eventSourceUrl).to.equal(payload.eventSourceUrl);
-      expect(authToken.downloadUrl).to.equal(payload.downloadUrl);
-      expect(authToken.uploadUrl).to.equal(payload.uploadUrl);
+      ['username', 'accessToken', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl'].forEach(function(property) {
+        expect(authToken[property]).to.equal(payload[property]);
+      });
     });
   });
 });
