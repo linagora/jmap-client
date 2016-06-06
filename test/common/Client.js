@@ -69,6 +69,36 @@ describe('The Client class', function() {
 
   });
 
+  describe('The withAuthAccess method', function() {
+
+    var authAccess = new jmap.AuthAccess({
+      username: 'user',
+      versions: [1],
+      extensions: { 'com.linagory.ext': [1] },
+      accessToken: 'accessToken1',
+      apiUrl: '/es',
+      eventSourceUrl: '/eventSource',
+      uploadUrl: '/upload',
+      downloadUrl: '/download'
+    });
+
+    it('should throw if access parameter is not an instance of AuthAccess', function() {
+      expect(function() {
+        defaultClient().withAuthAccess({});
+      }).to.throw(Error);
+    });
+
+    it('should store the AuthAccess properties', function() {
+      var client = defaultClient().withAuthAccess(authAccess);
+
+      expect(client.authToken).to.equal(authAccess.accessToken);
+      ['username', 'versions', 'extensions', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl'].forEach(function(property) {
+        expect(client[property]).to.equal(authAccess[property]);
+      });
+    });
+
+  });
+
   describe('The getAccounts method', function() {
 
     it('should post on the API url', function(done) {
