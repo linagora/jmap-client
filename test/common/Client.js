@@ -4,6 +4,8 @@ var expect = require('chai').expect,
     jmap = require('../../dist/jmap-client'),
     q = require('q');
 
+require('chai').use(require('chai-shallow-deep-equal'));
+
 describe('The Client class', function() {
 
   function defaultClient() {
@@ -2424,6 +2426,66 @@ describe('The Client class', function() {
 
           done();
         });
+    });
+
+  });
+
+  describe('The getVacationResponse method', function() {
+
+    it('should send a getVacationResponse request, passing the options', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['getVacationResponse', {
+          a: 'b'
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.getVacationResponse({ a: 'b' }).then(null, done);
+    });
+
+    it('should resolve the promise with returned VacationResponse instance', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponse', {
+          list: [{
+            isEnabled: true,
+            fromDate: '2016-06-10T17:00:00Z',
+            toDate: '2016-06-20T17:00:00Z',
+            subject: 'Out Of Office',
+            textBody: 'Text',
+            htmlBody: '<p>HTML</p>'
+          }]
+        }, '#0']]);
+      };
+
+      client.getVacationResponse().then(function(response) {
+        expect(response).to.be.an.instanceof(jmap.VacationResponse);
+        expect(response).to.shallowDeepEqual({
+          id: 'singleton',
+          isEnabled: true,
+          fromDate: new Date(Date.UTC(2016, 5, 10, 17, 0, 0, 0)),
+          toDate: new Date(Date.UTC(2016, 5, 20, 17, 0, 0, 0)),
+          subject: 'Out Of Office',
+          textBody: 'Text',
+          htmlBody: '<p>HTML</p>'
+        });
+
+        done();
+      });
+    });
+
+    it('should reject the promise if the request fails', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q.reject();
+      };
+
+      client.getVacationResponse().then(null, done);
     });
 
   });
