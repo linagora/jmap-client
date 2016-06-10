@@ -34,6 +34,7 @@ module.exports = function(config) {
     files: [
       'node_modules/chai/chai.js',
       'node_modules/chai-datetime/chai-datetime.js',
+      'node_modules/chai-shallow-deep-equal/chai-shallow-deep-equal.js',
       'node_modules/q/q.js',
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
       'node_modules/jquery/dist/jquery.js',
