@@ -395,7 +395,7 @@ describe('The Client class', function() {
         .withAuthenticationToken('token')
         .setMailboxes()
         .then(function(data) {
-          expect(data).to.deep.equal(new jmap.MailboxesSet(client, { accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa' }));
+          expect(data).to.deep.equal(new jmap.SetResponse(client, { accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa' }));
           done();
         });
     });
@@ -1271,7 +1271,7 @@ describe('The Client class', function() {
         .then(null, function() { done(); });
     });
 
-    it('should resolve the promise with a MessagesSet object when the response is valid', function(done) {
+    it('should resolve the promise with a SetResponse object when the response is valid', function(done) {
       var client = new jmap.Client({
         post: function() {
           return q([['messagesSet', {
@@ -1292,7 +1292,7 @@ describe('The Client class', function() {
           }
         })
         .then(function(data) {
-          expect(data).to.deep.equal(new jmap.MessagesSet(client, {
+          expect(data).to.deep.equal(new jmap.SetResponse(client, {
             accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
             updated: ['abcd']
           }));
@@ -2241,7 +2241,7 @@ describe('The Client class', function() {
       client.destroyMessages(['id', 'id2']);
     });
 
-    it('should resolve the promise with a MessagesSet', function(done) {
+    it('should resolve the promise with a SetResponse', function(done) {
       var client = defaultClient();
 
       client.transport.post = function() {
@@ -2251,8 +2251,8 @@ describe('The Client class', function() {
         }, '#0']]);
       };
 
-      client.destroyMessages(['id']).then(function(messagesSet) {
-        expect(messagesSet).to.be.an.instanceof(jmap.MessagesSet);
+      client.destroyMessages(['id']).then(function(response) {
+        expect(response).to.be.an.instanceof(jmap.SetResponse);
 
         done();
       });
