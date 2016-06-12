@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The VacationResponse model. #45
 - Client.getVacationResponse
 - The SetResponse class
+- Client.setVacationResponse
 
 ### Fixed
 - New/changed JMAP endpoint properties in AuthAcces. #38

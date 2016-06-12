@@ -2490,4 +2490,114 @@ describe('The Client class', function() {
 
   });
 
+  describe('The setVacationResponse method', function() {
+
+    var vacation = new jmap.VacationResponse({}, {
+      isEnabled: true,
+      fromDate: '2016-06-10T12:00:00Z',
+      textBody: 'Text'
+    });
+
+    function checkSentVacationAndAccountId(options, accountId, done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setVacationResponse', {
+          accountId: accountId,
+          update: {
+            singleton: {
+              id: 'singleton',
+              isEnabled: true,
+              fromDate: '2016-06-10T12:00:00Z',
+              textBody: 'Text'
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.setVacationResponse(vacation, options).then(null, done);
+    }
+
+    it('should throw if vacationResponse parameter is not given', function() {
+      expect(function() {
+        defaultClient().setVacationResponse();
+      }).to.throw(Error);
+    });
+
+    it('should throw if vacationResponse parameter is not an instance of VacationResponse', function() {
+      expect(function() {
+        defaultClient().setVacationResponse('vacation');
+      }).to.throw(Error);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and accountId if defined', function(done) {
+      checkSentVacationAndAccountId({ accountId: 'id' }, 'id', done);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if not defined', function(done) {
+      checkSentVacationAndAccountId({}, null, done);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if no options given', function(done) {
+      checkSentVacationAndAccountId(undefined, null, done);
+    });
+
+    it('should resolve the promise with nothing if the call succeeds', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {
+          updated: ['singleton']
+        }, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(done);
+    });
+
+    it('should reject the promise if the request fails', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q.reject();
+      };
+
+      client.setVacationResponse(vacation).then(null, done);
+    });
+
+    it('should reject the promise if the call completes with an error, passing the error message', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {
+          notUpdated: {
+            singleton: 'Failure'
+          }
+        }, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(null, function(err) {
+        expect(err.message).to.match(/Error: Failure/);
+
+        done();
+      });
+    });
+
+    it('should reject the promise if the call does not complete with success', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {}, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(null, function(err) {
+        expect(err.message).to.match(/Error: none/);
+
+        done();
+      });
+    });
+
+  });
+
 });
