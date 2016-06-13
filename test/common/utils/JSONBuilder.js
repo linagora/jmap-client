@@ -119,4 +119,30 @@ describe('The JSONBuilder class', function() {
     });
   });
 
+  describe('The appendDateIfDefined method', function() {
+
+    var date = new Date(Date.UTC(2016, 5, 10, 17, 0, 0, 0));
+
+    it('should throw an Error if the name is undefined', function() {
+      expect(function() {
+        new jmap.JSONBuilder().appendDateIfDefined(undefined, new Date());
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if date is not a Date', function() {
+      expect(function() {
+        new jmap.JSONBuilder().appendDateIfDefined(undefined, {});
+      }).to.throw(Error);
+    });
+
+    it('should append nothing if the date is undefined', function() {
+      expect(new jmap.JSONBuilder().appendDateIfDefined('date').build()).to.deep.equal({});
+    });
+
+    it('should append an ISO Date String if the value is a Date', function() {
+      expect(new jmap.JSONBuilder().appendDateIfDefined('date', date).build()).to.deep.equal({ date: '2016-06-10T17:00:00Z' });
+    });
+
+  });
+
 });

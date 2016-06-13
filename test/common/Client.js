@@ -4,6 +4,8 @@ var expect = require('chai').expect,
     jmap = require('../../dist/jmap-client'),
     q = require('q');
 
+require('chai').use(require('chai-shallow-deep-equal'));
+
 describe('The Client class', function() {
 
   function defaultClient() {
@@ -393,7 +395,7 @@ describe('The Client class', function() {
         .withAuthenticationToken('token')
         .setMailboxes()
         .then(function(data) {
-          expect(data).to.deep.equal(new jmap.MailboxesSet(client, { accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa' }));
+          expect(data).to.deep.equal(new jmap.SetResponse(client, { accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa' }));
           done();
         });
     });
@@ -1269,7 +1271,7 @@ describe('The Client class', function() {
         .then(null, function() { done(); });
     });
 
-    it('should resolve the promise with a MessagesSet object when the response is valid', function(done) {
+    it('should resolve the promise with a SetResponse object when the response is valid', function(done) {
       var client = new jmap.Client({
         post: function() {
           return q([['messagesSet', {
@@ -1290,7 +1292,7 @@ describe('The Client class', function() {
           }
         })
         .then(function(data) {
-          expect(data).to.deep.equal(new jmap.MessagesSet(client, {
+          expect(data).to.deep.equal(new jmap.SetResponse(client, {
             accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
             updated: ['abcd']
           }));
@@ -2239,7 +2241,7 @@ describe('The Client class', function() {
       client.destroyMessages(['id', 'id2']);
     });
 
-    it('should resolve the promise with a MessagesSet', function(done) {
+    it('should resolve the promise with a SetResponse', function(done) {
       var client = defaultClient();
 
       client.transport.post = function() {
@@ -2249,8 +2251,8 @@ describe('The Client class', function() {
         }, '#0']]);
       };
 
-      client.destroyMessages(['id']).then(function(messagesSet) {
-        expect(messagesSet).to.be.an.instanceof(jmap.MessagesSet);
+      client.destroyMessages(['id']).then(function(response) {
+        expect(response).to.be.an.instanceof(jmap.SetResponse);
 
         done();
       });
@@ -2424,6 +2426,176 @@ describe('The Client class', function() {
 
           done();
         });
+    });
+
+  });
+
+  describe('The getVacationResponse method', function() {
+
+    it('should send a getVacationResponse request, passing the options', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['getVacationResponse', {
+          a: 'b'
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.getVacationResponse({ a: 'b' }).then(null, done);
+    });
+
+    it('should resolve the promise with returned VacationResponse instance', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponse', {
+          list: [{
+            isEnabled: true,
+            fromDate: '2016-06-10T17:00:00Z',
+            toDate: '2016-06-20T17:00:00Z',
+            subject: 'Out Of Office',
+            textBody: 'Text',
+            htmlBody: '<p>HTML</p>'
+          }]
+        }, '#0']]);
+      };
+
+      client.getVacationResponse().then(function(response) {
+        expect(response).to.be.an.instanceof(jmap.VacationResponse);
+        expect(response).to.shallowDeepEqual({
+          id: 'singleton',
+          isEnabled: true,
+          fromDate: new Date(Date.UTC(2016, 5, 10, 17, 0, 0, 0)),
+          toDate: new Date(Date.UTC(2016, 5, 20, 17, 0, 0, 0)),
+          subject: 'Out Of Office',
+          textBody: 'Text',
+          htmlBody: '<p>HTML</p>'
+        });
+
+        done();
+      });
+    });
+
+    it('should reject the promise if the request fails', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q.reject();
+      };
+
+      client.getVacationResponse().then(null, done);
+    });
+
+  });
+
+  describe('The setVacationResponse method', function() {
+
+    var vacation = new jmap.VacationResponse({}, {
+      isEnabled: true,
+      fromDate: '2016-06-10T12:00:00Z',
+      textBody: 'Text'
+    });
+
+    function checkSentVacationAndAccountId(options, accountId, done) {
+      var client = defaultClient();
+
+      client.transport.post = function(url, headers, body) {
+        expect(body).to.deep.equal([['setVacationResponse', {
+          accountId: accountId,
+          update: {
+            singleton: {
+              id: 'singleton',
+              isEnabled: true,
+              fromDate: '2016-06-10T12:00:00Z',
+              textBody: 'Text'
+            }
+          }
+        }, '#0']]);
+
+        return q.reject();
+      };
+
+      client.setVacationResponse(vacation, options).then(null, done);
+    }
+
+    it('should throw if vacationResponse parameter is not given', function() {
+      expect(function() {
+        defaultClient().setVacationResponse();
+      }).to.throw(Error);
+    });
+
+    it('should throw if vacationResponse parameter is not an instance of VacationResponse', function() {
+      expect(function() {
+        defaultClient().setVacationResponse('vacation');
+      }).to.throw(Error);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and accountId if defined', function(done) {
+      checkSentVacationAndAccountId({ accountId: 'id' }, 'id', done);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if not defined', function(done) {
+      checkSentVacationAndAccountId({}, null, done);
+    });
+
+    it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if no options given', function(done) {
+      checkSentVacationAndAccountId(undefined, null, done);
+    });
+
+    it('should resolve the promise with nothing if the call succeeds', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {
+          updated: ['singleton']
+        }, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(done);
+    });
+
+    it('should reject the promise if the request fails', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q.reject();
+      };
+
+      client.setVacationResponse(vacation).then(null, done);
+    });
+
+    it('should reject the promise if the call completes with an error, passing the error message', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {
+          notUpdated: {
+            singleton: 'Failure'
+          }
+        }, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(null, function(err) {
+        expect(err.message).to.match(/Error: Failure/);
+
+        done();
+      });
+    });
+
+    it('should reject the promise if the call does not complete with success', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['vacationResponseSet', {}, '#0']]);
+      };
+
+      client.setVacationResponse(vacation).then(null, function(err) {
+        expect(err.message).to.match(/Error: none/);
+
+        done();
+      });
     });
 
   });
