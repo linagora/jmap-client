@@ -1,6 +1,6 @@
 {
   "name": "jmap-client",
-  "version": "0.0.15-dev",
+  "version": "0.0.15",
   "repository": "linagora/jmap-client",
   "description": "This lib help to make requests against a JMAP server",
   "main": "lib/jmap-client.js",
