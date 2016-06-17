@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MessageList</title>
+    <title>JSDoc: Class: SetResponse</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MessageList</h1>
+    <h1 class="page-title">Class: SetResponse</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>MessageList</h2>
+        <h2>SetResponse</h2>
         
     
 </header>
@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="MessageList"><span class="type-signature"></span>new MessageList<span class="signature">(jmap, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SetResponse"><span class="type-signature"></span>new SetResponse<span class="signature">(jmap, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#messagelists">MessageList</a>.</p>
+    <p>This class represents a JMAP [xxxSet] <a href="http://jmap.io/spec.html#setfoos">http://jmap.io/spec.html#setfoos</a>.</p>
 </div>
 
 
@@ -109,7 +109,7 @@
 
             
 
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>Mailbox</em>.</p></td>
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>SetResponse</em>.</p></td>
         </tr>
 
     
@@ -142,7 +142,7 @@
 
             
 
-            <td class="description last"><p>The optional properties of this <em>Mailbox</em>.</p>
+            <td class="description last"><p>The optional properties of this <em>SetResponse</em>.</p>
                 <h6>Properties</h6>
                 
 
@@ -204,20 +204,20 @@
                 </td>
             
 
-            <td class="description last"><p>The id of the <a href="Account.html">Account</a> used in the request that originated this <em>MessageList</em>.</p></td>
+            <td class="description last"><p>The id of the <a href="Account.html">Account</a> used in the request that originated this <em>SetResponse</em>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>filter</code></td>
+                <td class="name"><code>oldState</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
             
@@ -238,25 +238,26 @@
             
                 <td class="default">
                 
-                    null
+                    ''
                 
                 </td>
             
 
-            <td class="description last"><p>The filter used in the request that originated this <em>MessageList</em>.</p></td>
+            <td class="description last"><p>The state string that would have been returned by <em>getXXX</em> before making the requested changes,
+       or null if the server doesn’t know what the previous state string was.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>sort</code></td>
+                <td class="name"><code>newState</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Array.&lt;String></span>
 
 
             
@@ -277,136 +278,19 @@
             
                 <td class="default">
                 
-                    null
+                    ''
                 
                 </td>
             
 
-            <td class="description last"><p>The sort properties used in the request that originated this <em>MessageList</em>.</p></td>
+            <td class="description last"><p>The state string that will now be returned by <em>getXXX</em>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>collapseThreads</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>The collapseThreads value used in the request that originated this <em>MessageList</em>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>position</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-
-            <td class="description last"><p>The 0-based index of the first result in the <em>threadIds</em> array within the complete list.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>total</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-
-            <td class="description last"><p>The total number of messages in the message list (given the filter and collapseThreads arguments).</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>threadIds</code></td>
+                <td class="name"><code>created</code></td>
             
 
             <td class="type">
@@ -438,14 +322,15 @@
                 </td>
             
 
-            <td class="description last"><p>The list of <em>Thread</em> identifiers for each message in the list after filtering, sorting and collapsing threads.</p></td>
+            <td class="description last"><p>A map of the creation id to an object containing any server-assigned properties of
+       the <em>XXX</em> object (including the id) for all successfully created records.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>messageIds</code></td>
+                <td class="name"><code>updated</code></td>
             
 
             <td class="type">
@@ -477,7 +362,163 @@
                 </td>
             
 
-            <td class="description last"><p>The list of <em>Message</em> identifiers for each message in the list after filtering, sorting and collapsing threads.</p></td>
+            <td class="description last"><p>A list of <em>XXX</em> ids for records that were successfully updated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>destroyed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A list of <em>XXX</em> ids for records that were successfully destroyed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notCreated</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of creation id to a SetError object for each <em>XXX</em> that failed to be created.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notUpdated</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of <em>XXX</em> id to a SetError object for each <em>XXX</em> that failed to be updated.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notDestroyed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>A map of <em>XXX</em> id to a SetError object for each <em>XXX</em> that failed to be destroyed.</p></td>
         </tr>
 
     
@@ -525,7 +566,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_MessageList.js.html">models/MessageList.js</a>, <a href="models_MessageList.js.html#line28">line 28</a>
+        <a href="models_SetResponse.js.html">models/SetResponse.js</a>, <a href="models_SetResponse.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -536,10 +577,6 @@
     <dd class="tag-see">
         <ul>
             <li><a href="Model.html">Model</a></li>
-        
-            <li><a href="Thread.html">Thread</a></li>
-        
-            <li><a href="Message.html">Message</a></li>
         </ul>
     </dd>
     
@@ -596,14 +633,14 @@
 
     
 
-    <h4 class="name" id=".fromJSONObject"><span class="type-signature">(static) </span>fromJSONObject<span class="signature">(jmap, object)</span><span class="type-signature"> &rarr; {<a href="MessageList.html">MessageList</a>}</span></h4>
+    <h4 class="name" id=".fromJSONObject"><span class="type-signature">(static) </span>fromJSONObject<span class="signature">(jmap, object)</span><span class="type-signature"> &rarr; {<a href="SetResponse.html">SetResponse</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Creates a <em>MessageList</em> from its JSON representation.</p>
+    <p>Creates a <em>SetResponse</em> from its JSON representation.</p>
 </div>
 
 
@@ -655,7 +692,7 @@
 
             
 
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance passed to the <em>MessageList</em> constructor.</p></td>
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance passed to the <em>SetResponse</em> constructor.</p></td>
         </tr>
 
     
@@ -678,7 +715,7 @@
 
             
 
-            <td class="description last"><p>The JSON representation of the <em>MessageList</em>, as a Javascript object.</p></td>
+            <td class="description last"><p>The JSON representation of the <em>SetResponse</em>, as a Javascript object.</p></td>
         </tr>
 
     
@@ -719,7 +756,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_MessageList.js.html">models/MessageList.js</a>, <a href="models_MessageList.js.html#line87">line 87</a>
+        <a href="models_SetResponse.js.html">models/SetResponse.js</a>, <a href="models_SetResponse.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -753,359 +790,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="MessageList.html">MessageList</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getMessages"><span class="type-signature"></span>getMessages<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Fetches all messages contained in this <em>MessageList</em>.<br />
-This will delegate to <a href="Client.html#getMessages">Client#getMessages</a>, passing this MessageList's <em>messageIds</em> as the <em>ids</em> option.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The options object passed to <a href="Client.html#getMessages">Client#getMessages</a>.
-  Please note that the <em>ids</em> option will be overriden if defined.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_MessageList.js.html">models/MessageList.js</a>, <a href="models_MessageList.js.html#line72">line 72</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Client.html#getMessages">Client#getMessages</a></li>
-        
-            <li><a href="PromiseProvider.html">PromiseProvider</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A promise that eventually resolves with an array of <a href="Message.html">Message</a> instances.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getThreads"><span class="type-signature"></span>getThreads<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Fetches all threads contained in this <em>MessageList</em>.<br />
-This will delegate to <a href="Client.html#getThreads">Client#getThreads</a>, passing this MessageList's <em>threadIds</em> as the <em>ids</em> option.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The options object passed to <a href="Client.html#getThreads">Client#getThreads</a>.
-  Please note that the <em>ids</em> option will be overriden if defined.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_MessageList.js.html">models/MessageList.js</a>, <a href="models_MessageList.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Client.html#getThreads">Client#getThreads</a></li>
-        
-            <li><a href="PromiseProvider.html">PromiseProvider</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A promise that eventually resolves with an array of <a href="Thread.html">Thread</a> instances.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
+<span class="param-type"><a href="SetResponse.html">SetResponse</a></span>
 
 
     </dd>

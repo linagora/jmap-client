@@ -33,17 +33,17 @@ import Utils from './../utils/Utils.js';
 import Account from './../models/Account.js';
 import Mailbox from './../models/Mailbox.js';
 import MessageList from './../models/MessageList.js';
-import MailboxesSet from './../models/MailboxesSet.js';
+import SetResponse from './../models/SetResponse.js';
 import Thread from './../models/Thread.js';
 import Message from './../models/Message.js';
 import OutboundMessage from './../models/OutboundMessage.js';
 import CreateMessageAck from './../models/CreateMessageAck.js';
 import CreateMailboxAck from './../models/CreateMailboxAck.js';
-import MessagesSet from './../models/MessagesSet.js';
 import MailboxRole from './../models/MailboxRole.js';
 import AuthContinuation from './../models/AuthContinuation.js';
 import AuthAccess from './../models/AuthAccess.js';
 import Constants from '../utils/Constants.js';
+import VacationResponse from './../models/VacationResponse';
 
 export default class Client {
   /**
@@ -120,6 +120,26 @@ export default class Client {
    */
   withDownloadUrl(url) {
     this.downloadUrl = url;
+
+    return this;
+  }
+
+  /**
+   * Initializes the client with an {@link AuthAccess} model from an authentication response.&lt;br />
+   * &lt;br />
+   * The individual properties of the AuthAccess object will be copied into client properties.
+   *
+   * @param access {AuthAccess} The response object from an authenticate process.
+   *
+   * @return {Client} This Client instance.
+   */
+  withAuthAccess(access) {
+    Utils.assertRequiredParameterHasType(access, 'access', AuthAccess);
+
+    this.authToken = access.accessToken;
+    ['username', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'versions', 'extensions'].forEach((property) => {
+      this[property] = access[property];
+    });
 
     return this;
   }
@@ -308,12 +328,12 @@ export default class Client {
           parentId: parentId
         }
       }
-    }).then((mailboxesSet) => {
-      if (!mailboxesSet.created[clientId]) {
-        throw new Error('Failed to create mailbox, clientId: ' + clientId + ', message: ' + (mailboxesSet.notCreated[clientId] || 'none'));
+    }).then(response => {
+      if (!response.created[clientId]) {
+        throw new Error('Failed to create mailbox, clientId: ' + clientId + ', message: ' + (response.notCreated[clientId] || 'none'));
       }
 
-      return new CreateMailboxAck(this, mailboxesSet.created[clientId]);
+      return new CreateMailboxAck(this, response.created[clientId]);
     });
   }
 
@@ -335,9 +355,9 @@ export default class Client {
       update: {
         [id]: options
       }
-    }).then((mailboxesSet) => {
-      if (mailboxesSet.updated.indexOf(id) &lt; 0) {
-        throw new Error('Failed to update mailbox ' + id + ', the reason is: ' + mailboxesSet.notUpdated[id]);
+    }).then(response => {
+      if (response.updated.indexOf(id) &lt; 0) {
+        throw new Error('Failed to update mailbox ' + id + ', the reason is: ' + response.notUpdated[id]);
       }
     });
   }
@@ -356,9 +376,9 @@ export default class Client {
     Utils.assertRequiredParameterIsPresent(id, 'id');
 
     return this.setMailboxes({destroy: [id]})
-      .then((mailboxesSet) => {
-        if (mailboxesSet.destroyed.indexOf(id) &lt; 0) {
-          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (mailboxesSet.notDestroyed[id] || 'missing'));
+      .then(response => {
+        if (response.destroyed.indexOf(id) &lt; 0) {
+          throw new Error('Failed to destroy ' + id + ', the reason is: ' + (response.notDestroyed[id] || 'missing'));
         }
       });
   }
@@ -391,7 +411,7 @@ export default class Client {
           }
         }
 
-        throw new Error('Cannot find a mailbox with role ' + role.role);
+        throw new Error('Cannot find a mailbox with role ' + role.value);
       });
   }
 
@@ -439,7 +459,7 @@ export default class Client {
    *
    * @param [options=null] {Object} The options to the _setMessages_ JMAP request.
    *
-   * @return {Promise} A {@link Promise} that eventually resolves to a {@link MessagesSet} object.
+   * @return {Promise} A {@link Promise} that eventually resolves to a {@link SetResponse} object.
    *
    * @see http://jmap.io/spec.html#setmessages
    */
@@ -470,9 +490,9 @@ export default class Client {
       update: {
         [id]: options
       }
-    }).then(messagesSet => {
-      if (messagesSet.updated.indexOf(id) &lt; 0) {
-        throw new Error('Failed to update message ' + id + ', the reason is: ' + (messagesSet.notUpdated[id] || 'missing'));
+    }).then(response => {
+      if (response.updated.indexOf(id) &lt; 0) {
+        throw new Error('Failed to update message ' + id + ', the reason is: ' + (response.notUpdated[id] || 'missing'));
       }
     });
   }
@@ -488,9 +508,9 @@ export default class Client {
    * @see Client#setMessages
    */
   destroyMessage(id) {
-    return this.destroyMessages(id &amp;&amp; [id]).then(messagesSet => {
-      if (messagesSet.destroyed.indexOf(id) &lt; 0) {
-        throw new Error('Failed to destroy ' + id + ', the reason is: ' + (messagesSet.notDestroyed[id] || 'missing'));
+    return this.destroyMessages(id &amp;&amp; [id]).then(response => {
+      if (response.destroyed.indexOf(id) &lt; 0) {
+        throw new Error('Failed to destroy ' + id + ', the reason is: ' + (response.notDestroyed[id] || 'missing'));
       }
     });
   }
@@ -501,7 +521,7 @@ export default class Client {
    *
    * @param ids {String[]} The list of ids of the messages to destroy.
    *
-   * @return {Promise} A {@link Promise} that resolves to a {@link MessagesSet}, containing the result of the operation.
+   * @return {Promise} A {@link Promise} that resolves to a {@link SetResponse}, containing the result of the operation.
    *
    * @see Client#setMessages
    */
@@ -555,6 +575,44 @@ export default class Client {
     Utils.assertRequiredParameterIsArrayWithMinimumLength(mailboxIds, 'mailboxIds', 1);
 
     return this.updateMessage(id, { mailboxIds: mailboxIds });
+  }
+
+  /**
+   * Gets the singleton {@link VacationResponse} instance for a given account.&lt;br />
+   * This will send a `getVacationResponse` request to the JMAP backend.
+   *
+   * @param [options] {Object} The options to the underlying `getVacationResponse` JMAP request.
+   * @param [options.accountId=null] {String} The account ID to get the vacation response for. If `null`, the primary account is used.
+   *
+   * @returns {Promise} A {@link Promise} that eventually resolves to the {@link VacationResponse} instance.
+   */
+  getVacationResponse(options) {
+    return this._jmapRequest('getVacationResponse', options).then(list => list[0]);
+  }
+
+  /**
+   * Sets the singleton {@link VacationResponse} instance for a given account.&lt;br />
+   * This will send a `setVacationResponse` request to the JMAP backend.
+   *
+   * @param vacationResponse {VacationResponse} The {@link VacationResponse} instance to set
+   * @param [options] {Object} The options to the underlying `setVacationResponse` JMAP request.
+   * @param [options.accountId=null] {String} The account ID to set the vacation response for. If `null`, the primary account is used.
+   *
+   * @returns {Promise} A {@link Promise} that eventually resolves to nothing upon success.
+   */
+  setVacationResponse(vacationResponse, options) {
+    Utils.assertRequiredParameterHasType(vacationResponse, 'vacationResponse', VacationResponse);
+
+    return this._jmapRequest('setVacationResponse', {
+      accountId: (options &amp;&amp; options.accountId) || null,
+      update: {
+        [VacationResponse.ID]: vacationResponse.toJSONObject()
+      }
+    }).then(response => {
+      if (response.updated.indexOf(VacationResponse.ID) &lt; 0) {
+        throw new Error('Failed to set vacation response. Error: ' + (response.notUpdated[VacationResponse.ID] || 'none'));
+      }
+    });
   }
 
   _createMessage(message, role) {
@@ -623,6 +681,10 @@ export default class Client {
     return Utils._jsonArrayToModelList(this, Model, response[1].list, filter);
   }
 
+  _handleSetResponse(response) {
+    return SetResponse.fromJSONObject(this, response[1]);
+  }
+
   _handleAccountsResponse(response) {
     return this._handleListResponse(response, Account);
   }
@@ -646,7 +708,7 @@ export default class Client {
   }
 
   _handleMailboxesSetResponse(response) {
-    return MailboxesSet.fromJSONObject(this, response[1]);
+    return this._handleSetResponse(response);
   }
 
   _handleMessageListResponse(response) {
@@ -654,7 +716,15 @@ export default class Client {
   }
 
   _handleMessagesSetResponse(response) {
-    return MessagesSet.fromJSONObject(this, response[1]);
+    return this._handleSetResponse(response);
+  }
+
+  _handleVacationResponseResponse(response) {
+    return this._handleListResponse(response, VacationResponse);
+  }
+
+  _handleVacationResponseSetResponse(response) {
+    return this._handleSetResponse(response);
   }
 }
 </code></pre>
@@ -667,7 +737,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxesSet.html">MailboxesSet</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="MessagesSet.html">MessagesSet</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMailboxAck.html">CreateMailboxAck</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">
