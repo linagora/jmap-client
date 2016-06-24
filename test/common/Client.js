@@ -2537,11 +2537,11 @@ describe('The Client class', function() {
     });
 
     it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if not defined', function(done) {
-      checkSentVacationAndAccountId({}, null, done);
+      checkSentVacationAndAccountId({}, undefined, done);
     });
 
     it('should send a setVacationResponse request, passing the VacationResponse and a null accountId if no options given', function(done) {
-      checkSentVacationAndAccountId(undefined, null, done);
+      checkSentVacationAndAccountId(undefined, undefined, done);
     });
 
     it('should resolve the promise with nothing if the call succeeds', function(done) {
