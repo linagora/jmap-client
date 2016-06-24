@@ -588,66 +588,108 @@ describe('The Client class', function() {
       }).to.throw(Error);
     });
 
-    it('should call setMailboxes with the expected id', function(done) {
+    it('should delegate to Client#destroyMailboxes method', function(done) {
       var client = defaultClient();
+
+      client.destroyMailboxes = function(ids) {
+        expect(ids).to.deep.equal(['id']);
+
+        return q.reject(new Error('some error'));
+      };
+
+      client.destroyMailbox('id').catch(function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      });
+    });
+
+  });
+
+  describe('The destroyMailboxes method', function() {
+
+    it('should throw an Error if the ids is undefined', function() {
+      expect(function() {
+        defaultClient().destroyMailboxes();
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the ids is not an array', function() {
+      expect(function() {
+        defaultClient().destroyMailboxes({});
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if the ids array is empty', function() {
+      expect(function() {
+        defaultClient().destroyMailboxes([]);
+      }).to.throw(Error);
+    });
+
+    it('should call setMailboxes with the expected ids', function(done) {
+      var client = defaultClient();
+      var ids = ['m1', 'm2'];
 
       client.transport.post = function(url, headers, body) {
         expect(body).to.deep.equal([['setMailboxes', {
-          destroy: ['id']
+          destroy: ids
         }, '#0']]);
         done();
 
         return q.reject();
       };
 
-      client.destroyMailbox('id');
+      client.destroyMailboxes(ids);
     });
 
-    it('should resolve the promise with nothing if the mailbox was destroyed', function(done) {
+    it('should reject the promise if there is an error while destroying mailboxes', function(done) {
       var client = defaultClient();
 
       client.transport.post = function(url, headers, body) {
-        return q([['mailboxesSet', {
-          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
-          destroyed: ['id']
-        }, '#0']]);
+        return q.reject(new Error('some error'));
       };
 
-      client.destroyMailbox('id').then(done);
-    });
-
-    it('should throw an error if the given id is not in response.destroyed', function(done) {
-      var client = defaultClient();
-
-      client.transport.post = function(url, headers, body) {
-        return q([['mailboxesSet', {
-          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
-          destroyed: [],
-          notDestroyed: {id: 'reason'}
-        }, '#0']]);
-      };
-
-      client.destroyMailbox('id').then(null, function(err) {
+      client.destroyMailboxes(['id1', 'id2', 'id3']).then(null, function(err) {
         expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.equal('Failed to destroy id, the reason is: reason');
         done();
       });
     });
 
-    it('should throw an error if the given id is neither in response.destroyed nor in response.notDestroyed', function(done) {
+    it('should reject the promise with error if some mailboxes were not successfully destroyed', function(done) {
       var client = defaultClient();
+      var response = [['mailboxesSet', {
+        accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+        destroyed: ['id1'],
+        notDestroyed: {
+          id2: { type: 'type2', description: 'description2' },
+          id3: { type: 'type3', description: 'description3' }
+        }
+      }, '#0']];
 
-      client.transport.post = function(url, headers, body) {
-        return q([['mailboxesSet', {
-          accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
-          destroyed: [],
-          notDestroyed: {}
-        }, '#0']]);
+      client.transport.post = function() {
+        return q(response);
       };
 
-      client.destroyMailbox('id').then(null, function(err) {
+      client.destroyMailboxes(['id1', 'id2', 'id3']).catch(function(err) {
         expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.equal('Failed to destroy id, the reason is: missing');
+        expect(err.message).to.equal('Failed to destroy id2, the reason is: type2 (description2)');
+        done();
+      });
+    });
+
+    it('should resolve the promise with nothing if all mailboxes were successfully destroyed', function(done) {
+      var client = defaultClient();
+      var response = [['mailboxesSet', {
+        accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
+        destroyed: ['id1', 'id2', 'id3'],
+        notDestroyed: {}
+      }, '#0']];
+
+      client.transport.post = function() {
+        return q(response);
+      };
+
+      client.destroyMailboxes(['id1', 'id2', 'id3']).then(function(resp) {
+        expect(resp).to.be.undefined;
         done();
       });
     });
