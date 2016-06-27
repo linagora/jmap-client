@@ -122,8 +122,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -219,8 +219,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -316,8 +316,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -717,8 +717,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -948,8 +948,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -1097,8 +1097,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
@@ -1248,8 +1248,8 @@ describe('The Client class', function() {
         post: function(url, headers) {
           expect(headers).to.deep.equal({
             Authorization: 'token',
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json; charset=UTF-8'
           });
 
           return q.reject();
