@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Changed
+- Client.createMailbox now resolves with a Mailbox object
+
+### Removed
+- The CreateMailboxAck class.
+
+## [0.0.16] - 2016-06-27
 ### Added
 - Client.destroyMailboxes #47
 
