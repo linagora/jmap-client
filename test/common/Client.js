@@ -428,7 +428,7 @@ describe('The Client class', function() {
       return client;
     }
 
-    it('should resolve the promise with returned object if clientId in the response.created', function(done) {
+    it('should resolve the promise with a Mailbox object if clientId in the response.created', function(done) {
       var client = createMailboxClient();
 
       client.transport.post = function() {
@@ -436,7 +436,7 @@ describe('The Client class', function() {
           created: {
             expectedClientId: {
               id: 'id',
-              mustBeOnlyMailbox: true
+              name: 'another name'
             }
           }
         }, '#0']]);
@@ -445,11 +445,42 @@ describe('The Client class', function() {
       client
         .createMailbox('name')
         .then(function(resolved) {
-          expect(resolved).to.be.an.instanceof(jmap.CreateMailboxAck);
+          expect(resolved).to.be.an.instanceof(jmap.Mailbox);
           expect(resolved).to.include({
             id: 'id',
-            mustBeOnlyMailbox: true
+            name: 'another name'
           });
+
+          done();
+        });
+    });
+
+    it('should resolve the promise with a Mailbox object if clientId in the response.created, reusing the name', function(done) {
+      var client = createMailboxClient();
+
+      client.transport.post = function() {
+        return q([['mailboxesSet', {
+          created: {
+            expectedClientId: {
+              id: 'id',
+              mustBeOnlyMailbox: true,
+              sortOrder: 123
+            }
+          }
+        }, '#0']]);
+      };
+
+      client
+        .createMailbox('name')
+        .then(function(resolved) {
+          expect(resolved).to.be.an.instanceof(jmap.Mailbox);
+          expect(resolved).to.include({
+            id: 'id',
+            mustBeOnlyMailbox: true,
+            sortOrder: 123,
+            name: 'name'
+          });
+
           done();
         });
     });
