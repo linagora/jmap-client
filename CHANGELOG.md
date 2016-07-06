@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+
+## [0.0.17] - 2016-07-06
 ### Changed
 - Client.createMailbox now resolves with a Mailbox object
 
