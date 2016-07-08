@@ -70,7 +70,7 @@ describe('The RequestTransport class', function() {
       });
     });
 
-    it('should build a correct options object, and pass it to request', function() {
+    it('should build a correct options object and pass it to request', function() {
       mockery.registerMock('request', function(options) {
         expect(options).to.deep.equal({
           method: 'POST',
@@ -92,6 +92,24 @@ describe('The RequestTransport class', function() {
         a: 'b',
         c: 0
       });
+    });
+
+    it('should build a correct options object and pass it to request, when using raw mode', function() {
+      mockery.registerMock('request', function(options) {
+        expect(options).to.deep.equal({
+          method: 'POST',
+          url: 'https://jmap.open-paas.org',
+          headers: {
+            Authorization: 'SuperSecretToken'
+          },
+          body: {},
+          json: false
+        });
+      });
+
+      newTransport().post('https://jmap.open-paas.org', {
+        Authorization: 'SuperSecretToken'
+      }, {}, true);
     });
 
   });

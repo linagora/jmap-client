@@ -405,4 +405,40 @@ describe('The Utils class', function() {
 
   });
 
+  describe('The appendQueryParameter static method', function() {
+
+    it('should return undefined if undefined given as uri', function() {
+      expect(jmap.Utils.appendQueryParameter()).to.equal(undefined);
+    });
+
+    it('should return null if null given as uri', function() {
+      expect(jmap.Utils.appendQueryParameter(null)).to.equal(null);
+    });
+
+    it('should return an empty String if an empty String given as uri', function() {
+      expect(jmap.Utils.appendQueryParameter('')).to.equal('');
+    });
+
+    it('should return the uri as-is if key is not defined', function() {
+      expect(jmap.Utils.appendQueryParameter('uri')).to.equal('uri');
+    });
+
+    it('should return the uri as-is if value is not defined', function() {
+      expect(jmap.Utils.appendQueryParameter('uri', 'key')).to.equal('uri');
+    });
+
+    it('should return the uri completed with key=value if uri has a query string already', function() {
+      expect(jmap.Utils.appendQueryParameter('uri?a=b', 'c', 'd')).to.equal('uri?a=b&c=d');
+    });
+
+    it('should return the uri completed with key=value if uri has a not query string yet', function() {
+      expect(jmap.Utils.appendQueryParameter('uri', 'c', 'd')).to.equal('uri?c=d');
+    });
+
+    it('should encode key and value', function() {
+      expect(jmap.Utils.appendQueryParameter('uri', 'a b', 'c/d')).to.equal('uri?a%20b=c%2Fd');
+    });
+
+  });
+
 });
