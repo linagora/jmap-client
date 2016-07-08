@@ -49,14 +49,14 @@ export default class JQueryTransport extends Transport {
     this.promiseProvider = promiseProvider;
   }
 
-  post(url, headers, data) {
+  post(url, headers, data, raw) {
     return this.promiseProvider.newPromise(function(resolve, reject) {
       jQuery.ajax({
         url: url,
         method: 'POST',
         headers: headers,
-        data: JSON.stringify(data),
-        dataType: 'json',
+        data: raw ? data : JSON.stringify(data),
+        dataType: raw ? undefined : 'json',
         processData: false,
         jsonp: false
       })

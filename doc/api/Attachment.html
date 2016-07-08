@@ -799,7 +799,7 @@ An <em>Attachment</em> object holds all information of a given attachment of a <
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line87">line 87</a>
+        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -834,6 +834,142 @@ An <em>Attachment</em> object holds all information of a given attachment of a <
     <dd>
         
 <span class="param-type"><a href="Attachment.html">Attachment</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getSignedDownloadUrl"><span class="type-signature"></span>getSignedDownloadUrl<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets a signed download URL for this <a href="Attachment.html">Attachment</a>.
+Details of this process can be found in <a href="http://jmap.io/spec.html#downloading-an-attachment-through-a-signed-request">the spec</a>.
+<br />
+This mandates that <code>url</code> is defined on this <a href="Attachment.html">Attachment</a> instance, otherwise we cannot get a signed URL.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>If this <code>Attachment</code> instance has no URL available.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A Promise eventually resolving to the signed download URL.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
     </dd>
@@ -899,7 +1035,7 @@ An <em>Attachment</em> object holds all information of a given attachment of a <
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line64">line 64</a>
+        <a href="models_Attachment.js.html">models/Attachment.js</a>, <a href="models_Attachment.js.html#line82">line 82</a>
     </li></ul></dd>
     
 

@@ -51,14 +51,14 @@ export default class RequestTransport extends Transport {
     this.promiseProvider = promiseProvider;
   }
 
-  post(url, headers, data) {
+  post(url, headers, data, raw) {
     return this.promiseProvider.newPromise(function(resolve, reject) {
       require('request')({
         url: url,
         headers: headers,
         method: 'POST',
         body: data,
-        json: true
+        json: !raw
       }, function(err, res, body) {
         if (err) {
           return reject(err);

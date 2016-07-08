@@ -233,6 +233,24 @@ export default class Utils {
   }
 
   /**
+   * Appends a query parameter to an existing URL, taking care of existing query parameters.&lt;br />
+   * This method returns `uri` as-is if `key` or `value` is not defined.
+   *
+   * @param uri {String} The URI to modify.
+   * @param key {String} The name of the parameter to append.
+   * @param value {String} The value of the parameter to append.
+   *
+   * @returns {String} The modified URI.
+   */
+  static appendQueryParameter(uri, key, value) {
+    if (!uri || !key || !value) {
+      return uri;
+    }
+
+    return uri + (uri.indexOf('?') > -1 ? '&amp;' : '?') + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+  }
+
+  /**
    * Returns the value at _index_ in the given  `Array`, or the default value if the array is undefined, null,
    * if _index_ is negative or there is not enough elements in the array.
    *

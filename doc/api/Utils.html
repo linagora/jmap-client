@@ -141,6 +141,206 @@ The Utils class cannot be instantiated (its constructor will throw if called), a
 
     
 
+    <h4 class="name" id=".appendQueryParameter"><span class="type-signature">(static) </span>appendQueryParameter<span class="signature">(uri, key, value)</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Appends a query parameter to an existing URL, taking care of existing query parameters.<br />
+This method returns <code>uri</code> as-is if <code>key</code> or <code>value</code> is not defined.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>uri</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The URI to modify.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the parameter to append.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value of the parameter to append.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_Utils.js.html">utils/Utils.js</a>, <a href="utils_Utils.js.html#line217">line 217</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The modified URI.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".assertRequiredParameterHasType"><span class="type-signature">(static) </span>assertRequiredParameterHasType<span class="signature">(parameter, name, type)</span><span class="type-signature"> &rarr; {*}</span></h4>
 
     
@@ -1900,7 +2100,7 @@ if <em>index</em> is negative or there is not enough elements in the array.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utils_Utils.js.html">utils/Utils.js</a>, <a href="utils_Utils.js.html#line217">line 217</a>
+        <a href="utils_Utils.js.html">utils/Utils.js</a>, <a href="utils_Utils.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
