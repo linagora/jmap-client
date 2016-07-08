@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Added
+- Attachment.getSignedDownloadUrl. #50
+- Transport.post 'raw' parameter
+- Utils.appendQueryParameter
 
 ## [0.0.17] - 2016-07-06
 ### Changed

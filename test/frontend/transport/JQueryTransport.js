@@ -92,6 +92,32 @@ describe('The JQueryTransport class', function() {
         });
     });
 
+    it('should build a correct options object and pass it to jQuery, when using raw mode', function(done) {
+      jQuery.mockjax({
+        url: 'http://test',
+        response: function(options) {
+          expect(options).to.deep.equal({
+            method: 'POST',
+            url: 'http://test',
+            headers: {
+              Authorization: 'SuperSecretToken'
+            },
+            data: null,
+            dataType: undefined,
+            jsonp: false,
+            processData: false
+          });
+
+          this.responseText = '[]';
+        }
+      });
+
+      newTransport().post('http://test', { Authorization: 'SuperSecretToken' }, null, true)
+        .then(function() {
+          done();
+        });
+    });
+
   });
 
 });

@@ -1,7 +1,8 @@
 'use strict';
 
 var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client');
+    jmap = require('../../../dist/jmap-client'),
+    q = require('q');
 
 describe('The Attachment class', function() {
 
@@ -192,6 +193,49 @@ describe('The Attachment class', function() {
         width: 20,
         height: 30
       });
+    });
+
+  });
+
+  describe('The getSignedDownloadUrl method', function() {
+
+    function newClient(post) {
+      return new jmap.Client({
+        post: post
+      })
+        .withAuthenticationToken('token')
+        .withDownloadUrl('downloadUrl/{blobId}');
+    }
+
+    it('should throw an Error if url is not defined', function() {
+      expect(function() {
+        new jmap.Attachment({}, 'blobId').getSignedDownloadUrl();
+      }).to.throw(Error);
+    });
+
+    it('should send an authenticated POST request to the downloadUrl, and reject on failure', function(done) {
+      new jmap.Attachment(newClient(function(url, headers, data, raw) {
+        expect(url).to.equal('downloadUrl/id1');
+        expect(headers.Authorization).to.equal('token');
+        expect(data).to.equal(null);
+        expect(raw).to.equal(true);
+
+        return q.reject();
+      }), 'id1')
+        .getSignedDownloadUrl()
+        .then(null, done);
+    });
+
+    it('should send an authenticated POST request to the downloadUrl, then forge the signed URL using the token', function(done) {
+      new jmap.Attachment(newClient(function() {
+        return q('superSecretToken');
+      }), 'id1')
+        .getSignedDownloadUrl()
+        .then(function(url) {
+          expect(url).to.equal('downloadUrl/id1?access_token=superSecretToken');
+
+          done();
+        });
     });
 
   });
