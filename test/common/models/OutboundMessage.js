@@ -110,7 +110,7 @@ describe('The OutboundMessage class', function() {
         subject: 'subject',
         textBody: 'textBody',
         htmlBody: 'htmlBody',
-        attachments: [{blobId: 'att', isInline: true}]
+        attachments: [{blobId: 'att', size: 0, isInline: true}]
       };
 
       expect(new jmap.OutboundMessage({}, opts).toJSONObject()).to.deep.equal(opts);
