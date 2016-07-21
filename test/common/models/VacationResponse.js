@@ -10,6 +10,7 @@ describe('The VacationResponse class', function() {
   var defaultVacation = {
     id: jmap.VacationResponse.ID,
     isEnabled: false,
+    isActivated: false,
     fromDate: null,
     toDate: null,
     subject: null,
@@ -30,6 +31,7 @@ describe('The VacationResponse class', function() {
     it('should allow defining other fields through the opts object', function() {
       var vacation = new jmap.VacationResponse({}, {
         isEnabled: true,
+        isActivated: true,
         fromDate: '2016-06-10T17:00:00Z',
         toDate: '2016-06-20T17:00:00Z',
         subject: 'Out Of Office',
@@ -39,6 +41,7 @@ describe('The VacationResponse class', function() {
 
       expect(vacation).to.shallowDeepEqual({
         isEnabled: true,
+        isActivated: true,
         fromDate: new Date(Date.UTC(2016, 5, 10, 17, 0, 0, 0)),
         toDate: new Date(Date.UTC(2016, 5, 20, 17, 0, 0, 0)),
         subject: 'Out Of Office',
