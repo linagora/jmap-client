@@ -67,7 +67,7 @@ export default class Attachment extends Model {
     this.blobId = blobId;
     this.type = opts.type || null;
     this.name = opts.name || null;
-    this.size = opts.size || null;
+    this.size = opts.size || 0;
     this.cid = opts.cid || null;
     this.isInline = opts.isInline || false;
     this.width = opts.width || null;
