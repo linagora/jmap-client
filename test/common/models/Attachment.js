@@ -27,7 +27,7 @@ describe('The Attachment class', function() {
       expect(attachment.url).to.equal(null);
       expect(attachment.type).to.equal(null);
       expect(attachment.name).to.equal(null);
-      expect(attachment.size).to.equal(null);
+      expect(attachment.size).to.equal(0);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
       expect(attachment.width).to.equal(null);
@@ -41,7 +41,7 @@ describe('The Attachment class', function() {
       expect(attachment.url).to.equal(null);
       expect(attachment.type).to.equal(null);
       expect(attachment.name).to.equal(null);
-      expect(attachment.size).to.equal(null);
+      expect(attachment.size).to.equal(0);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
       expect(attachment.width).to.equal(null);
@@ -115,7 +115,7 @@ describe('The Attachment class', function() {
       expect(attachment.url).to.equal(null);
       expect(attachment.type).to.equal(null);
       expect(attachment.name).to.equal(null);
-      expect(attachment.size).to.equal(null);
+      expect(attachment.size).to.equal(0);
       expect(attachment.cid).to.equal(null);
       expect(attachment.isInline).to.equal(false);
       expect(attachment.width).to.equal(null);
@@ -153,6 +153,7 @@ describe('The Attachment class', function() {
     it('should produce blobId only object when no opts', function() {
       expect(new jmap.Attachment({}, 'blobId', {}).toJSONObject()).to.deep.equal({
         blobId: 'blobId',
+        size: 0,
         isInline: false
       });
     });
@@ -166,6 +167,7 @@ describe('The Attachment class', function() {
       expect(attachment.toJSONObject()).to.deep.equal({
         blobId: 'blobId',
         name: 'jmap.js',
+        size: 0,
         isInline: false
       });
     });
