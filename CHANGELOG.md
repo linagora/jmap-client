@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+
+## [0.0.19] - 2016-07-21
+### Added
+- Added support for VacationResponse.isActivated. #53
+
+### Changed
+- Attachment.size now defaults to 0 (was: null). #54
+
+## [0.0.18] - 2016-07-08
 ### Added
 - Attachment.getSignedDownloadUrl. #50
 - Transport.post 'raw' parameter
