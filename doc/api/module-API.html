@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: API</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: API</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>The <em>API</em> module is the entry point of the library.<br />
+It exports a single Object that is exposed as, either:</p>
+<ul>
+<li>A global <code>jmap</code> variable when jmap-client included in a web page through a <code>script</code> tag</li>
+<li>A NodeJS module when jmap-client is <code>require</code>'d in a NodeJS application</li>
+</ul>
+<p>When extending the library with new models, utility classes, etc. don't forget to update this module
+so that your new code gets exposed in the public API.<br />
+<br />
+The exported object has the following properties:</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Client.html">Client</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Utils</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Utils.html">Utils</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Utils.html">Utils</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>JSONBuilder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JSONBuilder.html">JSONBuilder</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="JSONBuilder.html">JSONBuilder</a> class helping to serialize model to json</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>PromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PromiseProvider.html">PromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="PromiseProvider.html">PromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ES6PromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="ES6PromiseProvider.html">ES6PromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>QPromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="QPromiseProvider.html">QPromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="QPromiseProvider.html">QPromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Transport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Transport.html">Transport</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Transport.html">Transport</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>JQueryTransport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="JQueryTransport.html">JQueryTransport</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="JQueryTransport.html">JQueryTransport</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>RequestTransport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="RequestTransport.html">RequestTransport</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="RequestTransport.html">RequestTransport</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Model</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Model.html">Model</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Account</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Account.html">Account</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Account.html">Account</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>EMailer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EMailer.html">EMailer</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="EMailer.html">EMailer</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Mailbox</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mailbox.html">Mailbox</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Mailbox.html">Mailbox</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MessageList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MessageList.html">MessageList</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="MessageList.html">MessageList</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Message.html">Message</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Message.html">Message</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>OutboundMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="OutboundMessage.html">OutboundMessage</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="OutboundMessage.html">OutboundMessage</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>CreateMessageAck</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CreateMessageAck.html">CreateMessageAck</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="CreateMessageAck.html">CreateMessageAck</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Thread</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Thread.html">Thread</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Thread.html">Thread</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MailboxRole</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MailboxRole.html">MailboxRole</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="MailboxRole.html">MailboxRole</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>SetResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="SetResponse.html">SetResponse</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="SetResponse.html">SetResponse</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AuthAccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="AuthAccess.html">AuthAccess</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="AuthAccess.html">AuthAccess</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AuthContinuation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="AuthContinuation.html">AuthContinuation</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="AuthContinuation.html">AuthContinuation</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Constants</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Constants</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="module-Constants.html">Constants</a> object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Attachment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Attachment.html">Attachment</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Attachment.html">Attachment</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AccountCapabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="AccountCapabilities.html">AccountCapabilities</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="AccountCapabilities.html">AccountCapabilities</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Capabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Capabilities.html">Capabilities</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Capabilities.html">Capabilities</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MailCapabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MailCapabilities.html">MailCapabilities</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="MailCapabilities.html">MailCapabilities</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>VacationResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="VacationResponse.html">VacationResponse</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="VacationResponse.html">VacationResponse</a> class</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
