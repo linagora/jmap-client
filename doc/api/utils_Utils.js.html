@@ -228,7 +228,9 @@ export default class Utils {
     }
 
     return uri.replace(/{(.+?)}/g, function(match, variable) {
-      return parameters[variable] || match;
+      let value = parameters[variable];
+
+      return value ? encodeURIComponent(value) : match;
     });
   }
 
