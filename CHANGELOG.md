@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.20] - 2016-08-22
+### Fixed
+- Utils.fillURITemplate now correctly encode replaced values.
+
 ## [0.0.19] - 2016-07-21
 ### Added
 - Added support for VacationResponse.isActivated. #53
