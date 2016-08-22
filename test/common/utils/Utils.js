@@ -359,6 +359,10 @@ describe('The Utils class', function() {
       })).to.equal('http://jmap.org/value/secondValue');
     });
 
+    it('should URL-encode the replaced values', function() {
+      expect(jmap.Utils.fillURITemplate('http://jmap.org/{test}', { test: '#value' })).to.equal('http://jmap.org/%23value');
+    });
+
   });
 
   describe('The nthElementOrDefault static method', function() {
