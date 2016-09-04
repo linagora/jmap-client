@@ -218,7 +218,7 @@ describe('The Attachment class', function() {
     it('should send an authenticated POST request to the downloadUrl, and reject on failure', function(done) {
       new jmap.Attachment(newClient(function(url, headers, data, raw) {
         expect(url).to.equal('downloadUrl/id1');
-        expect(headers.Authorization).to.equal('token');
+        expect(headers.Authorization).to.equal('X-JMAP token');
         expect(data).to.equal(null);
         expect(raw).to.equal(true);
 

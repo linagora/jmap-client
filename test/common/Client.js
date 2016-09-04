@@ -121,7 +121,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -218,7 +218,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -315,7 +315,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -747,7 +747,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -978,7 +978,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -1127,7 +1127,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
@@ -1278,7 +1278,7 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers) {
           expect(headers).to.deep.equal({
-            Authorization: 'token',
+            Authorization: 'X-JMAP token',
             'Content-Type': 'application/json; charset=UTF-8',
             Accept: 'application/json; charset=UTF-8'
           });
