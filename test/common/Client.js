@@ -1684,15 +1684,15 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
 
           return q({
-            continuationToken: 'continuationToken1',
-            methods: ['password', 'external']
+            loginId: 'loginId1',
+            methods: [{type:'password'}, {type:'external'}]
           });
         }
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        expect(authContinuation.continuationToken).to.equal('continuationToken1');
-        expect(authContinuation.methods).to.deep.equal(['password', 'external']);
+        expect(authContinuation.loginId).to.equal('loginId1');
+        expect(authContinuation.methods.length).to.deep.equal(2);
         done();
 
         return q.reject();
@@ -1708,13 +1708,13 @@ describe('The Client class', function() {
             calls++;
 
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password', 'external']
+              loginId: 'loginId1',
+              methods: [{type:'password'}, {type:'external'}]
             });
           } else {
-            expect(data.token).to.equal('continuationToken1');
-            expect(data.method).to.equal('password');
-            expect(data.password).to.equal('password1');
+            expect(data.loginId).to.equal('loginId1');
+            expect(data.type).to.equal('password');
+            expect(data.value).to.equal('password1');
             done();
 
             return q();
@@ -1724,8 +1724,8 @@ describe('The Client class', function() {
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
         return q({
-          method: 'password',
-          password: 'password1'
+          type: 'password',
+          value: 'password1'
         });
       });
     });
@@ -1734,14 +1734,14 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers, data) {
           return q({
-            continuationToken: 'continuationToken1',
-            methods: ['password']
+            loginId: 'loginId1',
+            methods: [{type:'password'}]
           });
         }
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({ method: 'external' });
+        return q({type: 'external'});
       })
       .then(null, function(err) {
         expect(err).to.be.instanceOf(Error);
@@ -1765,8 +1765,8 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           if (data.username) {
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password', 'external']
+              loginId: 'loginId1',
+              methods: [{type:'password'}, {type:'external'}]
             });
           } else {
             return q(authAccessResponse);
@@ -1775,7 +1775,7 @@ describe('The Client class', function() {
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({ method: 'external' });
+        return q({type: 'external'});
       })
       .then(function(authAccess) {
         expect(authAccess).to.deep.equal(authAccessResponse);
@@ -1799,20 +1799,20 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           if (data.username) {
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password']
+              loginId: 'loginId1',
+              methods: [{type:'password'}]
             });
-          } else if (data.password === 'pwd1') {
+          } else if (data.value === 'pwd1') {
             return q({
-              continuationToken: 'continuationToken2',
+              loginId: 'loginId2',
               prompt: '2nd Auth Factor',
-              methods: ['password']
+              methods: [{type:'totp'}]
             });
-          } else if (data.password === 'pwd2') {
+          } else if (data.value === 'pwd2') {
             return q({
-              continuationToken: 'continuationToken3',
+              loginId: 'loginId3',
               prompt: '3rd Auth Factor',
-              methods: ['password']
+              methods: [{type:'yubikeyotp'}]
             });
           } else {
             return q(authAccessResponse);
@@ -1821,12 +1821,12 @@ describe('The Client class', function() {
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        if (authContinuation.continuationToken === 'continuationToken1') {
-          return q({ method: 'password', password: 'pwd1' });
-        } else if (authContinuation.continuationToken === 'continuationToken2') {
-          return q({ method: 'password', password: 'pwd2' });
+        if (authContinuation.loginId === 'loginId1') {
+          return q({type: 'password', value: 'pwd1'});
+        } else if (authContinuation.loginId === 'loginId2') {
+          return q({type: 'totp', value: 'pwd2'});
         } else {
-          return q({ method: 'password', password: 'pwd3' });
+          return q({type: 'yubikeyotp', value: 'pwd3'});
         }
       })
       .then(function(authAccess) {
@@ -1840,13 +1840,13 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           return q({
             accessToken: 'accessToken1',
-            continuationToken: 'continuationToken1'
+            loginId: 'loginId1'
           });
         }
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({ method: 'external' });
+        return q({type: 'external'});
       })
       .then(null, function(err) {
         expect(err).to.be.instanceOf(Error);
@@ -1859,8 +1859,8 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           if (data.username) {
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['external']
+              loginId: 'loginId1',
+              methods: [{type:'external'}]
             });
           } else {
             return q({
@@ -1886,8 +1886,8 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers, data) {
           return q({
-            continuationToken: 'continuationToken1',
-            methods: ['password']
+            loginId: 'loginId1',
+            methods: [{type:'password'}]
           });
         }
       })
@@ -1903,15 +1903,15 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers, data) {
           return q({
-            continuationToken: 'continuationToken1',
-            methods: ['password', 'external']
+            loginId: 'loginId1',
+            methods: [{type:'password'}, {type:'external'}]
           });
         }
       })
       .withAuthenticationUrl('https://test')
       .authExternal('user@domain.com', 'Device name', function(authContinuation) {
-        expect(authContinuation.continuationToken).to.equal('continuationToken1');
-        expect(authContinuation.methods).to.deep.equal(['password', 'external']);
+        expect(authContinuation.loginId).to.equal('loginId1');
+        expect(authContinuation.methods.length).to.equal(2);
         done();
 
         return q.reject();
@@ -1934,8 +1934,8 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           if (data.username) {
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password', 'external']
+              loginId: 'loginId1',
+              methods: [{type:'password'}, {type:'external'}]
             });
           } else {
             return q(authAccessResponse);
@@ -1944,7 +1944,7 @@ describe('The Client class', function() {
       })
       .withAuthenticationUrl('https://test')
       .authExternal('user@domain.com', 'Device name', function(authContinuation) {
-        return q(authContinuation.continuationToken);
+        return q(authContinuation.loginId);
       })
       .then(function(authAccess) {
         expect(authAccess).to.deep.equal(authAccessResponse);
@@ -1961,8 +1961,8 @@ describe('The Client class', function() {
       new jmap.Client({
         post: function(url, headers, data) {
           return q({
-            continuationToken: 'continuationToken1',
-            methods: ['external']
+            loginId: 'loginId1',
+            methods: [{type:'external'}]
           });
         }
       }, promiseProvider)
@@ -1990,8 +1990,8 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           if (data.username) {
             return q({
-              continuationToken: 'continuationToken1',
-              methods: ['password', 'external']
+              loginId: 'loginId1',
+              methods: [{type:'password'}, {type:'external'}]
             });
           } else {
             return q(authAccessResponse);

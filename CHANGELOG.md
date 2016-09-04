@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Added
+- The AuthMethod model
+
+### Changed
+- Data strcutures used during authentication procedure after changes to the JMAP spec
+- The AuthContinuation model
 
 ## [0.0.20] - 2016-08-22
 ### Fixed
