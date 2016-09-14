@@ -33,5 +33,16 @@ describe('The AuthMethod class', function() {
 
       expect(authMethod.type).to.equal(payload.type);
     });
+
+    it('should expose all properties', function() {
+      var payload = {
+        type: 'u2f',
+        appId: 'app-id',
+        signChallenge: 'xyz'
+      };
+      var authMethod = new jmap.AuthMethod(payload);
+
+      expect(authMethod).to.deep.equal(payload);
+    });
   });
 });
