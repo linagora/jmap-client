@@ -6,6 +6,7 @@
   "main": "lib/jmap-client.js",
   "devDependencies": {
     "babelify": "6.3.0",
+    "babel-plugin-object-assign": "1.2.1",
     "browserify-versionify": "1.0.6",
     "chai": "3.0.0",
     "chai-datetime": "1.4.0",

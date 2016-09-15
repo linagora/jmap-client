@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Added
+- The AuthMethod model
+
+### Changed
+- Use the X-JMAP authentication scheme to construct the Authorization header. #44
+- Data structures used during authentication procedure after changes to the JMAP spec. #44
+- The AuthContinuation model
 
 ## [0.0.20] - 2016-08-22
 ### Fixed

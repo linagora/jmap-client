@@ -135,7 +135,10 @@ module.exports = function(grunt) {
     browserify: {
       dist: {
         options: {
-          transform: ['browserify-versionify', 'babelify'],
+          transform: [
+            'browserify-versionify',
+            ['babelify', {plugins: ['object-assign']}]
+          ],
           browserifyOptions: {
             standalone: 'jmap'
           },
