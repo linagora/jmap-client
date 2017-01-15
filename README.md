@@ -2,12 +2,12 @@
 
 [![Join the chat at https://gitter.im/linagora/jmap-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/linagora/jmap-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/linagora/jmap-client.svg?branch=master)](https://travis-ci.org/linagora/jmap-client) [![Coverage Status](https://coveralls.io/repos/linagora/jmap-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/linagora/jmap-client?branch=master)
 
-This repository provides a Javascript library to make requests against a JMAP server.
+This repository provides a JavaScript library to make requests against a JMAP server.
 It is a client-side implementation of the [JMAP](http://jmap.io/spec.html) specification.
 It is developed using **ES6** and transpiled to ES5 code using [babel.js](https://babeljs.io/).
 
-Non-exhausitve list of features:
-* Entities are modeled as Javascript classes.
+Non-exhaustive list of features:
+* Entities are modeled as JavaScript classes.
 * Expose a *Client* class that you can use to send JMAP requests, using a fluent API.
 * Uses Promises exclusively, and allows for pluggable Promise implementation.
 * Allows for pluggable transports, with default support for node.js [request](https://github.com/request/request) and [jQuery](http://jquery.com/) in the browser.
