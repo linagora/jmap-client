@@ -137,7 +137,7 @@ module.exports = function(grunt) {
         options: {
           transform: [
             'browserify-versionify',
-            ['babelify', {plugins: ['object-assign']}]
+            ['babelify', { presets: ['es2015'], plugins: ['transform-object-assign', 'add-module-exports'] }]
           ],
           browserifyOptions: {
             standalone: 'jmap'
@@ -162,6 +162,7 @@ module.exports = function(grunt) {
     jsdoc: {
       dist: {
         src: ['<%= project.lib %>/'],
+        jsdoc: 'node_modules/jsdoc/jsdoc.js',
         options: {
           recurse: true,
           destination: '<%= project.apidoc %>',
