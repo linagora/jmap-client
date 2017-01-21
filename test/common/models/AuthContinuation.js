@@ -13,7 +13,7 @@ describe('The AuthContinuation class', function() {
 
     it('should throw if payload.loginId parameter is not defined', function() {
       expect(function() {
-        var payload = {methods: []};
+        var payload = { methods: [] };
 
         new jmap.AuthContinuation(payload);
       }).to.throw(Error);
@@ -21,7 +21,7 @@ describe('The AuthContinuation class', function() {
 
     it('should throw if payload.methods parameter is not defined', function() {
       expect(function() {
-        var payload = {loginId: 'loginId1'};
+        var payload = { loginId: 'loginId1' };
 
         new jmap.AuthContinuation(payload);
       }).to.throw(Error);
@@ -29,7 +29,7 @@ describe('The AuthContinuation class', function() {
 
     it('should throw if payload.methods parameter is not an array', function() {
       expect(function() {
-        var payload = {loginId: 'loginId1', methods: 'password'};
+        var payload = { loginId: 'loginId1', methods: 'password' };
 
         new jmap.AuthContinuation(payload);
       }).to.throw(Error);
@@ -37,7 +37,7 @@ describe('The AuthContinuation class', function() {
 
     it('should throw if payload.methods parameter is not an array of objects', function() {
       expect(function() {
-        var payload = {loginId: 'loginId1', methods: ['oauth','password']};
+        var payload = { loginId: 'loginId1', methods: ['oauth', 'password'] };
 
         new jmap.AuthContinuation(payload);
       }).to.throw(Error);
@@ -47,8 +47,8 @@ describe('The AuthContinuation class', function() {
       var payload = {
         loginId: 'loginId1',
         methods: [
-          {type: 'password'},
-          {type: 'external'}
+          { type: 'password' },
+          { type: 'external' }
         ]
       };
       var authContinuation = new jmap.AuthContinuation(payload);
@@ -65,7 +65,7 @@ describe('The AuthContinuation class', function() {
         var payload = {
           loginId: 'loginId1',
           methods: [
-            {type: 'password'}
+            { type: 'password' }
           ]
         };
         var authContinuation = new jmap.AuthContinuation(payload);
@@ -79,7 +79,7 @@ describe('The AuthContinuation class', function() {
         var payload = {
           loginId: 'loginId1',
           methods: [
-            {type: 'password'}
+            { type: 'password' }
           ]
         };
         var authContinuation = new jmap.AuthContinuation(payload);
@@ -92,8 +92,8 @@ describe('The AuthContinuation class', function() {
       var payload = {
         loginId: 'loginId1',
         methods: [
-          {type: 'external'},
-          {type: 'password'}
+          { type: 'external' },
+          { type: 'password' }
         ]
       };
       var authContinuation = new jmap.AuthContinuation(payload);
@@ -108,7 +108,7 @@ describe('The AuthContinuation class', function() {
         var payload = {
           loginId: 'loginId1',
           methods: [
-            {type: 'password'}
+            { type: 'password' }
           ]
         };
         var authContinuation = new jmap.AuthContinuation(payload);
@@ -121,8 +121,8 @@ describe('The AuthContinuation class', function() {
       var payload = {
         loginId: 'loginId1',
         methods: [
-          {type: 'totp'},
-          {type: 'password'}
+          { type: 'totp' },
+          { type: 'password' }
         ]
       };
       var authContinuation = new jmap.AuthContinuation(payload);
@@ -134,7 +134,7 @@ describe('The AuthContinuation class', function() {
       var payload = {
         loginId: 'loginId1',
         methods: [
-          {type: 'password'}
+          { type: 'password' }
         ]
       };
       var authContinuation = new jmap.AuthContinuation(payload);

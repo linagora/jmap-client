@@ -223,7 +223,7 @@ describe('The Client class', function() {
     it('should resolve the promise with an array of Account objects when the response is valid', function(done) {
       var client = new jmap.Client({
         post: function() {
-          return q([['accounts', {list: [{id: 'id'}, {id: 'id2'}]}, '#0']]);
+          return q([['accounts', { list: [{ id: 'id' }, { id: 'id2' }] }, '#0']]);
         }
       });
 
@@ -320,7 +320,7 @@ describe('The Client class', function() {
     it('should resolve the promise with an array of Mailbox objects when the response is valid', function(done) {
       var client = new jmap.Client({
         post: function() {
-          return q([['mailboxes', {list: [{ id: 'id', name: 'name' }, { id: 'id2', name: 'name' }]}, '#0']]);
+          return q([['mailboxes', { list: [{ id: 'id', name: 'name' }, { id: 'id2', name: 'name' }] }, '#0']]);
         }
       });
 
@@ -617,7 +617,7 @@ describe('The Client class', function() {
       })
         .withAPIUrl('https://test')
         .withAuthenticationToken('token')
-        .updateMailbox('id', {property: 'property'})
+        .updateMailbox('id', { property: 'property' })
         .then(null, done);
     });
 
@@ -1730,7 +1730,7 @@ describe('The Client class', function() {
 
           return q({
             loginId: 'loginId1',
-            methods: [{type:'password'}, {type:'external'}]
+            methods: [{ type: 'password' }, { type: 'external' }]
           });
         }
       })
@@ -1754,7 +1754,7 @@ describe('The Client class', function() {
 
             return q({
               loginId: 'loginId1',
-              methods: [{type:'password'}, {type:'external'}]
+              methods: [{ type: 'password' }, { type: 'external' }]
             });
           } else {
             expect(data.loginId).to.equal('loginId1');
@@ -1780,13 +1780,13 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           return q({
             loginId: 'loginId1',
-            methods: [{type:'password'}]
+            methods: [{ type: 'password' }]
           });
         }
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({type: 'external'});
+        return q({ type: 'external' });
       })
       .then(null, function(err) {
         expect(err).to.be.instanceOf(Error);
@@ -1811,7 +1811,7 @@ describe('The Client class', function() {
           if (data.username) {
             return q({
               loginId: 'loginId1',
-              methods: [{type:'password'}, {type:'external'}]
+              methods: [{ type: 'password' }, { type: 'external' }]
             });
           } else {
             return q(authAccessResponse);
@@ -1820,7 +1820,7 @@ describe('The Client class', function() {
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({type: 'external'});
+        return q({ type: 'external' });
       })
       .then(function(authAccess) {
         expect(authAccess).to.deep.equal(authAccessResponse);
@@ -1845,19 +1845,19 @@ describe('The Client class', function() {
           if (data.username) {
             return q({
               loginId: 'loginId1',
-              methods: [{type:'password'}]
+              methods: [{ type: 'password' }]
             });
           } else if (data.value === 'pwd1') {
             return q({
               loginId: 'loginId2',
               prompt: '2nd Auth Factor',
-              methods: [{type:'totp'}]
+              methods: [{ type: 'totp' }]
             });
           } else if (data.value === 'pwd2') {
             return q({
               loginId: 'loginId3',
               prompt: '3rd Auth Factor',
-              methods: [{type:'yubikeyotp'}]
+              methods: [{ type: 'yubikeyotp' }]
             });
           } else {
             return q(authAccessResponse);
@@ -1867,11 +1867,11 @@ describe('The Client class', function() {
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
         if (authContinuation.loginId === 'loginId1') {
-          return q({type: 'password', value: 'pwd1'});
+          return q({ type: 'password', value: 'pwd1' });
         } else if (authContinuation.loginId === 'loginId2') {
-          return q({type: 'totp', value: 'pwd2'});
+          return q({ type: 'totp', value: 'pwd2' });
         } else {
-          return q({type: 'yubikeyotp', value: 'pwd3'});
+          return q({ type: 'yubikeyotp', value: 'pwd3' });
         }
       })
       .then(function(authAccess) {
@@ -1891,7 +1891,7 @@ describe('The Client class', function() {
       })
       .withAuthenticationUrl('https://test')
       .authenticate('user@domain.com', 'Device name', function(authContinuation) {
-        return q({type: 'external'});
+        return q({ type: 'external' });
       })
       .then(null, function(err) {
         expect(err).to.be.instanceOf(Error);
@@ -1905,7 +1905,7 @@ describe('The Client class', function() {
           if (data.username) {
             return q({
               loginId: 'loginId1',
-              methods: [{type:'external'}]
+              methods: [{ type: 'external' }]
             });
           } else {
             return q({
@@ -1932,7 +1932,7 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           return q({
             loginId: 'loginId1',
-            methods: [{type:'password'}]
+            methods: [{ type: 'password' }]
           });
         }
       })
@@ -1949,7 +1949,7 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           return q({
             loginId: 'loginId1',
-            methods: [{type:'password'}, {type:'external'}]
+            methods: [{ type: 'password' }, { type: 'external' }]
           });
         }
       })
@@ -1980,7 +1980,7 @@ describe('The Client class', function() {
           if (data.username) {
             return q({
               loginId: 'loginId1',
-              methods: [{type:'password'}, {type:'external'}]
+              methods: [{ type: 'password' }, { type: 'external' }]
             });
           } else {
             return q(authAccessResponse);
@@ -2007,7 +2007,7 @@ describe('The Client class', function() {
         post: function(url, headers, data) {
           return q({
             loginId: 'loginId1',
-            methods: [{type:'external'}]
+            methods: [{ type: 'external' }]
           });
         }
       }, promiseProvider)
@@ -2036,7 +2036,7 @@ describe('The Client class', function() {
           if (data.username) {
             return q({
               loginId: 'loginId1',
-              methods: [{type:'password'}, {type:'external'}]
+              methods: [{ type: 'password' }, { type: 'external' }]
             });
           } else {
             return q(authAccessResponse);
@@ -2292,7 +2292,7 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
           destroyed: [],
-          notDestroyed: {'the id': 'expected message'}
+          notDestroyed: { 'the id': 'expected message' }
         }, '#0']]);
       };
 

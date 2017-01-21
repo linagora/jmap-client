@@ -45,8 +45,7 @@ module.exports = function(grunt) {
     jscs: {
       lint: {
         options: {
-          config: '.jscsrc',
-          esnext: true
+          config: '.jscsrc'
         },
         src: ['<%= jshint.all.src %>']
       },

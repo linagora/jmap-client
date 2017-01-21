@@ -186,11 +186,11 @@ describe('The Mailbox class', function() {
       new jmap.Mailbox({
         updateMailbox: function(id, options) {
           expect(id).to.equal('id');
-          expect(options).to.deep.equal({newAttr1: 'newAttr1', newAttr2: 'newAttr2'});
+          expect(options).to.deep.equal({ newAttr1: 'newAttr1', newAttr2: 'newAttr2' });
 
           done();
         }
-      }, 'id', 'name', {options: 'options'}).update({newAttr1: 'newAttr1', newAttr2: 'newAttr2'});
+      }, 'id', 'name', { options: 'options' }).update({ newAttr1: 'newAttr1', newAttr2: 'newAttr2' });
     });
 
   });
@@ -204,7 +204,7 @@ describe('The Mailbox class', function() {
 
           done();
         }
-      }, 'id', 'name', {options: 'options'}).destroy();
+      }, 'id', 'name', { options: 'options' }).destroy();
     });
 
   });

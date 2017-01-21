@@ -11,6 +11,8 @@
   "disallowMultipleVarDecl": null,
   "disallowTrailingWhitespace": true,
   "validateIndentation": 2,
-  "safeContextKeyword": ["self"]
+  "safeContextKeyword": ["self"],
+  "maximumLineLength": null,
+  "requireSpacesInAnonymousFunctionExpression": null
 }
 
