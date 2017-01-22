@@ -18,6 +18,13 @@ describe('The JQueryTransport class', function() {
     jQuery.mockjax.clear();
   });
 
+  function expectTransportError(err, cause, statusCode, responseText) {
+    expect(err).to.be.a.instanceof(jmap.TransportError);
+    expect(err.cause).to.equal(cause);
+    expect(err.statusCode).to.equal(statusCode);
+    expect(err.responseText).to.equal(responseText);
+  }
+
   describe('The post method', function() {
 
     it('should reject the promise when an error occurs', function(done) {
@@ -28,7 +35,9 @@ describe('The JQueryTransport class', function() {
 
       newTransport()
         .post('http://test')
-        .then(null, function() {
+        .then(null, function(err) {
+          expectTransportError(err, 'timeout', 0, null);
+
           done();
         });
     });
@@ -36,12 +45,16 @@ describe('The JQueryTransport class', function() {
     it('should reject the promise when request fails with an error status code', function(done) {
       jQuery.mockjax({
         url: 'http://test',
-        status: 400
+        status: 400,
+        statusText: 'Bad Request',
+        responseText: '{"error":"failure"}'
       });
 
       newTransport()
         .post('http://test')
-        .then(null, function() {
+        .then(null, function(err) {
+          expectTransportError(err, 'Bad Request', 400, '{"error":"failure"}');
+
           done();
         });
     });

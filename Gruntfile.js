@@ -136,7 +136,16 @@ module.exports = function(grunt) {
         options: {
           transform: [
             'browserify-versionify',
-            ['babelify', { presets: ['es2015'], plugins: ['transform-object-assign', 'add-module-exports'] }]
+            [
+              'babelify',
+              {
+                presets: ['es2015'],
+                plugins: [
+                  ['transform-builtin-extend', { globals: ['Error'], approximate: true }],
+                  'transform-object-assign',
+                  'add-module-exports']
+              }
+            ]
           ],
           browserifyOptions: {
             standalone: 'jmap'
