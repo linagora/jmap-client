@@ -21,14 +21,14 @@ describe('The AuthMethod class', function() {
 
     it('should throw if payload.type parameter is not a string', function() {
       expect(function() {
-        var payload = {type: []};
+        var payload = { type: [] };
 
         new jmap.AuthMethod(payload);
       }).to.throw(Error);
     });
 
     it('should expose the type property', function() {
-      var payload = {type: 'password'};
+      var payload = { type: 'password' };
       var authMethod = new jmap.AuthMethod(payload);
 
       expect(authMethod.type).to.equal(payload.type);

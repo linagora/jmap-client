@@ -13,7 +13,7 @@ module.exports = function(config) {
       dir: 'coverage/frontend',
       reporters: [
         { type: 'lcov', subdir: '.' },
-        { type: 'text-summary'}
+        { type: 'text-summary' }
       ]
     },
 

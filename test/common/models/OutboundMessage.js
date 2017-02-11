@@ -46,7 +46,7 @@ describe('The OutboundMessage class', function() {
         isFlagged: true,
         isAnswered: true,
         isDraft: false,
-        headers: {custom: 'header'},
+        headers: { custom: 'header' },
         from: 'from@open-paas.org',
         to: 'to@open-paas.org',
         cc: 'cc@open-paas.org',
@@ -55,7 +55,7 @@ describe('The OutboundMessage class', function() {
         subject: 'subject',
         textBody: 'textBody',
         htmlBody: 'htmlBody',
-        attachments: [{blobId: 'att'}]
+        attachments: [{ blobId: 'att' }]
       });
 
       expect(message.mailboxIds).to.deep.equal(['1', '5']);
@@ -64,7 +64,7 @@ describe('The OutboundMessage class', function() {
       expect(message.isFlagged).to.equal(true);
       expect(message.isAnswered).to.equal(true);
       expect(message.isDraft).to.equal(false);
-      expect(message.headers).to.deep.equal({custom: 'header'});
+      expect(message.headers).to.deep.equal({ custom: 'header' });
       expect(message.from).to.equal('from@open-paas.org');
       expect(message.to).to.equal('to@open-paas.org');
       expect(message.cc).to.equal('cc@open-paas.org');
@@ -101,7 +101,7 @@ describe('The OutboundMessage class', function() {
         isFlagged: true,
         isAnswered: true,
         isDraft: true,
-        headers: {custom: 'header'},
+        headers: { custom: 'header' },
         from: 'from@open-paas.org',
         to: 'to@open-paas.org',
         cc: 'cc@open-paas.org',
@@ -110,7 +110,7 @@ describe('The OutboundMessage class', function() {
         subject: 'subject',
         textBody: 'textBody',
         htmlBody: 'htmlBody',
-        attachments: [{blobId: 'att', size: 0, isInline: true}]
+        attachments: [{ blobId: 'att', size: 0, isInline: true }]
       };
 
       expect(new jmap.OutboundMessage({}, opts).toJSONObject()).to.deep.equal(opts);

@@ -73,7 +73,8 @@ describe('The JQueryTransport class', function() {
             data: '{"a":"b","c":0}',
             dataType: 'json',
             jsonp: false,
-            processData: false
+            processData: false,
+            crossDomain: false
           });
 
           this.responseText = '[]';
@@ -105,7 +106,8 @@ describe('The JQueryTransport class', function() {
             data: null,
             dataType: undefined,
             jsonp: false,
-            processData: false
+            processData: false,
+            crossDomain: false
           });
 
           this.responseText = '[]';

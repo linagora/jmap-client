@@ -9,7 +9,7 @@ describe('The JSONBuilder class', function() {
 
     it('should throw an Error if the name is undefined', function() {
       expect(function() {
-        new jmap.JSONBuilder().append(undefined, {val: 'yolo'});
+        new jmap.JSONBuilder().append(undefined, { val: 'yolo' });
       }).to.throw(Error);
     });
 
@@ -20,23 +20,23 @@ describe('The JSONBuilder class', function() {
     });
 
     it('should append object value', function() {
-      expect(new jmap.JSONBuilder().append('name', {val: 'yolo'}).build())
-        .to.deep.equal({name: {val: 'yolo'}});
+      expect(new jmap.JSONBuilder().append('name', { val: 'yolo' }).build())
+        .to.deep.equal({ name: { val: 'yolo' } });
     });
 
     it('should append number value', function() {
       expect(new jmap.JSONBuilder().append('name', 5).build())
-        .to.deep.equal({name: 5});
+        .to.deep.equal({ name: 5 });
     });
 
     it('should append string value', function() {
       expect(new jmap.JSONBuilder().append('name', 'yolo').build())
-        .to.deep.equal({name: 'yolo'});
+        .to.deep.equal({ name: 'yolo' });
     });
 
     it('should append false value', function() {
       expect(new jmap.JSONBuilder().append('name', false).build())
-        .to.deep.equal({name: false});
+        .to.deep.equal({ name: false });
     });
 
   });
@@ -45,7 +45,7 @@ describe('The JSONBuilder class', function() {
 
     it('should throw an Error if the name is undefined', function() {
       expect(function() {
-        new jmap.JSONBuilder().appendIfDefined(undefined, {val: 'yolo'});
+        new jmap.JSONBuilder().appendIfDefined(undefined, { val: 'yolo' });
       }).to.throw(Error);
     });
 
@@ -56,17 +56,17 @@ describe('The JSONBuilder class', function() {
 
     it('should append if the value is defined', function() {
       expect(new jmap.JSONBuilder().appendIfDefined('name', 'yolo').build())
-        .to.deep.equal({name: 'yolo'});
+        .to.deep.equal({ name: 'yolo' });
     });
 
     it('should append if the value is zero', function() {
       expect(new jmap.JSONBuilder().appendIfDefined('name', 0).build())
-        .to.deep.equal({name: 0});
+        .to.deep.equal({ name: 0 });
     });
 
     it('should append if the value is empty string', function() {
       expect(new jmap.JSONBuilder().appendIfDefined('name', '').build())
-        .to.deep.equal({name: ''});
+        .to.deep.equal({ name: '' });
     });
 
   });
@@ -105,17 +105,17 @@ describe('The JSONBuilder class', function() {
 
     it('should append if the value is not empty', function() {
       expect(new jmap.JSONBuilder().appendIfNotEmpty('name', [1, 'bla']).build())
-        .to.deep.equal({name: [1, 'bla']});
+        .to.deep.equal({ name: [1, 'bla'] });
     });
 
     it('should append with transformation if the value is an object with toJSONObject method', function() {
       expect(new jmap.JSONBuilder().appendIfNotEmpty('name', [new TestType()]).build())
-        .to.deep.equal({name: ['lo']});
+        .to.deep.equal({ name: ['lo'] });
     });
 
     it('should transform only if the value is an object with toJSONObject method', function() {
       expect(new jmap.JSONBuilder().appendIfNotEmpty('name', [1, new TestType(), 'bla']).build())
-        .to.deep.equal({name: [1, 'lo', 'bla']});
+        .to.deep.equal({ name: [1, 'lo', 'bla'] });
     });
   });
 
