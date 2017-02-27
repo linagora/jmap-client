@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    jmap = require('../../dist/jmap-client'),
+    jmap = require('../../dist/jmap-client.min'),
     q = require('q');
 
 require('chai').use(require('chai-shallow-deep-equal'));
