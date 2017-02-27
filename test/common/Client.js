@@ -558,7 +558,9 @@ describe('The Client class', function() {
         return q([['mailboxesSet', {
           created: {},
           notCreated: {
-            otherId: 'otherId'
+            otherId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -578,7 +580,9 @@ describe('The Client class', function() {
         return q([['mailboxesSet', {
           created: {},
           notCreated: {
-            expectedClientId: 'this is the error message'
+            expectedClientId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -586,7 +590,8 @@ describe('The Client class', function() {
       client
         .createMailbox('name')
         .then(null, function(err) {
-          expect(err.message).to.equal('Failed to create mailbox, clientId: expectedClientId, message: this is the error message');
+          expect(err.message).to.equal('Failed to create mailbox, clientId: expectedClientId, message: JmapError{type=invalidArguments,description=null,method=null}');
+
           done();
         });
     });
@@ -1470,7 +1475,9 @@ describe('The Client class', function() {
             accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
             updated: [],
             notUpdated: {
-              id: 'notFound'
+              id: {
+                type: 'notFound'
+              }
             }
           }, '#0']]);
         }
@@ -1479,7 +1486,8 @@ describe('The Client class', function() {
         .withAuthenticationToken('token')
         .updateMessage('id',  { property: 'property' })
         .then(null, function(err) {
-          expect(err.message).to.equal('Failed to update message id, the reason is: notFound');
+          expect(err.message).to.equal('Failed to update message id, the reason is: JmapError{type=notFound,description=null,method=null}');
+
           done();
         });
     });
@@ -2212,7 +2220,9 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           created: {},
           notCreated: {
-            otherId: 'message with different clientId, it should not be taken in account'
+            otherId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -2235,7 +2245,9 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           created: {},
           notCreated: {
-            expectedClientId: 'message with right clientId, it should be taken in account'
+            expectedClientId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -2245,7 +2257,7 @@ describe('The Client class', function() {
           subject: 'message topic'
         }))
         .then(null, function(err) {
-          expect(err.message).to.equal('Failed to store message with clientId expectedClientId. Error: message with right clientId, it should be taken in account');
+          expect(err.message).to.equal('Failed to store message with clientId expectedClientId. Error: JmapError{type=invalidArguments,description=null,method=null}');
 
           done();
         });
@@ -2296,13 +2308,17 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
           destroyed: [],
-          notDestroyed: { 'the id': 'expected message' }
+          notDestroyed: {
+            'the id': {
+              type: 'invalidArguments'
+            }
+          }
         }, '#0']]);
       };
 
       client.destroyMessage('the id').then(null, function(err) {
         expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.equal('Failed to destroy the id, the reason is: expected message');
+        expect(err.message).to.equal('Failed to destroy the id, the reason is: JmapError{type=invalidArguments,description=null,method=null}');
         done();
       });
     });
@@ -2513,7 +2529,9 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           created: {},
           notCreated: {
-            otherId: 'errMessage'
+            otherId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -2535,7 +2553,9 @@ describe('The Client class', function() {
         return q([['messagesSet', {
           created: {},
           notCreated: {
-            expectedClientId: 'errMessage'
+            expectedClientId: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
@@ -2544,7 +2564,7 @@ describe('The Client class', function() {
         .send(new jmap.OutboundMessage(jmap, {
           subject: 'message topic'
         })).then(null, function(err) {
-          expect(err.message).to.equal('Failed to store message with clientId expectedClientId. Error: errMessage');
+          expect(err.message).to.equal('Failed to store message with clientId expectedClientId. Error: JmapError{type=invalidArguments,description=null,method=null}');
 
           done();
         });
@@ -2694,13 +2714,15 @@ describe('The Client class', function() {
       client.transport.post = function() {
         return q([['vacationResponseSet', {
           notUpdated: {
-            singleton: 'Failure'
+            singleton: {
+              type: 'invalidArguments'
+            }
           }
         }, '#0']]);
       };
 
       client.setVacationResponse(vacation).then(null, function(err) {
-        expect(err.message).to.match(/Error: Failure/);
+        expect(err.message).to.contains('Error: JmapError{type=invalidArguments,description=null,method=null}');
 
         done();
       });
