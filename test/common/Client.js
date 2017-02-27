@@ -628,7 +628,9 @@ describe('The Client class', function() {
             accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
             updated: [],
             notUpdated: {
-              id: 'notFound'
+              id: {
+                type: 'notFound'
+              }
             }
           }, '#0']]);
         }
@@ -1570,7 +1572,9 @@ describe('The Client class', function() {
             accountId: 'b6ed15b6-5611-11e5-b11b-0026b9fac7aa',
             updated: [],
             notUpdated: {
-              abcd: 'notFound'
+              abcd: {
+                type: 'notFound'
+              }
             }
           }, '#0']]);
         }
@@ -2711,6 +2715,27 @@ describe('The Client class', function() {
 
       client.setVacationResponse(vacation).then(null, function(err) {
         expect(err.message).to.match(/Error: none/);
+
+        done();
+      });
+    });
+
+  });
+
+  describe('When there is a JMAP error returned by the backend', function() {
+
+    it('should throw a JMAP error when an error is received from the backend', function(done) {
+      var client = defaultClient();
+
+      client.transport.post = function() {
+        return q([['error', { type: 'invalidArguments', description: 'The `id` property must be `singleton`.' }, '#0']]);
+      };
+
+      client.setVacationResponse(new jmap.VacationResponse({ id: 'newId' })).then(null, function(err) {
+        expect(err).to.be.an.instanceof(jmap.JmapError);
+        expect(err.type).to.equal('invalidArguments');
+        expect(err.description).to.equal('The `id` property must be `singleton`.');
+        expect(err.method).to.equal('setVacationResponse');
 
         done();
       });
