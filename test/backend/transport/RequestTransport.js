@@ -22,24 +22,41 @@ describe('The RequestTransport class', function() {
     mockery.disable();
   });
 
+  function expectTransportError(err, cause, statusCode, responseText) {
+    expect(err).to.be.a.instanceof(jmap.TransportError);
+    expect(err.cause).to.equal(cause);
+    expect(err.statusCode).to.equal(statusCode);
+    expect(err.responseText).to.equal(responseText);
+  }
+
   describe('The post method', function() {
 
     it('should reject the promise when an error occurs', function(done) {
+      var cause = new Error('Failed');
+
       mockery.registerMock('request', function(options, callback) {
-        callback(new Error('Failed'));
+        callback(cause);
       });
 
-      newTransport().post('').then(null, function() { done(); });
+      newTransport().post('').then(null, function(err) {
+        expectTransportError(err, cause, 0, null);
+
+        done();
+      });
     });
 
     it('should reject the promise when status code is not 200 nor 201', function(done) {
       mockery.registerMock('request', function(options, callback) {
         callback(null, {
           statusCode: 400
-        });
+        }, '{}');
       });
 
-      newTransport().post('').then(null, function() { done(); });
+      newTransport().post('').then(null, function(err) {
+        expectTransportError(err, null, 400, '{}');
+
+        done();
+      });
     });
 
     it('should resolve the promise when status code is 200, returning the body', function(done) {

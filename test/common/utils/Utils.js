@@ -198,24 +198,32 @@ describe('The Utils class', function() {
 
     it('should throw an Error if data[0][0] is not the expected response', function() {
       expect(function() {
-        jmap.Utils.assertValidJMAPResponse('getAccounts', [['I should be accounts'], {}]);
+        jmap.Utils.assertValidJMAPResponse('getAccounts', [['I should be accounts', {}]]);
       }).to.throw(Error);
     });
 
     it('should throw an Error if data[0][1] is not defined', function() {
       expect(function() {
-        jmap.Utils.assertValidJMAPResponse('getAccounts', [['I should be accounts']]);
+        jmap.Utils.assertValidJMAPResponse('getAccounts', [['accounts']]);
       }).to.throw(Error);
     });
 
     it('should throw an Error if data[0][1] is null', function() {
       expect(function() {
-        jmap.Utils.assertValidJMAPResponse('getAccounts', [['I should be accounts', null]]);
+        jmap.Utils.assertValidJMAPResponse('getAccounts', [['accounts', null]]);
       }).to.throw(Error);
     });
 
     it('should not throw an Error if data[0][0] is the expected response', function() {
       expect(jmap.Utils.assertValidJMAPResponse('getAccounts', [['accounts', {}]])).to.deep.equal([['accounts', {}]]);
+    });
+
+    it('should not throw an Error if data[0][0] is an error', function() {
+      expect(jmap.Utils.assertValidJMAPResponse('getAccounts', [['error', {}]])).to.deep.equal([['error', {}]]);
+    });
+
+    it('should not throw an Error if we do not know the expected response', function() {
+      expect(jmap.Utils.assertValidJMAPResponse('getFoos', [['foos', {}]])).to.deep.equal([['foos', {}]]);
     });
 
   });
