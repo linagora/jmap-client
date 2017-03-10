@@ -1,10 +1,12 @@
 'use strict';
 
 var expect = require('chai').expect,
+    sinon = require('sinon'),
     jmap = require('../../dist/jmap-client.min'),
     q = require('q');
 
 require('chai').use(require('chai-shallow-deep-equal'));
+require('chai').use(require('sinon-chai'));
 
 describe('The Client class', function() {
 
@@ -2446,6 +2448,30 @@ describe('The Client class', function() {
 
       return client;
     }
+
+    it('should not call getMailboxWithRole if the outbox Mailbox is already available', function(done) {
+      var client = sendReadyClient();
+
+      client.getMailboxWithRole = sinon.spy();
+      client.transport.post = function() {
+        return q([['messagesSet', {
+          created: {
+            expectedClientId: {
+              blobId: 'm-ma294202da',
+              id: 'ma294202da',
+              size: 281,
+              threadId: 'ta294202da'
+            }
+          }
+        }, '#0']]);
+      };
+
+      client.send(new jmap.OutboundMessage(jmap), new jmap.Mailbox(jmap, 'outbox', 'outbox', { role: 'outbox' })).then(function(a) {
+        expect(client.getMailboxWithRole).to.have.not.been.calledWith();
+
+        done();
+      }, done);
+    });
 
     it('should assign the "outbox" mailbox id in mailboxIds and remove isDraft', function(done) {
       var client = sendReadyClient();
