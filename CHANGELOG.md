@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
-## [0.0.21] - 2017-03-10
+## [0.0.22] - 2017-03-10
 ### Added
 - The AuthMethod model
 - The TransportError class. #18
