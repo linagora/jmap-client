@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect,
     sinon = require('sinon'),
-    jmap = require('../../dist/jmap-client.min'),
+    jmap = require('../../dist/jmap-client'),
     q = require('q');
 
 require('chai').use(require('chai-shallow-deep-equal'));
