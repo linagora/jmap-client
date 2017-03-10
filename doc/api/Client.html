@@ -198,7 +198,7 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line29">line 29</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -241,185 +241,6 @@ you'll use the <a href="Client.html#getAccounts">Client#getAccounts</a> method.<
 
     
         <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="_authenticateResponse"><span class="type-signature">(private) </span>_authenticateResponse<span class="signature">(data, continuationCallback)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Sub-routine handling JMAP server responses on authentication requests</p>
-<p>Depending on the server's response, this either (recursively) executes the second
-authentication step by calling the provided continuationCallback or resolves on
-successfully completed authentication.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The JMAP response data</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>continuationCallback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The callback function initially passed to the authenticate() method</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line156">line 156</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A Promise that will eventually be resovled with a <a href="AuthAccess.html">AuthAccess</a> object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
 
         
             
@@ -579,7 +400,7 @@ This method abstract the two authentication steps:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line133">line 133</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -791,7 +612,7 @@ It's the responsability of the caller to then set the AuthToken using for exampl
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line211">line 211</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line215">line 215</a>
     </li></ul></dd>
     
 
@@ -995,7 +816,7 @@ This method abstract the two authentication steps:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line233">line 233</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -1203,7 +1024,7 @@ This method abstract the two authentication steps:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line290">line 290</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line292">line 292</a>
     </li></ul></dd>
     
 
@@ -1364,7 +1185,7 @@ This will issue a <a href="Client.html#destroyMailboxes">Client#destroyMailboxes
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line347">line 347</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line349">line 349</a>
     </li></ul></dd>
     
 
@@ -1518,7 +1339,7 @@ This will issue a <a href="Client.html#setMailboxes">Client#setMailboxes</a> JMA
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line363">line 363</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line365">line 365</a>
     </li></ul></dd>
     
 
@@ -1679,7 +1500,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line505">line 505</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line507">line 507</a>
     </li></ul></dd>
     
 
@@ -1840,7 +1661,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line523">line 523</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line525">line 525</a>
     </li></ul></dd>
     
 
@@ -2020,7 +1841,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line250">line 250</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -2200,7 +2021,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line263">line 263</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -2419,7 +2240,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line392">line 392</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line394">line 394</a>
     </li></ul></dd>
     
 
@@ -2599,7 +2420,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line422">line 422</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line424">line 424</a>
     </li></ul></dd>
     
 
@@ -2779,7 +2600,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line448">line 448</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line450">line 450</a>
     </li></ul></dd>
     
 
@@ -2959,7 +2780,7 @@ This will issue a <em>getMailboxes</em> JMAP request and search for the mailbox 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line435">line 435</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line437">line 437</a>
     </li></ul></dd>
     
 
@@ -3201,7 +3022,7 @@ This will send a <code>getVacationResponse</code> request to the JMAP backend.</
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line584">line 584</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line587">line 587</a>
     </li></ul></dd>
     
 
@@ -3378,7 +3199,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line568">line 568</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line571">line 571</a>
     </li></ul></dd>
     
 
@@ -3539,7 +3360,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line539">line 539</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line541">line 541</a>
     </li></ul></dd>
     
 
@@ -3599,7 +3420,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
 
     
 
-    <h4 class="name" id="send"><span class="type-signature"></span>send<span class="signature">(message)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="send"><span class="type-signature"></span>send<span class="signature">(message, outbox)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -3663,6 +3484,29 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>outbox</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mailbox.html">Mailbox</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Mailbox.html">Mailbox</a> with role='outbox', if already available</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -3700,7 +3544,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line553">line 553</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line556">line 556</a>
     </li></ul></dd>
     
 
@@ -3880,7 +3724,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line276">line 276</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line278">line 278</a>
     </li></ul></dd>
     
 
@@ -4060,7 +3904,7 @@ The <em>mailboxIds</em> and <em>isDraft</em> properties of the given <em>message
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line461">line 461</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line463">line 463</a>
     </li></ul></dd>
     
 
@@ -4333,7 +4177,7 @@ This will send a <code>setVacationResponse</code> request to the JMAP backend.</
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line598">line 598</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line601">line 601</a>
     </li></ul></dd>
     
 
@@ -4510,7 +4354,7 @@ This will issue a <a href="Client.html#setMailboxes">Client#setMailboxes</a> JMA
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line324">line 324</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -4812,7 +4656,7 @@ This will issue a <a href="Client.html#setMessages">Client#setMessages</a> JMAP 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line480">line 480</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line482">line 482</a>
     </li></ul></dd>
     
 
@@ -4974,7 +4818,7 @@ The URL will be exposed as the <code>apiUrl</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line77">line 77</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -5129,7 +4973,7 @@ The individual properties of the AuthAccess object will be copied into client pr
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line107">line 107</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line110">line 110</a>
     </li></ul></dd>
     
 
@@ -5182,7 +5026,7 @@ The individual properties of the AuthAccess object will be copied into client pr
 
     
 
-    <h4 class="name" id="withAuthenticationToken"><span class="type-signature"></span>withAuthenticationToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {<a href="Client.html">Client</a>}</span></h4>
+    <h4 class="name" id="withAuthenticationToken"><span class="type-signature"></span>withAuthenticationToken<span class="signature">(token, scheme<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Client.html">Client</a>}</span></h4>
 
     
 
@@ -5216,6 +5060,8 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -5241,10 +5087,51 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The authentication token to use in JMAP requests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scheme</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The authentication scheme according to RFC 7235</p></td>
         </tr>
 
     
@@ -5285,7 +5172,7 @@ The token will be exposed as the <code>authToken</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line62">line 62</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -5440,7 +5327,7 @@ The URL will be exposed as the <code>authenticationUrl</code> property afterward
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line46">line 46</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -5595,7 +5482,7 @@ The URL will be exposed as the <code>downloadUrl</code> property afterwards.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line92">line 92</a>
+        <a href="client_Client.js.html">client/Client.js</a>, <a href="client_Client.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -5659,7 +5546,7 @@ The URL will be exposed as the <code>downloadUrl</code> property afterwards.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">

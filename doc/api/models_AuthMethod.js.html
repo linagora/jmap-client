@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Constants.js</title>
+    <title>JSDoc: Source: models/AuthMethod.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Constants.js</h1>
+    <h1 class="page-title">Source: models/AuthMethod.js</h1>
 
     
 
@@ -28,19 +28,24 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-/**
- * The _Constants_ module exports a single object that is a collection of useful constants.
- *
- * @property VERSION {String} The version of this library
- *
- * @module Constants
- */
-export default {
-  VERSION: '__VERSION__',
-  CLIENT_NAME: 'jmap-client (https://github.com/linagora/jmap-client)',
-  SUCCESS_RESPONSE_CODES: [200, 201],
-  ERROR: 'error'
-};
+import Utils from '../utils/Utils.js';
+
+export default class AuthMethod {
+  /**
+   * This class represents a JMAP [AuthMethod]{@link http://jmap.io/spec.html#getting-an-access-token}.
+   *
+   * @constructor
+   *
+   * @param payload {Object} The server response of POST request to the authentication URL.
+   */
+
+  constructor(payload) {
+    Utils.assertRequiredParameterIsPresent(payload, 'payload');
+    Utils.assertRequiredParameterHasType(payload.type, 'type', 'string');
+
+    Object.assign(this, payload);
+  }
+}
 </code></pre>
         </article>
     </section>

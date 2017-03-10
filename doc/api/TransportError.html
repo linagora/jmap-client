@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: CreateMessageAck</title>
+    <title>JSDoc: Class: TransportError</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: CreateMessageAck</h1>
+    <h1 class="page-title">Class: TransportError</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>CreateMessageAck</h2>
+        <h2>TransportError</h2>
         
     
 </header>
@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="CreateMessageAck"><span class="type-signature"></span>new CreateMessageAck<span class="signature">(jmap, response)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="TransportError"><span class="type-signature"></span>new TransportError<span class="signature">(cause<span class="signature-attributes">opt</span>, statusCode<span class="signature-attributes">opt</span>, responseText<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class should be used to wrap a create response item from a setMessages request.<br /></p>
+    <p>A <code>TransportError</code> is a custom <code>Error</code> thrown when a request to a remote server fails.</p>
 </div>
 
 
@@ -60,71 +60,6 @@
 
     <h5>Parameters:</h5>
     
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>jmap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>OutboundMessage</em>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The raw created response object.</p>
-                <h6>Properties</h6>
-                
 
 <table class="params">
     <thead>
@@ -152,13 +87,13 @@
 
         <tr>
             
-                <td class="name"><code>blobId</code></td>
+                <td class="name"><code>cause</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">*</span>
 
 
             
@@ -166,6 +101,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -177,17 +114,20 @@
             
                 <td class="default">
                 
+                    null
+                
                 </td>
             
 
-            <td class="description last"><p>The server side generated blobId of the created message.</p></td>
+            <td class="description last"><p>The underlying cause of this <code>TransportError</code>. Though this is usually an Error, this
+  might actually be anything and depends on the chosen <a href="Transport.html">Transport</a> implementation.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>size</code></td>
+                <td class="name"><code>statusCode</code></td>
             
 
             <td class="type">
@@ -202,6 +142,8 @@
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
 
                 
 
@@ -212,17 +154,19 @@
             
                 <td class="default">
                 
+                    0
+                
                 </td>
             
 
-            <td class="description last"><p>The server side size of the created message.</p></td>
+            <td class="description last"><p>The HTTP status code sent by the server, if the request reached the server.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>responseText</code></td>
             
 
             <td class="type">
@@ -254,53 +198,7 @@
                 </td>
             
 
-            <td class="description last"><p>The server side generated message id of the created message.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>threadId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The server side assigned threadId of the created message.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last"><p>The HTTP response sent by the server, if any.</p></td>
         </tr>
 
     
@@ -341,7 +239,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_CreateMessageAck.js.html">models/CreateMessageAck.js</a>, <a href="models_CreateMessageAck.js.html#line22">line 22</a>
+        <a href="errors_TransportError.js.html">errors/TransportError.js</a>, <a href="errors_TransportError.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -351,7 +249,9 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="Model.html">Model</a></li>
+            <li><a href="Transport.html">Transport</a></li>
+        
+            <li>Error</li>
         </ul>
     </dd>
     
@@ -376,17 +276,6 @@
 
     
     </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="Model.html">Model</a></li>
-    </ul>
-
 
     
 

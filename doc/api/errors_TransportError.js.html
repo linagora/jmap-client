@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Constants.js</title>
+    <title>JSDoc: Source: errors/TransportError.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Constants.js</h1>
+    <h1 class="page-title">Source: errors/TransportError.js</h1>
 
     
 
@@ -28,19 +28,28 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-/**
- * The _Constants_ module exports a single object that is a collection of useful constants.
- *
- * @property VERSION {String} The version of this library
- *
- * @module Constants
- */
-export default {
-  VERSION: '__VERSION__',
-  CLIENT_NAME: 'jmap-client (https://github.com/linagora/jmap-client)',
-  SUCCESS_RESPONSE_CODES: [200, 201],
-  ERROR: 'error'
-};
+export default class TransportError extends Error {
+  /**
+   * A `TransportError` is a custom `Error` thrown when a request to a remote server fails.
+   *
+   * @constructor
+   *
+   * @param [cause=null] {*} The underlying cause of this `TransportError`. Though this is usually an {@link Error}, this
+   *   might actually be anything and depends on the chosen {@link Transport} implementation.
+   * @param [statusCode=0] {Number} The HTTP status code sent by the server, if the request reached the server.
+   * @param [responseText=null] {String} The HTTP response sent by the server, if any.
+   *
+   * @see Transport
+   * @see Error
+   */
+  constructor(cause, statusCode, responseText) {
+    super();
+
+    this.cause = cause || null;
+    this.statusCode = statusCode || 0;
+    this.responseText = responseText || null;
+  }
+}
 </code></pre>
         </article>
     </section>

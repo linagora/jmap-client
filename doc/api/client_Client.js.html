@@ -43,6 +43,7 @@ import AuthContinuation from './../models/AuthContinuation.js';
 import AuthAccess from './../models/AuthAccess.js';
 import Constants from '../utils/Constants.js';
 import VacationResponse from './../models/VacationResponse';
+import JmapError from '../errors/JmapError';
 
 export default class Client {
   /**
@@ -84,11 +85,13 @@ export default class Client {
    * The token will be exposed as the `authToken` property afterwards.
    *
    * @param token {String} The authentication token to use in JMAP requests.
+   * @param [scheme] {String} The authentication scheme according to RFC 7235
    *
    * @return {Client} This Client instance.
    */
-  withAuthenticationToken(token) {
+  withAuthenticationToken(token, scheme) {
     this.authToken = token;
+    this.authScheme = scheme;
 
     return this;
   }
@@ -135,6 +138,7 @@ export default class Client {
   withAuthAccess(access) {
     Utils.assertRequiredParameterHasType(access, 'access', AuthAccess);
 
+    this.authScheme = 'X-JMAP';
     this.authToken = access.accessToken;
     ['username', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'versions', 'extensions'].forEach((property) => {
       this[property] = access[property];
@@ -182,29 +186,29 @@ export default class Client {
    * @return {Promise} A {@link Promise} that will eventually be resovled with a {@link AuthAccess} object
    */
   _authenticateResponse(data, continuationCallback) {
-    if (data.continuationToken &amp;&amp; data.accessToken === undefined) {
+    if (data.loginId &amp;&amp; data.accessToken === undefined) {
       // got an AuthContinuation response
       var authContinuation = new AuthContinuation(data);
 
       return continuationCallback(authContinuation)
         .then(continueData => {
-          if (authContinuation.methods.indexOf(continueData.method) &lt; 0) {
-            throw new Error('The "' + continueData.method + '" authentication protocol is not supported by the server.');
+          if (!authContinuation.supports(continueData.type)) {
+            throw new Error('The "' + continueData.type + '" authentication type is not supported by the server.');
           }
           let param = {
-            token: authContinuation.continuationToken,
-            method: continueData.method
+            loginId: authContinuation.loginId,
+            type: continueData.type
           };
 
-          if (continueData.password) {
-            param.password = continueData.password;
+          if (continueData.value) {
+            param.value = continueData.value;
           }
 
           return this.transport
             .post(this.authenticationUrl, this._defaultNonAuthenticatedHeaders(), param);
         })
         .then(resp => this._authenticateResponse(resp, continuationCallback));
-    } else if (data.accessToken &amp;&amp; data.continuationToken === undefined) {
+    } else if (data.accessToken &amp;&amp; data.loginId === undefined) {
       // got auth access response
       return new AuthAccess(data);
     } else {
@@ -239,9 +243,7 @@ export default class Client {
   authExternal(username, deviceName, continuationCallback) {
     return this.authenticate(username, deviceName, function(authContinuation) {
       // wrap the continuationCallback to resolve with method:'external'
-      return continuationCallback(authContinuation).then(() => {
-        return { method: 'external' };
-      });
+      return continuationCallback(authContinuation).then(() => ({ type: 'external' }));
     });
   }
 
@@ -261,7 +263,7 @@ export default class Client {
   authPassword(username, password, deviceName) {
     return this.authenticate(username, deviceName, function() {
       return this.promiseProvider.newPromise(function(resolve, reject) {
-        resolve({ method: 'password', password: password });
+        resolve({ type: 'password', value: password });
       });
     }.bind(this));
   }
@@ -573,13 +575,14 @@ export default class Client {
    * The _mailboxIds_ and _isDraft_ properties of the given _message_ will be overridden by this method.
    *
    * @param message {OutboundMessage} The message to send.
+   * @param outbox {Mailbox} The {@link Mailbox} with role='outbox', if already available
    *
    * @return {Promise} A {@link Promise} that eventually resolves to a {@link CreateMessageAck}.
    *
    * @see http://jmap.io/spec.html#sending-messages
    */
-  send(message) {
-    return this._createMessage(message, MailboxRole.OUTBOX);
+  send(message, outbox) {
+    return this._createMessage(message, MailboxRole.OUTBOX, outbox);
   }
 
   /**
@@ -638,29 +641,28 @@ export default class Client {
     });
   }
 
-  _createMessage(message, role) {
+  _createMessage(message, role, mailbox) {
     Utils.assertRequiredParameterHasType(message, 'message', OutboundMessage);
 
-    var clientId = this._generateClientId();
+    let clientId = this._generateClientId(),
+        doSetMessages = mailbox => {
+          message.mailboxIds = [mailbox.id];
+          message.isDraft = MailboxRole.DRAFTS.value === role.value ? true : null;
 
-    return this
-      .getMailboxWithRole(role)
-      .then(mailbox => {
-        message.mailboxIds = [mailbox.id];
-        message.isDraft = MailboxRole.DRAFTS.value === role.value ? true : null;
+          return this.setMessages({
+            create: {
+              [clientId]: message.toJSONObject()
+            }
+          }).then(response => {
+            if (!response.created[clientId]) {
+              throw new Error('Failed to store message with clientId ' + clientId + '. Error: ' + (response.notCreated[clientId] || 'none'));
+            }
 
-        return this.setMessages({
-          create: {
-            [clientId]: message.toJSONObject()
-          }
-        });
-      }).then(response => {
-        if (!response.created[clientId]) {
-          throw new Error('Failed to store message with clientId ' + clientId + '. Error: ' + (response.notCreated[clientId] || 'none'));
-        }
+            return new CreateMessageAck(this, response.created[clientId]);
+          });
+        };
 
-        return new CreateMessageAck(this, response.created[clientId]);
-      });
+    return mailbox ? doSetMessages(mailbox) : this.getMailboxWithRole(role).then(doSetMessages);
   }
 
   _generateClientId() {
@@ -678,26 +680,28 @@ export default class Client {
     return {
       Accept: 'application/json; charset=UTF-8',
       'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: this.authToken
+      Authorization: (this.authScheme ? this.authScheme + ' ' : '') + this.authToken
     };
   }
 
-  _jmapRequest(command, options) {
+  _jmapRequest(method, options) {
     return this.transport
-      .post(this.apiUrl, this._defaultHeaders(), [[command, options || {}, '#0']])
-      .then(Utils.assertValidJMAPResponse.bind(null, command))
-      .then(data => data.map(this._handleResponse.bind(this)))
-      .then(function(responses) {
-        return responses.length > 1 ? responses : responses[0];
-      });
+      .post(this.apiUrl, this._defaultHeaders(), [[method, options || {}, '#0']])
+      .then(data => Utils.assertValidJMAPResponse(method, data))
+      .then(data => data.map(response => this._handleResponse(response, method)))
+      .then(responses => responses.length > 1 ? responses : responses[0]);
   }
 
-  _handleResponse(response) {
+  _handleResponse(response, method) {
     let name = response[0],
-        fn = this['_handle' + Utils.capitalize(name) + 'Response'];
+        fn = this[`_handle${Utils.capitalize(name)}Response`];
 
     // This will return the "raw" data if the command is unknown to the client
-    return fn ? fn.bind(this)(response) : response[1];
+    return fn ? fn.bind(this)(response, method) : response[1];
+  }
+
+  _handleErrorResponse(response, method) {
+    throw new JmapError(response[1], method);
   }
 
   _handleListResponse(response, Model, filter) {
@@ -760,7 +764,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">

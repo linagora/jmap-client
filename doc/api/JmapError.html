@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: CreateMessageAck</title>
+    <title>JSDoc: Class: JmapError</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: CreateMessageAck</h1>
+    <h1 class="page-title">Class: JmapError</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>CreateMessageAck</h2>
+        <h2>JmapError</h2>
         
     
 </header>
@@ -40,14 +40,17 @@
 
     
 
-    <h4 class="name" id="CreateMessageAck"><span class="type-signature"></span>new CreateMessageAck<span class="signature">(jmap, response)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="JmapError"><span class="type-signature"></span>new JmapError<span class="signature">(payload, method<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class should be used to wrap a create response item from a setMessages request.<br /></p>
+    <p>A <code>JmapError</code> is a custom <code>Error</code> thrown when a request is rejected by the JMAP backend. <br />
+The <em>type</em> property holds the type of error that happened. Refer to the JMAP <a href="http://jmap.io/spec-core.html#errors">spec</a>
+for details on the available errors. <br />
+Other properties may be present with further information; these are detailed in the method descriptions where appropriate.</p>
 </div>
 
 
@@ -71,7 +74,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -83,30 +90,7 @@
 
         <tr>
             
-                <td class="name"><code>jmap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The <a href="Client.html">Client</a> instance that created this <em>OutboundMessage</em>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
+                <td class="name"><code>payload</code></td>
             
 
             <td class="type">
@@ -119,10 +103,22 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>The raw created response object.</p>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The error payload, from which detailed information about the error can be retrieved.</p>
                 <h6>Properties</h6>
                 
 
@@ -152,7 +148,7 @@
 
         <tr>
             
-                <td class="name"><code>blobId</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
@@ -167,40 +163,7 @@
             
                 <td class="attributes">
                 
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>The server side generated blobId of the created message.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>size</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
+                    &lt;optional><br>
                 
 
                 
@@ -215,14 +178,14 @@
                 </td>
             
 
-            <td class="description last"><p>The server side size of the created message.</p></td>
+            <td class="description last"><p>The type of this <code>JmapError</code>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>description</code></td>
             
 
             <td class="type">
@@ -254,46 +217,7 @@
                 </td>
             
 
-            <td class="description last"><p>The server side generated message id of the created message.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>threadId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The server side assigned threadId of the created message.</p></td>
+            <td class="description last"><p>The description, if any, of this <code>JmapError</code>.</p></td>
         </tr>
 
     
@@ -301,6 +225,45 @@
 </table>
 
             </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>The JMAP method that triggered this <code>JmapError</code>.</p></td>
         </tr>
 
     
@@ -341,7 +304,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_CreateMessageAck.js.html">models/CreateMessageAck.js</a>, <a href="models_CreateMessageAck.js.html#line22">line 22</a>
+        <a href="errors_JmapError.js.html">errors/JmapError.js</a>, <a href="errors_JmapError.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -351,7 +314,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="Model.html">Model</a></li>
+            <li>Error</li>
         </ul>
     </dd>
     
@@ -378,17 +341,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="Model.html">Model</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -400,6 +352,114 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns a String representation of this <code>JmapError</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="errors_JmapError.js.html">errors/JmapError.js</a>, <a href="errors_JmapError.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The human-readable representation of this <code>JmapError</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     

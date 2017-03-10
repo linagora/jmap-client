@@ -28,6 +28,8 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
+import { ERROR } from './Constants';
+
 export default class Utils {
   /**
    * This class contains some useful utility methods.&lt;br />
@@ -157,6 +159,7 @@ export default class Utils {
    * * `data` has one or more elements, and all elements are arrays
    * * `data[0][0]` is either
    *   * the expected response string (computed with the help of the `request` parameter)
+   *   * 'error'
    *   * an unknown response
    * * `data[0][1]` exists
    *
@@ -175,21 +178,22 @@ export default class Utils {
     }
 
     if (!data || !Array.isArray(data)) {
-      throw new Error('Expected an array as the JMAP response for a "' + request + '" request.');
+      throw new Error(`Expected an array as the JMAP response for a "${request}" request.`);
     }
 
     if (data.length === 0 || !allArrayElementsAreArray(data)) {
-      throw new Error('Expected an array of exactly 1 array element as the JMAP response for a "' + request + '" request.');
+      throw new Error(`Expected an array of exactly 1 array element as the JMAP response for a "${request}" request.`);
     }
 
-    let expectedResponse = Utils._expectedResponseFor(request);
+    let response = data[0][0],
+        expectedResponse = Utils._expectedResponseFor(request);
 
-    if (expectedResponse &amp;&amp; data[0][0] !== expectedResponse) {
-      throw new Error('Expected "' + expectedResponse + '" as the JMAP response for a "' + request + '" request, but got "' + data[0][0] + '".');
+    if (response !== ERROR &amp;&amp; (expectedResponse &amp;&amp; response !== expectedResponse)) {
+      throw new Error(`Expected "${expectedResponse}" as the JMAP response for a "${request}" request, but got "${response}".`);
     }
 
     if (!data[0][1]) {
-      throw new Error('The JMAP response for a "' + request + '" request should return some data.');
+      throw new Error(`The JMAP response for a "${request}" request should return some data.`);
     }
 
     return data;
@@ -310,7 +314,7 @@ export default class Utils {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">
