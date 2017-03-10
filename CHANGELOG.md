@@ -2,14 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [master]
+## [master]
+
+## [0.0.21] - 2017-03-10
 ### Added
 - The AuthMethod model
+- The TransportError class. #18
+- The JmapError class. #18
 
 ### Changed
 - Use the X-JMAP authentication scheme to construct the Authorization header. #44
 - Data structures used during authentication procedure after changes to the JMAP spec. #44
 - The AuthContinuation model
+- Updated all development dependencies
+- SetError instances are now JmapError instances
+- Client.send now supports using an already available Outbox
 
 ## [0.0.20] - 2016-08-22
 ### Fixed
