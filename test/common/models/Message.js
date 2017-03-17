@@ -102,6 +102,10 @@ describe('The Message class', function() {
       }));
     });
 
+    it('should set From to the unknown EMailer when not defined', function() {
+      expect(new jmap.Message({}, 'id', 'threadId', ['inbox']).from).to.deep.equal(jmap.EMailer.unknown());
+    });
+
     it('should take the first item of the From option', function() {
       var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
         from: [{
@@ -131,6 +135,57 @@ describe('The Message class', function() {
         name: 'notanarray',
         email: 'notanarray@open-paas.org'
       }));
+    });
+
+    it('should create EMailer instances for the To option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        to: [{
+          name: '',
+          email: 'me@open-paas.org'
+        }, {
+          name: 'another',
+          email: 'another@linagora.com'
+        }]
+      });
+
+      expect(message.to).to.deep.equal([
+        new jmap.EMailer({ name: '', email: 'me@open-paas.org' }),
+        new jmap.EMailer({ name: 'another', email: 'another@linagora.com' })
+      ]);
+    });
+
+    it('should create EMailer instances for the CC option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        cc: [{
+          name: '',
+          email: 'me@open-paas.org'
+        }, {
+          name: 'another',
+          email: 'another@linagora.com'
+        }]
+      });
+
+      expect(message.cc).to.deep.equal([
+        new jmap.EMailer({ name: '', email: 'me@open-paas.org' }),
+        new jmap.EMailer({ name: 'another', email: 'another@linagora.com' })
+      ]);
+    });
+
+    it('should create EMailer instances for the BCC option', function() {
+      var message = new jmap.Message({}, 'id', 'threadId', ['inbox'], {
+        bcc: [{
+          name: '',
+          email: 'me@open-paas.org'
+        }, {
+          name: 'another',
+          email: 'another@linagora.com'
+        }]
+      });
+
+      expect(message.bcc).to.deep.equal([
+        new jmap.EMailer({ name: '', email: 'me@open-paas.org' }),
+        new jmap.EMailer({ name: 'another', email: 'another@linagora.com' })
+      ]);
     });
 
     it('should parse the message date as a Date object', function() {

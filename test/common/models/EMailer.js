@@ -45,4 +45,23 @@ describe('The EMailer class', function() {
 
   });
 
+  describe('The fromJSONObject static method', function() {
+
+    it('should return an EMailer object', function() {
+      expect(jmap.EMailer.fromJSONObject()).to.be.an.instanceof(jmap.EMailer);
+    });
+
+    it('should return an EMailer object with all properties set to default values when nothing given', function() {
+      expect(jmap.EMailer.fromJSONObject()).to.deep.equal(jmap.EMailer.unknown());
+    });
+
+    it('should return an EMailer with properties set when given', function() {
+      expect(jmap.EMailer.fromJSONObject(null, { name: 'name', email: 'email' })).to.deep.equal(new jmap.EMailer({
+        name: 'name',
+        email: 'email'
+      }));
+    });
+
+  });
+
 });
