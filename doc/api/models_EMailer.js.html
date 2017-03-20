@@ -52,6 +52,18 @@ export default class EMailer {
   static unknown() {
     return new EMailer();
   }
+
+  /**
+   * Creates a _EMailer_ from its JSON representation.
+   *
+   * @param jmap {Client} The {@link Client} instance that originates the _EMailer_ instance. Is actually ignored.
+   * @param object {Object} The JSON representation of the _EMailer_, as a Javascript object
+   *
+   * @return {EMailer}
+   */
+  static fromJSONObject(jmap, object) {
+    return new EMailer(object);
+  }
 }
 </code></pre>
         </article>
