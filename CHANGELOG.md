@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.23] - 2017-03-20
+### Fixed
+- The Message model was not creating EMailer instances for To, CC and BCC fields. #63
+
 ## [0.0.22] - 2017-03-10
 ### Added
 - The AuthMethod model
