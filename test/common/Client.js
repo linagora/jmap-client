@@ -953,16 +953,19 @@ describe('The Client class', function() {
               state: 'm815034',
               list: [{
                 id: 'fm1u314',
+                blobId: '4f512aafed75e7fb',
                 threadId: '4f512aafed75e7fb',
                 mailboxIds: ['inbox']
               },
               {
                 id: 'fm1u312',
+                blobId: 'fed75e7fb4f512aa',
                 threadId: 'fed75e7fb4f512aa',
                 mailboxIds: ['inbox']
               },
               {
                 id: 'fm2u12',
+                blobId: 'fed75e7fb4f512aa',
                 threadId: 'fed75e7fb4f512aa',
                 mailboxIds: ['mailbox2']
               }
@@ -1000,9 +1003,9 @@ describe('The Client class', function() {
               new jmap.Thread(client, 'fed75e7fb4f512aa', { messageIds: ['fm1u312', 'fm2u12'] })
             ],
             [
-              new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', ['inbox']),
-              new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', ['inbox']),
-              new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', ['mailbox2'])
+              new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', '4f512aafed75e7fb', ['inbox']),
+              new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['inbox']),
+              new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['mailbox2'])
             ]
           ]);
 
@@ -1133,6 +1136,7 @@ describe('The Client class', function() {
               accountId: 'user@example.com',
               list: [{
                 id: 'fm1u314',
+                blobId: '4f512aafed75e7fb',
                 threadId: '4f512aafed75e7fb',
                 mailboxIds: ['inbox']
               }],
@@ -1152,7 +1156,7 @@ describe('The Client class', function() {
         .then(function(data) {
           expect(data).to.deep.equal([
             [new jmap.Thread(client, '4f512aafed75e7fb', { messageIds: ['fm1u314'] })],
-            [new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', ['inbox'])]
+            [new jmap.Message(client, 'fm1u314', '4f512aafed75e7fb', '4f512aafed75e7fb', ['inbox'])]
           ]);
 
           done();
@@ -1242,11 +1246,13 @@ describe('The Client class', function() {
             accountId: 'user@example.com',
             list: [{
               id: 'fm1u312',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: ['mailbox1']
             },
             {
               id: 'fm2u12',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: ['mailbox2']
             }],
@@ -1261,8 +1267,8 @@ describe('The Client class', function() {
         .getMessages({ ids: ['fm1u312', 'fm2u12'] })
         .then(function(data) {
           expect(data).to.deep.equal([
-            new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', ['mailbox1']),
-            new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', ['mailbox2'])
+            new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['mailbox1']),
+            new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['mailbox2'])
           ]);
 
           done();
@@ -1276,18 +1282,22 @@ describe('The Client class', function() {
             accountId: 'user@example.com',
             list: [{
               id: 'fm1u312',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: ['mailbox1']
             }, {
               id: 'fm1azf52',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: null
             }, {
               id: 'fm2u12',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: ['mailbox2']
             }, {
               id: 'fm1ab32',
+              blobId: 'fed75e7fb4f512aa',
               threadId: 'fed75e7fb4f512aa',
               mailboxIds: []
             }],
@@ -1302,8 +1312,8 @@ describe('The Client class', function() {
         .getMessages({ ids: ['fm1u312', 'fm2u12'] })
         .then(function(data) {
           expect(data).to.deep.equal([
-            new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', ['mailbox1']),
-            new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', ['mailbox2'])
+            new jmap.Message(client, 'fm1u312', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['mailbox1']),
+            new jmap.Message(client, 'fm2u12', 'fed75e7fb4f512aa', 'fed75e7fb4f512aa', ['mailbox2'])
           ]);
 
           done();
