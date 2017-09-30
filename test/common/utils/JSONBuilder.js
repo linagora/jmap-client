@@ -145,4 +145,37 @@ describe('The JSONBuilder class', function() {
 
   });
 
+  describe('The appendObject method', function() {
+
+    var obj = { one: 1, two: 2 };
+    var Child = function(val) {
+      this.prop = val;
+      this.toJSONObject = function() {
+        return { value: this.prop };
+      };
+    };
+    var complex = { foo: 'foo', child: new Child('bar') };
+
+    it('should throw an Error if the name is undefined', function() {
+      expect(function() {
+        new jmap.JSONBuilder().appendObject(undefined, {});
+      }).to.throw(Error);
+    });
+
+    it('should throw an Error if date is not an Object', function() {
+      expect(function() {
+        new jmap.JSONBuilder().appendObject('obj', []);
+      }).to.throw(Error);
+    });
+
+    it('should append a clone of the object value', function() {
+      expect(new jmap.JSONBuilder().appendObject('obj', obj).build()).to.deep.equal({ obj: obj });
+    });
+
+    it('should call toJSONObject() on object elements', function() {
+      expect(new jmap.JSONBuilder().appendObject('obj', complex).build()).to.deep.equal({ obj: { foo: 'foo', child: { value: 'bar' } } });
+    });
+
+  });
+
 });
