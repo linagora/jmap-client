@@ -10,6 +10,19 @@ require('chai').use(require('sinon-chai'));
 
 describe('The Client class', function() {
 
+  var authAccessResponse = {
+    username: 'user@domain.com',
+    signingId: 'signId1',
+    signingKey: 'signKeyA',
+    accessToken: 'accessToken1',
+    apiUrl: '/',
+    eventSourceUrl: '/es',
+    uploadUrl: '/upload',
+    downloadUrl: '/download',
+    accounts: {},
+    capabilities: {}
+  };
+
   function defaultClient() {
     return new jmap.Client({
       post: function() {
@@ -75,18 +88,20 @@ describe('The Client class', function() {
 
   describe('The withAuthAccess method', function() {
 
-    var authAccess = new jmap.AuthAccess({
+    var authAccess = new jmap.AuthAccess(defaultClient(), {
       username: 'user',
-      versions: [1],
-      extensions: { 'com.linagory.ext': [1] },
       accessToken: 'accessToken1',
+      signingId: 'signId1',
+      signingKey: 'signKeyA',
       apiUrl: '/es',
       eventSourceUrl: '/eventSource',
       uploadUrl: '/upload',
-      downloadUrl: '/download'
+      downloadUrl: '/download',
+      accounts: {},
+      capabilities: { 'com.linagory.ext': {} }
     });
 
-    it('should throw if access parameter is not an instance of AuthAccess', function() {
+    it('should throw if access parameter is invalid', function() {
       expect(function() {
         defaultClient().withAuthAccess({});
       }).to.throw(Error);
@@ -97,7 +112,18 @@ describe('The Client class', function() {
 
       expect(client.authToken).to.equal(authAccess.accessToken);
       expect(client.authScheme).to.equal('X-JMAP');
-      ['username', 'versions', 'extensions', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl'].forEach(function(property) {
+      ['username', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'signingId', 'signingKey'].forEach(function(property) {
+        expect(client[property]).to.equal(authAccess[property]);
+      });
+      expect(client.serverCapabilities).to.be.an.instanceof(jmap.ServerCapabilities);
+      expect(client.mailCapabilities).to.be.an.instanceof(jmap.MailCapabilities);
+    });
+
+    it('should accept a plain json object', function() {
+      var client = defaultClient().withAuthAccess(authAccess.toJSONObject());
+
+      expect(client.authToken).to.equal(authAccess.accessToken);
+      ['username', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'signingId', 'signingKey'].forEach(function(property) {
         expect(client[property]).to.equal(authAccess[property]);
       });
     });
@@ -105,6 +131,19 @@ describe('The Client class', function() {
   });
 
   describe('The getAccounts method', function() {
+
+    function defaultAccounts(id) {
+      var accounts = {};
+
+      accounts[id] = {
+        name: 'test',
+        isPrimary: true,
+        isReadOnly: false,
+        hasDataFor: ['mail']
+      };
+
+      return accounts;
+    }
 
     it('should post on the API url', function(done) {
       new jmap.Client({
@@ -152,32 +191,6 @@ describe('The Client class', function() {
       })
         .withAPIUrl('https://test')
         .withAuthenticationToken('token', 'Bearer')
-        .getAccounts()
-        .then(null, done);
-    });
-
-    it('should send correct HTTP Authorization header after JMAP authentication', function(done) {
-      var authAccess = new jmap.AuthAccess({
-        username: 'user',
-        accessToken: 'accessToken1',
-        apiUrl: 'https://test',
-        eventSourceUrl: '/es',
-        uploadUrl: '/upload',
-        downloadUrl: '/download'
-      });
-
-      new jmap.Client({
-        post: function(url, headers) {
-          expect(headers).to.deep.equal({
-            Authorization: 'X-JMAP accessToken1',
-            'Content-Type': 'application/json; charset=UTF-8',
-            Accept: 'application/json; charset=UTF-8'
-          });
-
-          return q.reject();
-        }
-      })
-        .withAuthAccess(authAccess)
         .getAccounts()
         .then(null, done);
     });
@@ -235,12 +248,45 @@ describe('The Client class', function() {
         .getAccounts()
         .then(function(data) {
           expect(data).to.deep.equal([
-            new jmap.Account(client, 'id'),
-            new jmap.Account(client, 'id2')
+            new jmap.Account(client, 'id', {}),
+            new jmap.Account(client, 'id2', {})
           ]);
 
           done();
         });
+    });
+
+    it('returns account information received during JMAP authentication', function(done) {
+      var authAccess = {
+        username: 'user',
+        accessToken: 'accessToken1',
+        signingId: 'signId1',
+        signingKey: 'signKeyA',
+        apiUrl: 'https://test',
+        eventSourceUrl: '/es',
+        uploadUrl: '/upload',
+        downloadUrl: '/download',
+        accounts: defaultAccounts('a1'),
+        capabilities: {}
+      };
+
+      var client = new jmap.Client({
+        post: function(url, headers) {
+          return q.reject();
+        }
+      }, new jmap.QPromiseProvider());
+
+      client
+        .withAuthAccess(authAccess)
+        .getAccounts()
+        .then(function(data) {
+          expect(data).to.deep.equal([
+            new jmap.Account(client, 'a1', authAccess.accounts.a1)
+          ]);
+
+          done();
+        })
+        .catch(done);
     });
 
   });
@@ -1819,17 +1865,6 @@ describe('The Client class', function() {
     });
 
     it('should resolve with AuthAccess', function(done) {
-      var authAccessResponse = {
-        username: 'user@domain.com',
-        versions: [1],
-        extensions: {},
-        accessToken: 'accessToken1',
-        apiUrl: '/',
-        eventSourceUrl: '/es',
-        uploadUrl: '/upload',
-        downloadUrl: '/download'
-      };
-
       new jmap.Client({
         post: function(url, headers, data) {
           if (data.username) {
@@ -1847,23 +1882,13 @@ describe('The Client class', function() {
         return q({ type: 'external' });
       })
       .then(function(authAccess) {
-        expect(authAccess).to.deep.equal(authAccessResponse);
+        expect(authAccess.toJSONObject()).to.deep.equal(authAccessResponse);
         done();
-      });
+      })
+      .catch(done);
     });
 
     it('should repeat authentication steps if server demands to', function(done) {
-      var authAccessResponse = {
-        username: 'user@domain.com',
-        versions: [1],
-        extensions: {},
-        accessToken: 'accessToken1',
-        apiUrl: '/',
-        eventSourceUrl: '/es',
-        uploadUrl: '/upload',
-        downloadUrl: '/download'
-      };
-
       new jmap.Client({
         post: function(url, headers, data) {
           if (data.username) {
@@ -1899,9 +1924,10 @@ describe('The Client class', function() {
         }
       })
       .then(function(authAccess) {
-        expect(authAccess).to.deep.equal(authAccessResponse);
+        expect(authAccess.toJSONObject()).to.deep.equal(authAccessResponse);
         done();
-      }, done);
+      })
+      .catch(done);
     });
 
     it('should reject on ambiguous server response', function(done) {
@@ -1951,6 +1977,7 @@ describe('The Client class', function() {
   });
 
   describe('The authExternal method', function() {
+
     it('should reject if the server does not support external authentication', function(done) {
       new jmap.Client({
         post: function(url, headers, data) {
@@ -1988,17 +2015,6 @@ describe('The Client class', function() {
     });
 
     it('should give back a AuthAccess', function(done) {
-      var authAccessResponse = {
-        username: 'user@domain.com',
-        versions: [1],
-        extensions: {},
-        accessToken: 'accessToken1',
-        apiUrl: '/',
-        eventSourceUrl: '/es',
-        uploadUrl: '/upload',
-        downloadUrl: '/download'
-      };
-
       new jmap.Client({
         post: function(url, headers, data) {
           if (data.username) {
@@ -2016,9 +2032,10 @@ describe('The Client class', function() {
         return q(authContinuation.loginId);
       })
       .then(function(authAccess) {
-        expect(authAccess).to.deep.equal(authAccessResponse);
+        expect(authAccess.toJSONObject()).to.deep.equal(authAccessResponse);
         done();
-      });
+      })
+      .catch(done);
     });
 
   });
@@ -2044,17 +2061,6 @@ describe('The Client class', function() {
     });
 
     it('should give back a AuthAccess', function(done) {
-      var authAccessResponse = {
-        username: 'user@domain.com',
-        versions: [1],
-        extensions: {},
-        accessToken: 'accessToken1',
-        apiUrl: '/',
-        eventSourceUrl: '/es',
-        uploadUrl: '/upload',
-        downloadUrl: '/download'
-      };
-
       new jmap.Client({
         post: function(url, headers, data) {
           if (data.username) {
@@ -2070,9 +2076,10 @@ describe('The Client class', function() {
       .withAuthenticationUrl('https://test')
       .authPassword('user@domain.com', 'xxxxxx', 'Device name')
       .then(function(authAccess) {
-        expect(authAccess).to.deep.equal(authAccessResponse);
+        expect(authAccess.toJSONObject()).to.deep.equal(authAccessResponse);
         done();
-      });
+      })
+      .catch(done);
     });
 
   });
