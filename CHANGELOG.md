@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
+### Added
+- JSONBuilder.appendObject
+- The ServerCapabilities model
+- AuthAccess.accounts. #58
+- AuthAccess.serverCapabilites. #58
+- AuthAccess.mailCapabilities. #58
+
+### Changed
+- Migrate accounts + capabilities to new JMAP authentication spec. #58
+
+## Removed
+- The AccountCapabilities model
 
 ## [0.0.23] - 2017-03-20
 ### Fixed
