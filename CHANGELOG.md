@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.0.25] - 2017-10-10
 ### Added
 - Add 'namespace' and 'sharedWith' property to Mailbox. Fixes #69
+- JSONBuilder.appendObject
+- The ServerCapabilities model
+- AuthAccess.accounts. #58
+- AuthAccess.serverCapabilites. #58
+- AuthAccess.mailCapabilities. #58
+
+### Changed
+- Migrate accounts + capabilities to new JMAP authentication spec. #58
+
+## Removed
+- The AccountCapabilities model
 
 ## [0.0.24] - 2017-26-09
 ### Added
