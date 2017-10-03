@@ -6,10 +6,12 @@ var expect = require('chai').expect,
 describe('The MailCapabilities class', function() {
 
   var defaultMailCapabilities = {
-    isReadOnly: false,
+    ns: jmap.Constants.MAIL_CAPABILITIES_URI,
+    maxMailboxesPerMessage: null,
     maxSizeMessageAttachments: 0,
-    canDelaySend: false,
-    messageListSortOptions: []
+    maxDelayedSend: 0,
+    messageListSortOptions: [],
+    submissionExtensions: {}
   };
 
   describe('The constructor', function() {
@@ -24,16 +26,19 @@ describe('The MailCapabilities class', function() {
 
     it('should allow defining values through the opts object', function() {
       var capabilities = new jmap.MailCapabilities({
-        isReadOnly: true,
+        maxMailboxesPerMessage: 8,
         maxSizeMessageAttachments: 1234,
-        canDelaySend: true,
-        messageListSortOptions: ['date', 'id']
+        maxDelayedSend: 120,
+        messageListSortOptions: ['date', 'id'],
+        submissionExtensions: { DSN: ['RET=HDRS'] }
       });
 
-      expect(capabilities.isReadOnly).to.equal(true);
+      expect(capabilities.ns).to.equal(jmap.Constants.MAIL_CAPABILITIES_URI);
+      expect(capabilities.maxMailboxesPerMessage).to.equal(8);
       expect(capabilities.maxSizeMessageAttachments).to.equal(1234);
-      expect(capabilities.canDelaySend).to.equal(true);
+      expect(capabilities.maxDelayedSend).to.equal(120);
       expect(capabilities.messageListSortOptions).to.deep.equal(['date', 'id']);
+      expect(capabilities.submissionExtensions).to.deep.equal({ DSN: ['RET=HDRS'] });
     });
 
   });

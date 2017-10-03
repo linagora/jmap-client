@@ -11,10 +11,8 @@ describe('The Account class', function() {
       id: id,
       name: '',
       isPrimary: false,
-      capabilities: null,
-      mail: null,
-      contacts: null,
-      calendars: null
+      isReadOnly: false,
+      hasDataFor: []
     };
   }
 
@@ -38,21 +36,8 @@ describe('The Account class', function() {
       var expectedAccount = {
         name: 'name',
         isPrimary: true,
-        capabilities: {
-          maxSizeUpload: 123
-        },
-        mail: {
-          isReadOnly: false,
-          maxSizeMessageAttachments: 456,
-          canDelaySend: true,
-          messageListSortOptions: ['date']
-        },
-        contacts: {
-          isReadOnly: true
-        },
-        calendars: {
-          isReadOnly: true
-        }
+        isReadOnly: false,
+        hasDataFor: ['mail', 'contacts', 'calendars']
       };
       var account = new jmap.Account({}, 'id', expectedAccount);
 
@@ -119,16 +104,14 @@ describe('The Account class', function() {
         id: 'id',
         name: 'name',
         isPrimary: true,
-        calendars: {
-          isReadOnly: true
-        }
+        hasDataFor: ['calendars']
       });
 
       expect(account.id).to.equal('id');
       expect(account.name).to.equal('name');
       expect(account.isPrimary).to.equal(true);
-      expect(account.calendars).to.deep.equal({ isReadOnly: true });
-      expect(account.mail).to.equal(null);
+      expect(account.hasDataFor).to.deep.equal(['calendars']);
+      expect(account.isReadOnly).to.equal(false);
     });
 
   });
@@ -140,7 +123,7 @@ describe('The Account class', function() {
     });
 
     it('should return true when the account has mail capabilities defined', function() {
-      expect(new jmap.Account({}, 'id', { mail: {} }).hasMail()).to.equal(true);
+      expect(new jmap.Account({}, 'id', { hasDataFor: ['mail'] }).hasMail()).to.equal(true);
     });
 
   });
@@ -152,7 +135,7 @@ describe('The Account class', function() {
     });
 
     it('should return true when the account has calendars capabilities defined', function() {
-      expect(new jmap.Account({}, 'id', { calendars: {} }).hasCalendars()).to.equal(true);
+      expect(new jmap.Account({}, 'id', { hasDataFor: ['calendars'] }).hasCalendars()).to.equal(true);
     });
 
   });
@@ -164,7 +147,7 @@ describe('The Account class', function() {
     });
 
     it('should return true when the account has contacts capabilities defined', function() {
-      expect(new jmap.Account({}, 'id', { contacts: {} }).hasContacts()).to.equal(true);
+      expect(new jmap.Account({}, 'id', { hasDataFor: ['contacts'] }).hasContacts()).to.equal(true);
     });
 
   });
