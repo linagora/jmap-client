@@ -4,6 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.25] - 2017-10-10
+### Added
+- Add 'namespace' and 'sharedWith' property to Mailbox. Fixes #69
+
+## [0.0.24] - 2017-26-09
+### Added
+- add required property blobId to Message. Fixes #65
+
 ## [0.0.23] - 2017-03-20
 ### Fixed
 - The Message model was not creating EMailer instances for To, CC and BCC fields. #63
