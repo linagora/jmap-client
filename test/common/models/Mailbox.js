@@ -22,8 +22,10 @@ describe('The Mailbox class', function() {
     it('should use default values for all other fields if not defined', function() {
       var mailbox = new jmap.Mailbox({}, 'id', 'name');
 
+      expect(mailbox.namespace).to.deep.equal({});
       expect(mailbox.parentId).to.equal(null);
       expect(mailbox.role).to.equal(jmap.MailboxRole.UNKNOWN);
+      expect(mailbox.sharedWith).to.deep.equal({});
       expect(mailbox.sortOrder).to.equal(0);
       expect(mailbox.mustBeOnlyMailbox).to.equal(false);
       expect(mailbox.mayReadItems).to.equal(false);
@@ -41,8 +43,10 @@ describe('The Mailbox class', function() {
     it('should use default values for all other fields if an empty opts object is given', function() {
       var mailbox = new jmap.Mailbox({}, 'id', 'name', {});
 
+      expect(mailbox.namespace).to.deep.equal({});
       expect(mailbox.parentId).to.equal(null);
       expect(mailbox.role).to.equal(jmap.MailboxRole.UNKNOWN);
+      expect(mailbox.sharedWith).to.deep.equal({});
       expect(mailbox.sortOrder).to.equal(0);
       expect(mailbox.mustBeOnlyMailbox).to.equal(false);
       expect(mailbox.mayReadItems).to.equal(false);
@@ -124,8 +128,10 @@ describe('The Mailbox class', function() {
     it('should use default values for for all other fields if not defined', function() {
       var mailbox = jmap.Mailbox.fromJSONObject({}, { id: 'id', name: 'name' });
 
+      expect(mailbox.namespace).to.deep.equal({});
       expect(mailbox.parentId).to.equal(null);
       expect(mailbox.role).to.equal(jmap.MailboxRole.UNKNOWN);
+      expect(mailbox.sharedWith).to.deep.equal({});
       expect(mailbox.sortOrder).to.equal(0);
       expect(mailbox.mustBeOnlyMailbox).to.equal(false);
       expect(mailbox.mayReadItems).to.equal(false);
@@ -144,8 +150,12 @@ describe('The Mailbox class', function() {
       var mailbox = jmap.Mailbox.fromJSONObject({}, {
         id: 'id',
         name: 'name',
+        namespace: {
+          type: 'Personal'
+        },
         parentId: 'parentId',
         role: 'inbox',
+        sharedWith: {},
         sortOrder: 1,
         mustBeOnlyMailbox: true,
         mayReadItems: true,
@@ -162,8 +172,10 @@ describe('The Mailbox class', function() {
 
       expect(mailbox.id).to.equal('id');
       expect(mailbox.name).to.equal('name');
+      expect(mailbox.namespace.type).to.equal('Personal');
       expect(mailbox.parentId).to.equal('parentId');
       expect(mailbox.role).to.equal(jmap.MailboxRole.INBOX);
+      expect(mailbox.sharedWith).to.deep.equal({});
       expect(mailbox.sortOrder).to.equal(1);
       expect(mailbox.mustBeOnlyMailbox).to.equal(true);
       expect(mailbox.mayReadItems).to.equal(true);
