@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/VacationResponse.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/VacationResponse.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import Model from './Model.js';
+import Utils from '../utils/Utils.js';
+import JSONBuilder from '../utils/JSONBuilder.js';
+
+class VacationResponse extends Model {
+  /**
+   * This class represents a JMAP [VacationResponse]{@link http://jmap.io/spec.html#vacation-response}.&lt;br />
+   * The _VacationResponse_ object represents the state of vacation-response related settings for an account.
+   *
+   * @constructor
+   * @extends Model
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _VacationResponse_.
+   * @param [opts] {Object} The optional properties of this _VacationResponse_.
+   * @param [opts.isEnabled=false] {Boolean} Is the vacation response enabled?
+   * @param [opts.isActivated=false] {Boolean} Is the vacation response activated?
+   * @param [opts.fromDate=null] {Date} The date/time after which messages that arrive should receive the user’s vacation response, in UTC.
+   * @param [opts.toDate=null] {Date} The date/time after which messages that arrive should no longer receive the user’s vacation response, in UTC.
+   * @param [opts.subject=null] {String} The subject that will be used by the mail sent in response to messages when the vacation response is enabled.
+   * @param [opts.textBody=null] {Number} The plain text part of the message to send in response to messages when the vacation response is enabled.
+   * @param [opts.htmlBody=null] {String} The HTML part of the message to send in response to messages when the vacation response is enabled.
+   *
+   * @see Model
+   */
+  constructor(jmap, opts) {
+    super(jmap);
+
+    opts = opts || {};
+
+    this.id = VacationResponse.ID;
+    this.isEnabled = opts.isEnabled || false;
+    this.isActivated = opts.isActivated || false;
+    this.fromDate = opts.fromDate ? new Date(opts.fromDate) : null;
+    this.toDate = opts.toDate ? new Date(opts.toDate) : null;
+    this.subject = opts.subject || null;
+    this.textBody = opts.textBody || null;
+    this.htmlBody = opts.htmlBody || null;
+  }
+
+  /**
+   * Creates a JSON representation from this {@link VacationResponse}.
+   *
+   * @return JSON object with only owned properties and non-null default values.
+   */
+  toJSONObject() {
+    return new JSONBuilder()
+      .append('id', this.id)
+      .append('isEnabled', this.isEnabled)
+      .appendDateIfDefined('fromDate', this.fromDate)
+      .appendDateIfDefined('toDate', this.toDate)
+      .appendIfDefined('subject', this.subject)
+      .appendIfDefined('textBody', this.textBody)
+      .appendIfDefined('htmlBody', this.htmlBody)
+      .build();
+  }
+
+  /**
+   * Creates an _VacationResponse_ from its JSON representation.
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _VacationResponse_.
+   * @param object {Object} The JSON representation of the _VacationResponse_, as a Javascript object.
+   *
+   * @return {VacationResponse}
+   */
+  static fromJSONObject(jmap, object) {
+    Utils.assertRequiredParameterIsPresent(object, 'object');
+
+    return new VacationResponse(jmap, object);
+  }
+}
+
+VacationResponse.ID = 'singleton'; // http://jmap.io/spec.html#vacation-response
+
+export default VacationResponse;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="ServerCapabilities.html">ServerCapabilities</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
