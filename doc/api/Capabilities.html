@@ -40,15 +40,14 @@
 
     
 
-    <h4 class="name" id="Capabilities"><span class="type-signature"></span>new Capabilities<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Capabilities"><span class="type-signature"></span>new Capabilities<span class="signature">(namespace, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class represents an abstract JMAP &quot;capabilities&quot; object. See <a href="http://jmap.io/spec.html#accounts*">http://jmap.io/spec.html#accounts*</a>.<br />
-It is subclassed in more specific xxxCapabilities classes.</p>
+    <p>This class represents an generic JMAP &quot;capabilities&quot; object. See <a href="http://jmap.io/spec-core.html#getting-an-access-token*">http://jmap.io/spec-core.html#getting-an-access-token*</a>.<br /></p>
 </div>
 
 
@@ -86,6 +85,37 @@ It is subclassed in more specific xxxCapabilities classes.</p>
 
         <tr>
             
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The namespace/identifier of the capabilities.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>opts</code></td>
             
 
@@ -112,76 +142,7 @@ It is subclassed in more specific xxxCapabilities classes.</p>
 
             
 
-            <td class="description last"><p>The optional properties of this <em>AccountCapabilities</em>.</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>isReadOnly</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>Whether the feature denoted by this <em>Capabilities</em> instance is read-only.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last"><p>The optional properties of this <em>Capabilities</em>.</p></td>
         </tr>
 
     
@@ -222,7 +183,7 @@ It is subclassed in more specific xxxCapabilities classes.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_Capabilities.js.html">models/Capabilities.js</a>, <a href="models_Capabilities.js.html#line11">line 11</a>
+        <a href="models_Capabilities.js.html">models/Capabilities.js</a>, <a href="models_Capabilities.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -278,7 +239,7 @@ It is subclassed in more specific xxxCapabilities classes.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="ServerCapabilities.html">ServerCapabilities</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">

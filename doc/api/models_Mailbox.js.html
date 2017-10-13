@@ -43,8 +43,10 @@ export default class Mailbox extends Model {
    * @param id {String} The unique identifier of this _Mailbox_.
    * @param name {String} The user-visible name (i.e.: display name) of this _Mailbox_.
    * @param [opts] {Object} The optional properties of this _Mailbox_.
+   * @param [opts.namespace={}] {Object} The namespace give information about mailbox type and owner.
    * @param [opts.parentId=null] {String} The _Mailbox_ id for the parent of this mailbox, or _null_ if this mailbox is at the top level.
    * @param [opts.role=null] {String} The role of this mailbox, if it is a system mailbox. See the specification for the possible values.
+   * @param [opts.sharedWith={}] {Object} The sharedWith give information about mailbox shared and rights.
    * @param [opts.sortOrder=0] {String} Defines the sort order of mailboxes when presented in the UI.
    * @param [opts.mustBeOnlyMailbox=false] {Boolean} If _true_, messages in this mailbox may not also be in any other mailbox.
    * @param [opts.mayReadItems=false] {Boolean}  If _true_, may use this mailbox as part of a filter in a {@link Client#getMessageList} call.
@@ -70,8 +72,10 @@ export default class Mailbox extends Model {
 
     this.id = id;
     this.name = name;
+    this.namespace = opts.namespace || {};
     this.parentId = opts.parentId || null;
     this.role = MailboxRole.fromRole(opts.role);
+    this.sharedWith = opts.sharedWith || {};
     this.sortOrder = opts.sortOrder || 0;
     this.mustBeOnlyMailbox = opts.mustBeOnlyMailbox || false;
     this.mayReadItems = opts.mayReadItems || false;
@@ -162,7 +166,7 @@ export default class Mailbox extends Model {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="ServerCapabilities.html">ServerCapabilities</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">

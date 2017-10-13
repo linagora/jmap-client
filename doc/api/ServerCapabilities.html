@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MailCapabilities</title>
+    <title>JSDoc: Class: ServerCapabilities</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MailCapabilities</h1>
+    <h1 class="page-title">Class: ServerCapabilities</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>MailCapabilities</h2>
+        <h2>ServerCapabilities</h2>
         
     
 </header>
@@ -40,15 +40,15 @@
 
     
 
-    <h4 class="name" id="MailCapabilities"><span class="type-signature"></span>new MailCapabilities<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ServerCapabilities"><span class="type-signature"></span>new ServerCapabilities<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>This class represents a JMAP <a href="http://jmap.io/spec.html#accounts*">MailCapabilities</a>.<br />
-An <em>MailCapabilities</em> object describes mail-related capabilities of a JMAP server.</p>
+    <p>This class represents a JMAP <a href="http://jmap.io/spec-core.html#201-authentication-is-complete-access-token-created">ServerCapabilities</a>.<br />
+An <em>ServerCapabilities</em> object describes general capabilities of a JMAP server.</p>
 </div>
 
 
@@ -112,7 +112,7 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
 
             
 
-            <td class="description last"><p>The optional properties of this <em>MailCapabilities</em>.</p>
+            <td class="description last"><p>The optional properties of this <em>ServerCapabilities</em>.</p>
                 <h6>Properties</h6>
                 
 
@@ -142,46 +142,7 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
 
         <tr>
             
-                <td class="name"><code>maxMailboxesPerMessage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last"><p>The maximum number of mailboxes that can be can assigned to a single message.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>maxSizeMessageAttachments</code></td>
+                <td class="name"><code>maxSizeUpload</code></td>
             
 
             <td class="type">
@@ -213,14 +174,14 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
                 </td>
             
 
-            <td class="description last"><p>The maximum total size of attachments, in bytes, allowed for messages.</p></td>
+            <td class="description last"><p>The maximum file size, in bytes, that the server will accept for a single file upload.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>maxDelayedSend</code></td>
+                <td class="name"><code>maxSizeRequest</code></td>
             
 
             <td class="type">
@@ -252,20 +213,20 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
                 </td>
             
 
-            <td class="description last"><p>The number in seconds of the maximum delay the server supports in sending. 0 if delayed send is not supported.</p></td>
+            <td class="description last"><p>The maximum size, in bytes, that the server will accept for a single request to the API endpoint.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>messageListSortOptions</code></td>
+                <td class="name"><code>maxConcurrentUpload</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;String></span>
+<span class="param-type">Number</span>
 
 
             
@@ -286,27 +247,34 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
             
                 <td class="default">
                 
-                    []
+                    1
                 
                 </td>
             
 
-            <td class="description last"><p>A list of all the message properties the server supports for sorting by.</p></td>
+            <td class="description last"><p>The maximum number of concurrent requests the server will accept to the upload endpoint.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>submissionExtensions=</code></td>
+                <td class="name"><code>maxConcurrentRequests</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
             
             </td>
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -318,10 +286,129 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
             
                 <td class="default">
                 
+                    1
+                
                 </td>
             
 
-            <td class="description last"><p>{String[String[]]} Known safe-to-expose EHLO capabilities of the submission server.</p></td>
+            <td class="description last"><p>The maximum number of concurrent requests the server will accept to the API endpoint.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxCallsInRequest</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last"><p>The maximum number of method calls the server will accept in a single request to the API endpoint.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxObjectsInGet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>The maximum number of objects that the client may request in a single getXXX type method call.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxObjectsInSet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last"><p>The maximum number of objects the client may send to create, update or destroy in a single setXXX type method call.</p></td>
         </tr>
 
     
@@ -369,19 +456,12 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_MailCapabilities.js.html">models/MailCapabilities.js</a>, <a href="models_MailCapabilities.js.html#line23">line 23</a>
+        <a href="models_ServerCapabilities.js.html">models/ServerCapabilities.js</a>, <a href="models_ServerCapabilities.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Capabilities.html">Capabilities</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -404,17 +484,6 @@ An <em>MailCapabilities</em> object describes mail-related capabilities of a JMA
 
     
     </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="Capabilities.html">Capabilities</a></li>
-    </ul>
-
 
     
 

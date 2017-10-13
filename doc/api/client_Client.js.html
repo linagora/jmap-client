@@ -131,16 +131,22 @@ export default class Client {
    * &lt;br />
    * The individual properties of the AuthAccess object will be copied into client properties.
    *
-   * @param access {AuthAccess} The response object from an authenticate process.
+   * @param access {AuthAccess|Object} The response object from an authenticate process.
    *
    * @return {Client} This Client instance.
    */
   withAuthAccess(access) {
-    Utils.assertRequiredParameterHasType(access, 'access', AuthAccess);
+    Utils.assertRequiredParameterIsObject(access, 'access');
 
+    // create an instance of AuthAccess if plain object is given
+    if (!(access instanceof AuthAccess)) {
+      access = new AuthAccess(this, access);
+    }
+
+    this.authAccess = access;
     this.authScheme = 'X-JMAP';
     this.authToken = access.accessToken;
-    ['username', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'versions', 'extensions'].forEach((property) => {
+    ['username', 'signingId', 'signingKey', 'apiUrl', 'eventSourceUrl', 'uploadUrl', 'downloadUrl', 'serverCapabilities', 'mailCapabilities'].forEach((property) => {
       this[property] = access[property];
     });
 
@@ -210,7 +216,7 @@ export default class Client {
         .then(resp => this._authenticateResponse(resp, continuationCallback));
     } else if (data.accessToken &amp;&amp; data.loginId === undefined) {
       // got auth access response
-      return new AuthAccess(data);
+      return new AuthAccess(this, data);
     } else {
       // got unknown response data
       throw new Error('Unexpected response on authorization request');
@@ -278,6 +284,23 @@ export default class Client {
    * @see http://jmap.io/spec.html#getaccounts
    */
   getAccounts(options) {
+    // resolve with accounts list from AuthAccess
+    if (this.authAccess instanceof AuthAccess) {
+      return this.promiseProvider.newPromise(function(resolve, reject) {
+        let accounts = [];
+
+        // equivalent to Object.values()
+        for (let id in this.authAccess.accounts) {
+          if (this.authAccess.accounts.hasOwnProperty(id)) {
+            accounts.push(this.authAccess.accounts[id]);
+          }
+        }
+
+        resolve(accounts);
+      }.bind(this));
+    }
+
+    // fallback to deprecated getAccounts request
     return this._jmapRequest('getAccounts', options);
   }
 
@@ -764,7 +787,7 @@ export default class Client {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="AccountCapabilities.html">AccountCapabilities</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="ServerCapabilities.html">ServerCapabilities</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
 </nav>
 
 <br class="clear">
