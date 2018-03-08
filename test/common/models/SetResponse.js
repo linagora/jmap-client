@@ -16,9 +16,11 @@ describe('The SetResponse class', function() {
       expect(response.created).to.deep.equal({});
       expect(response.updated).to.deep.equal([]);
       expect(response.destroyed).to.deep.equal([]);
+      expect(response.MDNSent).to.deep.equal([]);
       expect(response.notCreated).to.deep.equal({});
       expect(response.notUpdated).to.deep.equal({});
       expect(response.notDestroyed).to.deep.equal({});
+      expect(response.MDNNotSent).to.deep.equal({});
     });
 
     it('should allow defining optional properties through the opts object', function() {
@@ -48,9 +50,11 @@ describe('The SetResponse class', function() {
       expect(response.created).to.deep.equal({});
       expect(response.updated).to.deep.equal([]);
       expect(response.destroyed).to.deep.equal([]);
+      expect(response.MDNSent).to.deep.equal([]);
       expect(response.notCreated).to.deep.equal({});
       expect(response.notUpdated).to.deep.equal({});
       expect(response.notDestroyed).to.deep.equal({});
+      expect(response.MDNNotSent).to.deep.equal({});
     });
 
     it('should copy values for all fields if defined', function() {
@@ -60,6 +64,12 @@ describe('The SetResponse class', function() {
           ABCD: {
             id: 'mailboxId'
           }
+        },
+        MDNNotSent: {
+          EFGH: {
+            type: 'invalidArguments',
+            description: 'lorem ipsum'
+          }
         }
       });
 
@@ -67,6 +77,12 @@ describe('The SetResponse class', function() {
       expect(response.created).to.deep.equal({
         ABCD: {
           id: 'mailboxId'
+        }
+      });
+      expect(response.MDNNotSent).to.shallowDeepEqual({
+        EFGH: {
+          type: 'invalidArguments',
+          description: 'lorem ipsum'
         }
       });
     });
