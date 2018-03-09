@@ -38,6 +38,7 @@ describe('The Mailbox class', function() {
       expect(mailbox.unreadMessages).to.equal(0);
       expect(mailbox.totalThreads).to.equal(0);
       expect(mailbox.unreadThreads).to.equal(0);
+      expect(mailbox.quotas).to.deep.equal({});
     });
 
     it('should use default values for all other fields if an empty opts object is given', function() {
@@ -59,6 +60,7 @@ describe('The Mailbox class', function() {
       expect(mailbox.unreadMessages).to.equal(0);
       expect(mailbox.totalThreads).to.equal(0);
       expect(mailbox.unreadThreads).to.equal(0);
+      expect(mailbox.quotas).to.deep.equal({});
     });
 
     it('should allow defining optional properties through the opts object', function() {
@@ -144,6 +146,7 @@ describe('The Mailbox class', function() {
       expect(mailbox.unreadMessages).to.equal(0);
       expect(mailbox.totalThreads).to.equal(0);
       expect(mailbox.unreadThreads).to.equal(0);
+      expect(mailbox.quotas).to.deep.equal({});
     });
 
     it('should copy values for id, name, and all other fields if defined', function() {
@@ -167,7 +170,8 @@ describe('The Mailbox class', function() {
         totalMessages: 123,
         unreadMessages: 4,
         totalThreads: 567,
-        unreadThreads: 8
+        unreadThreads: 8,
+        quotas: { '#private&user': { STORAGE: { used: 10, max: 512 }, MESSAGE: { used: 42, max: null } } }
       });
 
       expect(mailbox.id).to.equal('id');
@@ -188,6 +192,7 @@ describe('The Mailbox class', function() {
       expect(mailbox.unreadMessages).to.equal(4);
       expect(mailbox.totalThreads).to.equal(567);
       expect(mailbox.unreadThreads).to.equal(8);
+      expect(mailbox.quotas).to.deep.equal({ '#private&user': { STORAGE: { used: 10, max: 512 }, MESSAGE: { used: 42, max: null } } });
     });
 
   });
