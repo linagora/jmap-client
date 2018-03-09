@@ -4,6 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.27] - 2018-03-
+### Added
+- add 'quota' property to 'Mailbox' #74
+
+## [0.0.26] - 2018-03-08
+### Added
+- add properties 'MDNSent' and 'MDNNotSent' to 'SetResponse' for read receipt notifications #72
+
+### Changed
+- main entry point is now located in dist folder.
+
 ## [0.0.25] - 2017-10-10
 ### Added
 - Add 'namespace' and 'sharedWith' property to Mailbox. Fixes #69
