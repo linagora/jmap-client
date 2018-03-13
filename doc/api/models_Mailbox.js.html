@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/Mailbox.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/Mailbox.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import Model from './Model.js';
+import Utils from '../utils/Utils.js';
+import MailboxRole from './MailboxRole.js';
+
+export default class Mailbox extends Model {
+  /**
+   * This class represents a JMAP [Mailbox]{@link http://jmap.io/spec.html#mailboxes}.
+   *
+   * @constructor
+   * @extends Model
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _Mailbox_.
+   * @param id {String} The unique identifier of this _Mailbox_.
+   * @param name {String} The user-visible name (i.e.: display name) of this _Mailbox_.
+   * @param [opts] {Object} The optional properties of this _Mailbox_.
+   * @param [opts.namespace={}] {Object} The namespace give information about mailbox type and owner.
+   * @param [opts.parentId=null] {String} The _Mailbox_ id for the parent of this mailbox, or _null_ if this mailbox is at the top level.
+   * @param [opts.role=null] {String} The role of this mailbox, if it is a system mailbox. See the specification for the possible values.
+   * @param [opts.sharedWith={}] {Object} The sharedWith give information about mailbox shared and rights.
+   * @param [opts.sortOrder=0] {String} Defines the sort order of mailboxes when presented in the UI.
+   * @param [opts.mustBeOnlyMailbox=false] {Boolean} If _true_, messages in this mailbox may not also be in any other mailbox.
+   * @param [opts.mayReadItems=false] {Boolean}  If _true_, may use this mailbox as part of a filter in a {@link Client#getMessageList} call.
+   * @param [opts.mayAddItems=false] {Boolean} If _true_, the user may add messages to this mailbox.
+   * @param [opts.mayRemoveItems=false] {Boolean} If _true_, the user may remove messages from this mailbox.
+   * @param [opts.mayCreateChild=false] {Boolean} If _true_, the user may create a _Mailbox_ with this _Mailbox_ as its parent.
+   * @param [opts.mayRename=false] {Boolean} If _true_, the user may rename this mailbox or make it a child of another mailbox.
+   * @param [opts.mayDelete=false] {Boolean} If _true_, the user may delete this mailbox.
+   * @param [opts.totalMessages=0] {Number} The number of messages in this mailbox.
+   * @param [opts.unreadMessages=0] {Number} The number of messages in this mailbox with _isUnread_=true and _isDraft_=false.
+   * @param [opts.totalThreads=0] {Number} The number of threads where at least one message in the thread is in this mailbox.
+   * @param [opts.unreadThreads=0] {Number} The number of threads where at least one message in the thread is in this mailbox with _isUnread_=true and _isDraft_=false.
+   * @param [opts.quotas={}] {Object} List of enforced quotas. 'STORAGE' for size quota and 'MESSAGE' for messages count. Each one provide used and max properties.
+       used (Number) number of messages, or size in bytes for storage
+       max (Number|null) maximum number of messages, or maximum size in bytes for storage. Null means unlimited
+   * @see Model
+   */
+  constructor(jmap, id, name, opts) {
+    super(jmap);
+
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+    Utils.assertRequiredParameterIsPresent(name, 'name');
+
+    opts = opts || {};
+
+    this.id = id;
+    this.name = name;
+    this.namespace = opts.namespace || {};
+    this.parentId = opts.parentId || null;
+    this.role = MailboxRole.fromRole(opts.role);
+    this.sharedWith = opts.sharedWith || {};
+    this.sortOrder = opts.sortOrder || 0;
+    this.mustBeOnlyMailbox = opts.mustBeOnlyMailbox || false;
+    this.mayReadItems = opts.mayReadItems || false;
+    this.mayAddItems = opts.mayAddItems || false;
+    this.mayRemoveItems = opts.mayRemoveItems || false;
+    this.mayCreateChild = opts.mayCreateChild || false;
+    this.mayRename = opts.mayRename || false;
+    this.mayDelete = opts.mayDelete || false;
+    this.totalMessages = opts.totalMessages || 0;
+    this.unreadMessages = opts.unreadMessages || 0;
+    this.totalThreads = opts.totalThreads || 0;
+    this.unreadThreads = opts.unreadThreads || 0;
+    this.quotas = opts.quotas || {};
+  }
+
+  /**
+   * Fetches a message list from this _Mailbox_.&lt;br />
+   * This will delegate to {@link Client#getMessageList}, passing the following filter:
+   *
+   *     {
+   *       inMailboxes: [&lt;this Mailbox id>]
+   *     }
+   *
+   * @param [options] {Object} The options object passed to {@link Client#getMessageList}.
+   *   Please note that the _filter_ option will be overriden if defined.
+   * @returns {Promise} A promise that eventually resolves with a {@link MessageList} instance.
+   *
+   * @see Client#getMessageList
+   * @see PromiseProvider
+   */
+  getMessageList(options) {
+    options = options || {};
+    options.filter = {
+      inMailboxes: [this.id]
+    };
+
+    return this._jmap.getMessageList(options);
+  }
+
+  /**
+   * Update this {@link Mailbox}.
+   *
+   * @param options {Object} The attribute to be updated in this {@link Mailbox}.
+   * @param options.name {String} The user-visible name of the _Mailbox_.
+   * @param [options.parentId = null] {String} The _Mailbox_ id for the parent of this mailbox, or _null_ if this mailbox is at the top level.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.updateMailbox}.
+   *
+   * @see Client#updateMailbox
+   */
+  update(options) {
+    return this._jmap.updateMailbox(this.id, options);
+  }
+
+  /**
+   * Destroy this {@link Mailbox} on the server.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.destroyMailbox}.
+   *
+   * @see Client#destroyMailbox
+   */
+  destroy() {
+    return this._jmap.destroyMailbox(this.id);
+  }
+
+  /**
+   * Creates a _Mailbox_ from its JSON representation.
+   *
+   * @param jmap {Client} The {@link Client} instance passed to the _Mailbox_ constructor.
+   * @param object {Object} The JSON representation of the _Mailbox_, as a Javascript object.
+   * @param object.id {String} The identifier of the _Mailbox_.
+   * @param object.name {String} The user-visible name of the _Mailbox_.
+   *
+   * @return {Mailbox}
+   */
+  static fromJSONObject(jmap, object) {
+    Utils.assertRequiredParameterIsPresent(object, 'object');
+
+    return new Mailbox(jmap, object.id, object.name, object);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Attachment.html">Attachment</a></li><li><a href="AuthAccess.html">AuthAccess</a></li><li><a href="AuthContinuation.html">AuthContinuation</a></li><li><a href="AuthMethod.html">AuthMethod</a></li><li><a href="Capabilities.html">Capabilities</a></li><li><a href="Client.html">Client</a></li><li><a href="CreateMessageAck.html">CreateMessageAck</a></li><li><a href="EMailer.html">EMailer</a></li><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="JmapError.html">JmapError</a></li><li><a href="JQueryTransport.html">JQueryTransport</a></li><li><a href="JSONBuilder.html">JSONBuilder</a></li><li><a href="Mailbox.html">Mailbox</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="MailCapabilities.html">MailCapabilities</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageList.html">MessageList</a></li><li><a href="Model.html">Model</a></li><li><a href="OutboundMessage.html">OutboundMessage</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="RequestTransport.html">RequestTransport</a></li><li><a href="ServerCapabilities.html">ServerCapabilities</a></li><li><a href="SetResponse.html">SetResponse</a></li><li><a href="Thread.html">Thread</a></li><li><a href="Transport.html">Transport</a></li><li><a href="TransportError.html">TransportError</a></li><li><a href="Utils.html">Utils</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
