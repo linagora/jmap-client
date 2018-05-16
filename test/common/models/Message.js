@@ -53,6 +53,7 @@ describe('The Message class', function() {
       expect(message.isUnread).to.equal(false);
       expect(message.isFlagged).to.equal(false);
       expect(message.isAnswered).to.equal(false);
+      expect(message.isForwarded).to.equal(false);
       expect(message.isDraft).to.equal(false);
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
@@ -76,6 +77,7 @@ describe('The Message class', function() {
       expect(message.isUnread).to.equal(false);
       expect(message.isFlagged).to.equal(false);
       expect(message.isAnswered).to.equal(false);
+      expect(message.isForwarded).to.equal(false);
       expect(message.isDraft).to.equal(false);
       expect(message.hasAttachment).to.equal(false);
       expect(message.headers).to.deep.equal({});
@@ -277,6 +279,7 @@ describe('The Message class', function() {
         isUnread: true,
         isFlagged: true,
         isAnswered: true,
+        isForwarded: true,
         isDraft: true,
         hasAttachment: true,
         headers: {
@@ -303,6 +306,7 @@ describe('The Message class', function() {
       expect(message.isUnread).to.equal(true);
       expect(message.isFlagged).to.equal(true);
       expect(message.isAnswered).to.equal(true);
+      expect(message.isForwarded).to.equal(true);
       expect(message.isDraft).to.equal(true);
       expect(message.hasAttachment).to.equal(true);
       expect(message.headers).to.deep.equal({ To: 'To' });

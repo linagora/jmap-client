@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.28] - 2018-05-17
+### Added
+- add 'isForwarded' property to 'Message' #77
+
 ## [0.0.27] - 2018-03-12
 ### Added
 - add 'quota' property to 'Mailbox' #74
