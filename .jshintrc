@@ -28,6 +28,7 @@
     "beforeEach": false,
     "browser": false,
     "describe": false,
+    "context": false,
     "inject": false,
     "element": false,
     "it": false,

@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.29]
+### Added
+- add JMap's filter feature #79 
+
 ## [0.0.28] - 2018-05-17
 ### Added
 - add 'isForwarded' property to 'Message' #77
