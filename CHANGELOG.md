@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [master]
 
+## [0.0.30]
+### Added
+- add 'to', 'cc', 'recipients' and 'subject' conditions to filter rules (#80)
+
 ## [0.0.29]
 ### Added
 - add JMap's filter feature #79 
