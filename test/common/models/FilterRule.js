@@ -105,6 +105,74 @@ describe('The FilterRule class', function () {
           });
         });
       });
+
+      describe('to', function () {
+        it('should build the JSON object', function () {
+          target.when.to.value('admin@open-paas.org').comparator(jmap.FilterRule.Comparator.EXACTLY_EQUALS);
+
+          expect(target.toJSONObject()).to.eql({
+            id: 'e71a07e5-1985-4c8e-9979-8c8671d8e76f',
+            name: 'My rule',
+            condition: {
+              field: 'to',
+              comparator: jmap.FilterRule.Comparator.EXACTLY_EQUALS,
+              value: 'admin@open-paas.org',
+            },
+            action: { filterAction: '_toJSONObject' }
+          });
+        });
+      });
+
+      describe('cc', function () {
+        it('should build the JSON object', function () {
+          target.when.cc.value('admin@open-paas.org').comparator(jmap.FilterRule.Comparator.EXACTLY_EQUALS);
+
+          expect(target.toJSONObject()).to.eql({
+            id: 'e71a07e5-1985-4c8e-9979-8c8671d8e76f',
+            name: 'My rule',
+            condition: {
+              field: 'cc',
+              comparator: jmap.FilterRule.Comparator.EXACTLY_EQUALS,
+              value: 'admin@open-paas.org',
+            },
+            action: { filterAction: '_toJSONObject' }
+          });
+        });
+      });
+
+      describe('recipient', function () {
+        it('should build the JSON object', function () {
+          target.when.recipient.value('admin@open-paas.org').comparator(jmap.FilterRule.Comparator.EXACTLY_EQUALS);
+
+          expect(target.toJSONObject()).to.eql({
+            id: 'e71a07e5-1985-4c8e-9979-8c8671d8e76f',
+            name: 'My rule',
+            condition: {
+              field: 'recipient',
+              comparator: jmap.FilterRule.Comparator.EXACTLY_EQUALS,
+              value: 'admin@open-paas.org',
+            },
+            action: { filterAction: '_toJSONObject' }
+          });
+        });
+      });
+
+      describe('subject', function () {
+        it('should build the JSON object', function () {
+          target.when.subject.value('email subject').comparator(jmap.FilterRule.Comparator.EXACTLY_EQUALS);
+
+          expect(target.toJSONObject()).to.eql({
+            id: 'e71a07e5-1985-4c8e-9979-8c8671d8e76f',
+            name: 'My rule',
+            condition: {
+              field: 'subject',
+              comparator: jmap.FilterRule.Comparator.EXACTLY_EQUALS,
+              value: 'email subject',
+            },
+            action: { filterAction: '_toJSONObject' }
+          });
+        });
+      });
     });
 
     context('actions', function () {
