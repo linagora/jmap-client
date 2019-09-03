@@ -130,6 +130,28 @@ describe('The Client class', function() {
 
   });
 
+  describe('The withCustomMailboxRoles method', function() {
+    it('should add a list of mailbox roles to be preserved', function(done) {
+      var mailboxes = [
+        { id: 'id', name: 'test1', role: 'for-test' },
+        { id: 'id', name: 'test2', role: 'non-custom-mailbox' }
+      ];
+
+      new jmap.Client({
+        post: function() { return q([['mailboxes', { list: mailboxes }, '#0']]); }
+      })
+        .withCustomMailboxRoles(['for-test'])
+        .getMailboxes()
+        .then(function(mailboxes) {
+          expect(mailboxes[0].role.value).to.equal('for-test');
+          expect(mailboxes[1].role.value).to.be.null;
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
   describe('The getAccounts method', function() {
 
     function defaultAccounts(id) {
