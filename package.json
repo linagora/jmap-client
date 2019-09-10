@@ -61,7 +61,8 @@
     "sinon-chai": "2.8.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "dist": "grunt compile && grunt apidoc"
   },
   "author": "Linagora Folks",
   "license": "MIT"
