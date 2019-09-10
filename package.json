@@ -40,7 +40,7 @@
     "istanbul": "0.4.5",
     "jquery": "3.1.1",
     "jquery-mockjax": "2.2.1",
-    "jsdoc": "jsdoc3/jsdoc#a6927b2fbd51acf616d153339f78e6f5703688a0",
+    "jsdoc": "3.6.3",
     "karma": "1.4.0",
     "karma-babel-preprocessor": "^8.0.0-beta.0",
     "karma-chrome-launcher": "2.0.0",
