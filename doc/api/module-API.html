@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: API</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: API</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>The <em>API</em> module is the entry point of the library.<br />
+It exports a single Object that is exposed as, either:</p>
+<ul>
+<li>A global <code>jmap</code> variable when jmap-client included in a web page through a <code>script</code> tag</li>
+<li>A NodeJS module when jmap-client is <code>require</code>'d in a NodeJS application</li>
+</ul>
+<p>When extending the library with new models, utility classes, etc. don't forget to update this module
+so that your new code gets exposed in the public API.<br />
+<br />
+The exported object has the following properties:</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Client</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Client class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Utils</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Utils</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Utils class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>JSONBuilder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JSONBuilder</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JSONBuilder class helping to serialize model to json</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>PromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PromiseProvider.html">PromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="PromiseProvider.html">PromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ES6PromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="ES6PromiseProvider.html">ES6PromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>QPromiseProvider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="QPromiseProvider.html">QPromiseProvider</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="QPromiseProvider.html">QPromiseProvider</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Transport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Transport.html">Transport</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Transport.html">Transport</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>JQueryTransport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JQueryTransport</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JQueryTransport class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>RequestTransport</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RequestTransport</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The RequestTransport class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Model</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Model</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Model class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Account</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Account</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Account class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>EMailer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EMailer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The EMailer class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Mailbox</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mailbox</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Mailbox class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MessageList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MessageList</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The MessageList class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Message class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>OutboundMessage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">OutboundMessage</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The OutboundMessage class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>CreateMessageAck</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">CreateMessageAck</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The CreateMessageAck class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Thread</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Thread</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Thread class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MailboxRole</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MailboxRole.html">MailboxRole</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="MailboxRole.html">MailboxRole</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>SetResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">SetResponse</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The SetResponse class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AuthAccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">AuthAccess</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The AuthAccess class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AuthContinuation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">AuthContinuation</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The AuthContinuation class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Constants</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Constants</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="module-Constants.html">Constants</a> object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Attachment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Attachment</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Attachment class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Capabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Capabilities</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Capabilities class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MailCapabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MailCapabilities</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The MailCapabilities class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ServerCapabilities</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ServerCapabilities</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ServerCapabilities class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>VacationResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="VacationResponse.html">VacationResponse</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="VacationResponse.html">VacationResponse</a> class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>TransportError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">TransportError</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The TransportError class</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>JmapError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">JmapError</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JmapError class</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="FilterRule.html">FilterRule</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="Transport.html">Transport</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul><h3>Global</h3><ul><li><a href="global.html#append">append</a></li><li><a href="global.html#appendDateIfDefined">appendDateIfDefined</a></li><li><a href="global.html#appendIfDefined">appendIfDefined</a></li><li><a href="global.html#appendIfNotEmpty">appendIfNotEmpty</a></li><li><a href="global.html#appendObject">appendObject</a></li><li><a href="global.html#appendQueryParameter">appendQueryParameter</a></li><li><a href="global.html#assertRequiredParameterHasType">assertRequiredParameterHasType</a></li><li><a href="global.html#assertRequiredParameterIsArrayWithMinimumLength">assertRequiredParameterIsArrayWithMinimumLength</a></li><li><a href="global.html#assertRequiredParameterIsObject">assertRequiredParameterIsObject</a></li><li><a href="global.html#assertRequiredParameterIsPresent">assertRequiredParameterIsPresent</a></li><li><a href="global.html#assertValidJMAPResponse">assertValidJMAPResponse</a></li><li><a href="global.html#authenticate">authenticate</a></li><li><a href="global.html#authExternal">authExternal</a></li><li><a href="global.html#authPassword">authPassword</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#capitalize">capitalize</a></li><li><a href="global.html#createMailbox">createMailbox</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#destroyMailbox">destroyMailbox</a></li><li><a href="global.html#destroyMailboxes">destroyMailboxes</a></li><li><a href="global.html#destroyMessage">destroyMessage</a></li><li><a href="global.html#destroyMessages">destroyMessages</a></li><li><a href="global.html#fillURITemplate">fillURITemplate</a></li><li><a href="global.html#fromJSONObject">fromJSONObject</a></li><li><a href="global.html#getAccounts">getAccounts</a></li><li><a href="global.html#getMailboxes">getMailboxes</a></li><li><a href="global.html#getMailboxWithRole">getMailboxWithRole</a></li><li><a href="global.html#getMessageList">getMessageList</a></li><li><a href="global.html#getMessages">getMessages</a></li><li><a href="global.html#getMethod">getMethod</a></li><li><a href="global.html#getSignedDownloadUrl">getSignedDownloadUrl</a></li><li><a href="global.html#getThreads">getThreads</a></li><li><a href="global.html#getVacationResponse">getVacationResponse</a></li><li><a href="global.html#hasCalendars">hasCalendars</a></li><li><a href="global.html#hasContacts">hasContacts</a></li><li><a href="global.html#hasMail">hasMail</a></li><li><a href="global.html#isDefined">isDefined</a></li><li><a href="global.html#move">move</a></li><li><a href="global.html#moveMessage">moveMessage</a></li><li><a href="global.html#moveToMailboxWithRole">moveToMailboxWithRole</a></li><li><a href="global.html#newPromise">newPromise</a></li><li><a href="global.html#nthElementOrDefault">nthElementOrDefault</a></li><li><a href="global.html#objectValues">objectValues</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#saveAsDraft">saveAsDraft</a></li><li><a href="global.html#send">send</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setIsAnswered">setIsAnswered</a></li><li><a href="global.html#setIsFlagged">setIsFlagged</a></li><li><a href="global.html#setIsUnread">setIsUnread</a></li><li><a href="global.html#setMailboxes">setMailboxes</a></li><li><a href="global.html#setMessages">setMessages</a></li><li><a href="global.html#setVacationResponse">setVacationResponse</a></li><li><a href="global.html#supports">supports</a></li><li><a href="global.html#then">then</a></li><li><a href="global.html#toJSONObject">toJSONObject</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#unknown">unknown</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateMailbox">updateMailbox</a></li><li><a href="global.html#updateMessage">updateMessage</a></li><li><a href="global.html#when">when</a></li><li><a href="global.html#withAPIUrl">withAPIUrl</a></li><li><a href="global.html#withAuthAccess">withAuthAccess</a></li><li><a href="global.html#withAuthenticationToken">withAuthenticationToken</a></li><li><a href="global.html#withAuthenticationUrl">withAuthenticationUrl</a></li><li><a href="global.html#withCustomMailboxRoles">withCustomMailboxRoles</a></li><li><a href="global.html#withDownloadUrl">withDownloadUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
