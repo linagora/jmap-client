@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/EMailer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/EMailer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+export default class EMailer {
+  /**
+   * This class represents a JMAP [EMailer]{@link http://jmap.io/spec.html#messages}.&lt;br />
+   * An _EMailer_ object holds the name and email address of either a sender or a recipient of a {@link Message}.
+   *
+   * @param [opts] {Object} The optional properties of this _EMailer_.
+   * @param [opts.name=''] {String} The name of the emailer.
+   * @param [opts.email='@'] {String} The email address of the emailer.
+   */
+  constructor(opts) {
+    opts = opts || {};
+
+    this.name = opts.name || '';
+    this.email = opts.email || '@'; // http://jmap.io/spec.html#messages
+  }
+
+  /**
+   * This method returns the unknown _EMailer_, that is, an _EMailer_ instance with all fields set to defaults.
+   *
+   * @return {EMailer} The unknown _EMailer_.
+   */
+  static unknown() {
+    return new EMailer();
+  }
+
+  /**
+   * Creates a _EMailer_ from its JSON representation.
+   *
+   * @param jmap {Client} The {@link Client} instance that originates the _EMailer_ instance. Is actually ignored.
+   * @param object {Object} The JSON representation of the _EMailer_, as a Javascript object
+   *
+   * @return {EMailer}
+   */
+  static fromJSONObject(jmap, object) {
+    return new EMailer(object);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="FilterRule.html">FilterRule</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="Transport.html">Transport</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul><h3>Global</h3><ul><li><a href="global.html#append">append</a></li><li><a href="global.html#appendDateIfDefined">appendDateIfDefined</a></li><li><a href="global.html#appendIfDefined">appendIfDefined</a></li><li><a href="global.html#appendIfNotEmpty">appendIfNotEmpty</a></li><li><a href="global.html#appendObject">appendObject</a></li><li><a href="global.html#appendQueryParameter">appendQueryParameter</a></li><li><a href="global.html#assertRequiredParameterHasType">assertRequiredParameterHasType</a></li><li><a href="global.html#assertRequiredParameterIsArrayWithMinimumLength">assertRequiredParameterIsArrayWithMinimumLength</a></li><li><a href="global.html#assertRequiredParameterIsObject">assertRequiredParameterIsObject</a></li><li><a href="global.html#assertRequiredParameterIsPresent">assertRequiredParameterIsPresent</a></li><li><a href="global.html#assertValidJMAPResponse">assertValidJMAPResponse</a></li><li><a href="global.html#authenticate">authenticate</a></li><li><a href="global.html#authExternal">authExternal</a></li><li><a href="global.html#authPassword">authPassword</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#capitalize">capitalize</a></li><li><a href="global.html#createMailbox">createMailbox</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#destroyMailbox">destroyMailbox</a></li><li><a href="global.html#destroyMailboxes">destroyMailboxes</a></li><li><a href="global.html#destroyMessage">destroyMessage</a></li><li><a href="global.html#destroyMessages">destroyMessages</a></li><li><a href="global.html#fillURITemplate">fillURITemplate</a></li><li><a href="global.html#fromJSONObject">fromJSONObject</a></li><li><a href="global.html#getAccounts">getAccounts</a></li><li><a href="global.html#getMailboxes">getMailboxes</a></li><li><a href="global.html#getMailboxWithRole">getMailboxWithRole</a></li><li><a href="global.html#getMessageList">getMessageList</a></li><li><a href="global.html#getMessages">getMessages</a></li><li><a href="global.html#getMethod">getMethod</a></li><li><a href="global.html#getSignedDownloadUrl">getSignedDownloadUrl</a></li><li><a href="global.html#getThreads">getThreads</a></li><li><a href="global.html#getVacationResponse">getVacationResponse</a></li><li><a href="global.html#hasCalendars">hasCalendars</a></li><li><a href="global.html#hasContacts">hasContacts</a></li><li><a href="global.html#hasMail">hasMail</a></li><li><a href="global.html#isDefined">isDefined</a></li><li><a href="global.html#move">move</a></li><li><a href="global.html#moveMessage">moveMessage</a></li><li><a href="global.html#moveToMailboxWithRole">moveToMailboxWithRole</a></li><li><a href="global.html#newPromise">newPromise</a></li><li><a href="global.html#nthElementOrDefault">nthElementOrDefault</a></li><li><a href="global.html#objectValues">objectValues</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#saveAsDraft">saveAsDraft</a></li><li><a href="global.html#send">send</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setIsAnswered">setIsAnswered</a></li><li><a href="global.html#setIsFlagged">setIsFlagged</a></li><li><a href="global.html#setIsUnread">setIsUnread</a></li><li><a href="global.html#setMailboxes">setMailboxes</a></li><li><a href="global.html#setMessages">setMessages</a></li><li><a href="global.html#setVacationResponse">setVacationResponse</a></li><li><a href="global.html#supports">supports</a></li><li><a href="global.html#then">then</a></li><li><a href="global.html#toJSONObject">toJSONObject</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#unknown">unknown</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateMailbox">updateMailbox</a></li><li><a href="global.html#updateMessage">updateMessage</a></li><li><a href="global.html#when">when</a></li><li><a href="global.html#withAPIUrl">withAPIUrl</a></li><li><a href="global.html#withAuthAccess">withAuthAccess</a></li><li><a href="global.html#withAuthenticationToken">withAuthenticationToken</a></li><li><a href="global.html#withAuthenticationUrl">withAuthenticationUrl</a></li><li><a href="global.html#withCustomMailboxRoles">withCustomMailboxRoles</a></li><li><a href="global.html#withDownloadUrl">withDownloadUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
