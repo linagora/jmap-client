@@ -1,6 +1,6 @@
 {
   "name": "jmap-client",
-  "version": "0.0.6-beta2",
+  "version": "0.1.0-dev",
   "authors": [
     "Linagora Folks <lgs-openpaas-dev@linagora.com>"
   ],
