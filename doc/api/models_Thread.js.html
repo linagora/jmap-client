@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/Thread.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/Thread.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import Model from './Model.js';
+import Utils from '../utils/Utils.js';
+
+export default class Thread extends Model {
+  /**
+   * This class represents a JMAP [Thread]{@link http://jmap.io/spec.html#threads}.
+   *
+   * @constructor
+   * @extends Model
+   *
+   * @param jmap {Client} The {@link Client} instance that created this _Thread_.
+   * @param id {String} The unique identifier of this _Thread_.
+   * @param [opts] {Object} The optional properties of this _Thread_.
+   * @param [opts.messageIds=[]] {String[]} An array of message identifiers contained in this _Thread_.
+   *
+   * @see Model
+   */
+  constructor(jmap, id, opts) {
+    super(jmap);
+
+    Utils.assertRequiredParameterIsPresent(id, 'id');
+
+    opts = opts || {};
+
+    this.id = id;
+    this.messageIds = opts.messageIds || [];
+  }
+
+  /**
+   * Fetches all messages contained in this _Thread_.&lt;br />
+   * This will delegate to {@link Client#getMessages}, passing this Thread's _messageIds_ as the _ids_ option.
+   *
+   * @param [options] {Object} The options object passed to {@link Client#getMessages}.
+   *   Please note that the _ids_ option will be overriden if defined.
+   * @returns {Promise} A promise that eventually resolves with an array of {@link Message} instances.
+   *
+   * @see Client#getMessages
+   * @see PromiseProvider
+   */
+  getMessages(options) {
+    options = options || {};
+    options.ids = this.messageIds;
+
+    return this._jmap.getMessages(options);
+  }
+
+  /**
+   * Updates the isFlagged field of all {@link Message}s of this {@link Thread}.
+   *
+   * @param isFlagged {Boolean} The isFlagged field of the thread.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.setMessages}.
+   *
+   * @see Client#setMessages
+   */
+  setIsFlagged(isFlagged) {
+    return this._flagAllMessages('isFlagged', isFlagged);
+  }
+
+  /**
+   * Updates the isUnread field of this {@link Message}.
+   *
+   * @param isUnread {Boolean} The isUnread field of the thread.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.setMessages}.
+   *
+   * @see Client#setMessages
+   */
+  setIsUnread(isUnread) {
+    return this._flagAllMessages('isUnread', isUnread);
+  }
+
+  /**
+   * Moves this {@link Thread} to a different set of mailboxes.
+   *
+   * @param mailboxIds {String[]} The identifiers of the target mailboxes for the thread.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.setMessages}.
+   *
+   * @see Client#setMessages
+   */
+  move(mailboxIds) {
+    return this._updateAllMessages({ mailboxIds });
+  }
+
+  /**
+   * Moves this {@link Thread} to the mailbox holding the given `role`.&lt;br />
+   * This will first do a JMAP request to find the mailbox with the given role, then a {@link Thread#move} to move the message.
+   *
+   * @param role {MailboxRole|String} The desired mailbox role.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Thread#move}.
+   *
+   * @see MailboxRole
+   * @see Client#getMailboxWithRole
+   */
+  moveToMailboxWithRole(role) {
+    return this._jmap.getMailboxWithRole(role).then(mailbox => this.move([mailbox.id]));
+  }
+
+  /**
+   * Destroy this {@link Thread} on the server.&lt;br />
+   * This will internally destory all messages contained in this thread.
+   *
+   * @return {Promise} A {@link Promise}, as per {@link Client.destroyMessages}.
+   *
+   * @see Client#destroyMessages
+   */
+  destroy() {
+    return this._jmap.destroyMessages(this.messageIds);
+  }
+
+  _updateAllMessages(updates) {
+    let options = {};
+
+    this.messageIds.forEach(id => {
+      options[id] = updates;
+    });
+
+    return this._jmap.setMessages({ update: options });
+  }
+
+  _flagAllMessages(flag, state) {
+    Utils.assertRequiredParameterHasType(state, 'state', 'boolean');
+
+    return this._updateAllMessages({ [flag]: state });
+  }
+
+  /**
+   * Creates a _Thread_ from its JSON representation.
+   *
+   * @param jmap {Client} The {@link Client} instance passed to the _Thread_ constructor.
+   * @param object {Object} The JSON representation of the _Thread_, as a Javascript object.
+   * @param object.id {String} The identifier of the _Thread_.
+   *
+   * @return {Thread}
+   */
+  static fromJSONObject(jmap, object) {
+    Utils.assertRequiredParameterIsPresent(object, 'object');
+
+    return new Thread(jmap, object.id, object);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-API.html">API</a></li><li><a href="module-Constants.html">Constants</a></li></ul><h3>Classes</h3><ul><li><a href="ES6PromiseProvider.html">ES6PromiseProvider</a></li><li><a href="FilterRule.html">FilterRule</a></li><li><a href="MailboxRole.html">MailboxRole</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="PromiseProvider.html">PromiseProvider</a></li><li><a href="QPromiseProvider.html">QPromiseProvider</a></li><li><a href="Transport.html">Transport</a></li><li><a href="VacationResponse.html">VacationResponse</a></li></ul><h3>Global</h3><ul><li><a href="global.html#append">append</a></li><li><a href="global.html#appendDateIfDefined">appendDateIfDefined</a></li><li><a href="global.html#appendIfDefined">appendIfDefined</a></li><li><a href="global.html#appendIfNotEmpty">appendIfNotEmpty</a></li><li><a href="global.html#appendObject">appendObject</a></li><li><a href="global.html#appendQueryParameter">appendQueryParameter</a></li><li><a href="global.html#assertRequiredParameterHasType">assertRequiredParameterHasType</a></li><li><a href="global.html#assertRequiredParameterIsArrayWithMinimumLength">assertRequiredParameterIsArrayWithMinimumLength</a></li><li><a href="global.html#assertRequiredParameterIsObject">assertRequiredParameterIsObject</a></li><li><a href="global.html#assertRequiredParameterIsPresent">assertRequiredParameterIsPresent</a></li><li><a href="global.html#assertValidJMAPResponse">assertValidJMAPResponse</a></li><li><a href="global.html#authenticate">authenticate</a></li><li><a href="global.html#authExternal">authExternal</a></li><li><a href="global.html#authPassword">authPassword</a></li><li><a href="global.html#build">build</a></li><li><a href="global.html#capitalize">capitalize</a></li><li><a href="global.html#createMailbox">createMailbox</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#destroyMailbox">destroyMailbox</a></li><li><a href="global.html#destroyMailboxes">destroyMailboxes</a></li><li><a href="global.html#destroyMessage">destroyMessage</a></li><li><a href="global.html#destroyMessages">destroyMessages</a></li><li><a href="global.html#fillURITemplate">fillURITemplate</a></li><li><a href="global.html#fromJSONObject">fromJSONObject</a></li><li><a href="global.html#getAccounts">getAccounts</a></li><li><a href="global.html#getMailboxes">getMailboxes</a></li><li><a href="global.html#getMailboxWithRole">getMailboxWithRole</a></li><li><a href="global.html#getMessageList">getMessageList</a></li><li><a href="global.html#getMessages">getMessages</a></li><li><a href="global.html#getMethod">getMethod</a></li><li><a href="global.html#getSignedDownloadUrl">getSignedDownloadUrl</a></li><li><a href="global.html#getThreads">getThreads</a></li><li><a href="global.html#getVacationResponse">getVacationResponse</a></li><li><a href="global.html#hasCalendars">hasCalendars</a></li><li><a href="global.html#hasContacts">hasContacts</a></li><li><a href="global.html#hasMail">hasMail</a></li><li><a href="global.html#isDefined">isDefined</a></li><li><a href="global.html#move">move</a></li><li><a href="global.html#moveMessage">moveMessage</a></li><li><a href="global.html#moveToMailboxWithRole">moveToMailboxWithRole</a></li><li><a href="global.html#newPromise">newPromise</a></li><li><a href="global.html#nthElementOrDefault">nthElementOrDefault</a></li><li><a href="global.html#objectValues">objectValues</a></li><li><a href="global.html#post">post</a></li><li><a href="global.html#saveAsDraft">saveAsDraft</a></li><li><a href="global.html#send">send</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setIsAnswered">setIsAnswered</a></li><li><a href="global.html#setIsFlagged">setIsFlagged</a></li><li><a href="global.html#setIsUnread">setIsUnread</a></li><li><a href="global.html#setMailboxes">setMailboxes</a></li><li><a href="global.html#setMessages">setMessages</a></li><li><a href="global.html#setVacationResponse">setVacationResponse</a></li><li><a href="global.html#supports">supports</a></li><li><a href="global.html#then">then</a></li><li><a href="global.html#toJSONObject">toJSONObject</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#unknown">unknown</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateMailbox">updateMailbox</a></li><li><a href="global.html#updateMessage">updateMessage</a></li><li><a href="global.html#when">when</a></li><li><a href="global.html#withAPIUrl">withAPIUrl</a></li><li><a href="global.html#withAuthAccess">withAuthAccess</a></li><li><a href="global.html#withAuthenticationToken">withAuthenticationToken</a></li><li><a href="global.html#withAuthenticationUrl">withAuthenticationUrl</a></li><li><a href="global.html#withCustomMailboxRoles">withCustomMailboxRoles</a></li><li><a href="global.html#withDownloadUrl">withDownloadUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
