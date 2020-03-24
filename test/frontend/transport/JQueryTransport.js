@@ -1,6 +1,6 @@
 'use strict';
 
-/* global chai: false, jmap: false, jQuery: false */
+/* global chai: false, jmap: false */
 
 var expect = chai.expect;
 

@@ -1,8 +1,6 @@
-'use strict';
-
-var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client'),
-    mockery = require('mockery');
+const { expect } = require('chai');
+const mockery = require('mockery');
+const jmap = require('../../../dist/jmap-client');
 
 function newTransport() {
   return new jmap.RequestTransport(new jmap.QPromiseProvider());
