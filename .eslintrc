@@ -1,0 +1,11 @@
+{
+  "extends": "linagora-esn",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "prefer-destructuring": "off"
+  }
+}

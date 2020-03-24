@@ -1,8 +1,4 @@
-'use strict';
-
 module.exports = function(grunt) {
-  var CI = grunt.option('ci');
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -26,36 +22,12 @@ module.exports = function(grunt) {
       }
     },
 
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: CI && 'checkstyle',
-        reporterOutput: CI && 'jshint.xml'
-      },
+    eslint: {
       all: {
-        src: [
-          'Gruntfile.js',
-          '<%= project.test %>/**/*.js',
-          '<%= project.lib %>/**/*.js',
-          'index.js'
-        ]
-      }
-    },
-
-    jscs: {
-      lint: {
-        options: {
-          config: '.jscsrc'
-        },
-        src: ['<%= jshint.all.src %>']
+        src: ['Gruntfile.js', 'lib/**/*.js', 'test/**/**/*.js']
       },
-      fix: {
-        options: {
-          config: '.jscsrc',
-          esnext: true,
-          fix: true
-        },
-        src: ['<%= jshint.all.src %>']
+      options: {
+        quiet: true
       }
     },
 
@@ -66,7 +38,7 @@ module.exports = function(grunt) {
         ]
       },
       all: {
-        src: ['<%= jshint.all.src %>']
+        src: ['<%= eslint.all.src %>']
       }
     },
 
@@ -109,7 +81,7 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['<%= jshint.all.src %>'],
+      files: ['<%= eslint.all.src %>'],
       tasks: ['test']
     },
 
@@ -215,10 +187,11 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-coveralls');
+  grunt.loadNpmTasks('grunt-eslint');
 
   grunt.registerTask('compile', 'Compile from ES6 to ES5', ['clean:dist', 'browserify', 'uglify']);
   grunt.registerTask('coverage', ['test', 'lcovMerge', 'coveralls:publish']);
-  grunt.registerTask('linters', 'Check code for lint', ['jshint:all', 'jscs:lint', 'lint_pattern:all']);
+  grunt.registerTask('linters', 'Check code for lint', ['eslint:all', 'lint_pattern:all']);
   grunt.registerTask('test', 'Lint, compile and launch test suite', ['linters', 'compile', 'mocha_istanbul:coverage', 'karma']);
   grunt.registerTask('dev', 'Launch tests then for each changes relaunch it', ['test', 'watch']);
   grunt.registerTask('apidoc', 'Generates API documentation', ['clean:apidoc', 'jsdoc']);

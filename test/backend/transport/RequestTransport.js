@@ -43,7 +43,7 @@ describe('The RequestTransport class', function() {
       });
     });
 
-    it('should reject the promise when status code is not 200 nor 201', function(done) {
+    it.only('should reject the promise when status code is not 200 nor 201', function(done) {
       mockery.registerMock('request', function(options, callback) {
         callback(null, {
           statusCode: 400
