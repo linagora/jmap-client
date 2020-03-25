@@ -1,8 +1,6 @@
-'use strict';
-
-var expect = require('chai').expect,
-    jmap = require('../../../dist/jmap-client'),
-    mockery = require('mockery');
+const { expect } = require('chai');
+const mockery = require('mockery');
+const jmap = require('../../../dist/jmap-client');
 
 function newTransport() {
   return new jmap.RequestTransport(new jmap.QPromiseProvider());
@@ -45,7 +43,7 @@ describe('The RequestTransport class', function() {
       });
     });
 
-    it('should reject the promise when status code is not 200 nor 201', function(done) {
+    it.only('should reject the promise when status code is not 200 nor 201', function(done) {
       mockery.registerMock('request', function(options, callback) {
         callback(null, {
           statusCode: 400
