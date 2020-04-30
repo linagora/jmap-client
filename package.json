@@ -41,7 +41,7 @@
     "grunt-mocha-istanbul": "5.0.2",
     "grunt-release": "0.14.0",
     "istanbul": "0.4.5",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jquery-mockjax": "2.2.1",
     "jsdoc": "3.6.3",
     "karma": "1.4.0",
