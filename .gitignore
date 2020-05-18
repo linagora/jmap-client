@@ -6,4 +6,4 @@ tmp/
 .idea
 doc/api
 coverage
-
+package-lock.json
