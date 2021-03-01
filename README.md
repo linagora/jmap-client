@@ -1,5 +1,7 @@
 # JMAP-CLIENT
 
+:warning: jmap-client is based on an outdated jmap draft. If you are looking for a jmap client you can check this project [jmap-client-ts](https://github.com/OpenPaaS-Suite/jmap-client-ts)
+
 [![Join the chat at https://gitter.im/linagora/jmap-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/linagora/jmap-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/linagora/jmap-client.svg?branch=master)](https://travis-ci.org/linagora/jmap-client) [![Coverage Status](https://coveralls.io/repos/linagora/jmap-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/linagora/jmap-client?branch=master)
 
 This repository provides a JavaScript library to make requests against a JMAP server.
