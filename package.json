@@ -5,7 +5,7 @@
   "description": "This lib help to make requests against a JMAP server",
   "main": "dist/jmap-client.js",
   "dependencies": {
-    "uuid": "3.3.2"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
